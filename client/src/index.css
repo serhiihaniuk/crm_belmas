@@ -1,0 +1,194 @@
+@import "~carbon-components/css/carbon-components.css";
+
+body {
+    padding: 50px 0 20px;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: #E8EAE6;
+}
+
+body {
+    font-size: 16px;
+}
+
+input, select, textarea {
+    font-size: 100% !important;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.bx--data-table-header {
+    font-size: 12px;
+    padding: 2px 5px;
+}
+
+.bx--table-header-label {
+    font-size: 14px;
+    padding: 2px 5px;
+}
+
+.bx--data-table td {
+    font-size: 12px;
+    padding: 2px 5px;
+
+}
+
+.bx--data-table th {
+    padding: 2px 5px;
+}
+
+.bx--data-table-content {
+    overflow: visible !important;
+}
+
+a, a:visited {
+    color: #c6c6c6;
+    text-decoration: none;
+}
+
+.bx--modal-container {
+    top: 20px;
+    width: 320px;
+    height: auto;
+    max-height: 80vh;
+}
+
+
+/*reset tabs wrapper padding*/
+.bx--tab-content {
+    padding: 0;
+}
+
+.bx--tabs--scrollable__nav-link {
+    width: min-content !important;
+}
+
+.bx--tab-content {
+    padding: 0;
+    outline: none;
+}
+
+.bx--tab-content:focus {
+    outline: none;
+}
+
+@media screen and (device-aspect-ratio: 2/3) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="url"] {
+        font-size: 16px;
+    }
+}
+
+/* Fix Input Zoom on iPhone 5, 5C, 5S, iPod Touch 5g */
+@media screen and (device-aspect-ratio: 40/71) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="url"] {
+        font-size: 16px;
+    }
+}
+
+/* Fix Input Zoom on iPhone 6, iPhone 6s, iPhone 7  */
+@media screen and (device-aspect-ratio: 375/667) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="tel"], input[type="url"] {
+        font-size: 16px;
+    }
+}
+
+/* Fix Input Zoom on iPhone 6 Plus, iPhone 6s Plus, iPhone 7 Plus, iPhone 8, iPhone X, XS, XS Max  */
+@media screen and (device-aspect-ratio: 9/16) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="tel"], input[type="url"] {
+        font-size: 16px;
+    }
+}
+
+
+input[type="color"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"],
+select:focus,
+textarea {
+    font-size: 12px;
+}
+
+/*table colors*/
+.bx--data-table th {
+    background: #7C9473;
+}
+
+.bx--data-table td {
+    background: #CFDAC8;
+}
+
+.bx--data-table tr:hover td {
+    color: #fff !important;
+    background: #7C9473 !important;
+}
+
+.bx--tag.bx--tag--teal {
+    color: #fff !important;
+    background: #7C9473;
+}
+
+.bx--tag {
+    background: #A0937D;
+    color: #fff;
+    box-shadow: 7px 3px 5px rgb(0 0 0 / 12%)
+}
+
+.bx--data-table-container {
+    box-shadow: 13px 11px 11px rgb(205 208 203 / 99%)
+}
+
+.bx--data-table td, .bx--data-table tbody th {
+    padding-right: 1rem;
+    padding-left: 1rem;
+    border-top: 1px solid #CDD0CB !important;
+    border-bottom: 1px solid #CDD0CB !important;
+}
+
+.bx--data-table-container {
+    border-radius: 19px;
+    overflow: hidden;
+    margin: 10px 0 9px;
+}
+
+/*timepicker*/
+
+
