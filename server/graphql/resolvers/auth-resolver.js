@@ -1,0 +1,81 @@
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const { getEmployeeFromDB } = require("./merge-resolvers");
+const { generateTokens } = require("../helpers/tokens");
+const ApiError = require("../helpers/api-error");
+
+const login = async (parent, { login, password }, { req, res, setCookies }) => {
+  try {
+    const employee = await getEmployeeFromDB(login, true);
+
+    if (!employee) {
+      return new Error("No such user");
+    }
+
+    const isPasswordValid = bcrypt.compareSync(password, employee.password);
+    if (!isPasswordValid) {
+      return new Error("Invalid password");
+    }
+
+    const { refreshToken, accessToken } = generateTokens({
+      ...employee,
+      password: null,
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: false,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
+
+    setCookies.push({
+      name: "refreshToken",
+      value: refreshToken,
+      options: {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+      },
+    });
+
+    return {
+      accessToken,
+      employee,
+    };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const logout = async (parent, args, { res }) => {
+  try {
+    res.clearCookie("sss");
+    return true;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const checkAuth = async (parent, args, { req, res }) => {
+  const token = req.headers.authorization.split(" ")[1];
+
+  const verifyJWT = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+  const employee = await getEmployeeFromDB(verifyJWT.login);
+  if (!employee) {
+    return ApiError.UnauthorizedError();
+  }
+
+  const { accessToken } = generateTokens({
+    ...employee,
+    password: null,
+  });
+
+  return {
+    accessToken,
+    employee,
+  };
+};
+
+module.exports = {
+  login,
+  logout,
+  checkAuth,
+};
