@@ -33,7 +33,7 @@ module.exports = {
         if (candidate) {
           return new Error("User already exists");
         }
-        const { accessToken, refreshToken } = generateTokens({
+        const { accessToken } = generateTokens({
           login: EmployeeInput.login,
         });
 
@@ -44,7 +44,6 @@ module.exports = {
           qualification: EmployeeInput.qualification,
           login: EmployeeInput.login,
           role: EmployeeInput.role,
-          refreshToken: refreshToken,
 
         });
 

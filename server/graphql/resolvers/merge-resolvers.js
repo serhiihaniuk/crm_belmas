@@ -11,7 +11,6 @@ const getEmployeeFromDB = async (field, withPassword = false) => {
         return {
             ...employee._doc,
             _id: employee.id,
-            refreshToken: null,
             appointments: getAppointments.bind(this, employee._doc.appointments),
         };
     } catch (err) {

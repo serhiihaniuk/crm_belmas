@@ -11,8 +11,8 @@ const typeDefs = gql`
     }
     type Mutation {
         createAppointment(AppointmentInput: AppointmentInput): Appointment
-        updateAppointment(id: ID!, AppointmentInput: AppointmentInput): Appointment
-        calculateAppointment(id: ID!, price: Float!): Appointment
+        updateAppointment(appointmentID: ID!, AppointmentInput: AppointmentInput!): Appointment
+        calculateAppointment(id: ID!, price: Int!, paymentMethod: String!): Appointment!
         deleteAppointment(id: ID!): String
         createEmployee(EmployeeInput: EmployeeInput): Employee
     }
@@ -20,7 +20,8 @@ const typeDefs = gql`
         _id: ID!
         client: String!
         description: String
-        price: Float
+        price: Int
+        paymentMethod: String
         date: String!
         instagram: String
         procedure: String!
@@ -37,7 +38,6 @@ const typeDefs = gql`
         role: String!
         login: String!
         password: String
-        refreshToken: String
         appointments: [Appointment]!
     }
     type AuthData {

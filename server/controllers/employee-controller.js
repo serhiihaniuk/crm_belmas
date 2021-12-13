@@ -12,7 +12,6 @@ class EmployeeController {
             return {
                 ...employee._doc,
                 _id: employee.id,
-                refreshToken: null,
                 appointments: AppointmentController.getAppointments.bind(this, { employee: employee._id })
             };
         } catch (err) {
@@ -20,7 +19,6 @@ class EmployeeController {
         }
     };
     async getEmployees (query)  {
-        console.log(query)
 
         try {
 
@@ -29,7 +27,6 @@ class EmployeeController {
                 return {
                     ...employee._doc,
                     _id: employee.id,
-                    refreshToken: null,
                     appointments: AppointmentController.getAppointments.bind(this, { employee: employee._id })
                 };
             })

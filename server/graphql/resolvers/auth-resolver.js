@@ -17,24 +17,24 @@ const login = async (parent, { login, password }, { req, res, setCookies }) => {
       return new Error("Invalid password");
     }
 
-    const { refreshToken, accessToken } = generateTokens({
+    const { accessToken } = generateTokens({
       ...employee,
       password: null,
     });
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: false,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    });
-
-    setCookies.push({
-      name: "refreshToken",
-      value: refreshToken,
-      options: {
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 * 7,
-      },
-    });
+    // res.cookie("refreshToken", refreshToken, {
+    //   httpOnly: false,
+    //   maxAge: 1000 * 60 * 60 * 24 * 7,
+    // });
+    //
+    // setCookies.push({
+    //   name: "refreshToken",
+    //   value: refreshToken,
+    //   options: {
+    //     httpOnly: true,
+    //     maxAge: 1000 * 60 * 60 * 24 * 7,
+    //   },
+    // });
 
     return {
       accessToken,
@@ -47,7 +47,6 @@ const login = async (parent, { login, password }, { req, res, setCookies }) => {
 
 const logout = async (parent, args, { res }) => {
   try {
-    res.clearCookie("sss");
     return true;
   } catch (error) {
     throw new Error(error);
@@ -57,7 +56,7 @@ const logout = async (parent, args, { res }) => {
 const checkAuth = async (parent, args, { req, res }) => {
   const token = req.headers.authorization.split(" ")[1];
 
-  const verifyJWT = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+  const verifyJWT = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
   const employee = await getEmployeeFromDB(verifyJWT.login);
   if (!employee) {
     return ApiError.UnauthorizedError();

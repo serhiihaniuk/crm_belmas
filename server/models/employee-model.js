@@ -24,9 +24,6 @@ const EmployeeSchema = new Schema({
     type: String,
     required: true,
   },
-  refreshToken: {
-    type: String,
-  },
   role: {
     type: String,
     required: true,

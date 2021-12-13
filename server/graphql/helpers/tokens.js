@@ -6,7 +6,7 @@ const generateTokens = (payload) => {
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: "22d",
     });
-    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
+    const refreshToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: "7222d",
     });
     return { accessToken, refreshToken };
