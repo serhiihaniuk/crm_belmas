@@ -8,5 +8,7 @@ export interface IAppointment {
     description: string | null;
     employee: {
         _id: string
-    };
+    }
+    status: string;
+    paymentMethod: string | null;
 }

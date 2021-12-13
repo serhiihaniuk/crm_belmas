@@ -21,7 +21,7 @@ const divider = css`
 `;
 
 interface IDayProps {
-    openModal: (day: string) => void;
+    openModal: (day: IScheduleTableRow) => void;
     rows: IScheduleTableRow[];
     day: string;
 }

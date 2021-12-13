@@ -2,17 +2,21 @@ import React, {useEffect, useState} from 'react';
 import Day from './components/Day';
 import ScheduleModal from './components/ScheduleModal';
 import {pageWrapper} from '../../globalStyles';
-import {useQuery} from "@apollo/client";
+import {ApolloConsumer, useQuery} from "@apollo/client";
 import {GET_APPOINTMENTS} from "../../gql/query/appointment";
 import {InlineLoading} from "carbon-components-react";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {splitAppointmentsByDays} from "../../helpers/appointments-helpers";
 import {currentMonthFirstAndListDayTimestamp} from "../../helpers/utils";
-import {makeScheduleTableRows} from "./service/tableService";
+import {IScheduleTableRow, makeScheduleTableRows} from "./service/tableService";
 
 const Schedule = () => {
     const [open, setOpen] = React.useState(false);
-    const openModal = () => setOpen(true);
+    const [selectedAppointment, setSelectedAppointment] = useState<IScheduleTableRow | null>(null);
+    const openModal = (appointment: IScheduleTableRow) => {
+        setOpen(true);
+        setSelectedAppointment(appointment)
+    }
     const closeModal = () => setOpen(false);
     const {firstDayTimestamp, lastDayTimestamp} = currentMonthFirstAndListDayTimestamp();
     const employee = useTypedSelector(state => state.employee._id);
@@ -37,15 +41,19 @@ const Schedule = () => {
         <>
             <div className={pageWrapper}>
                 {days.map(([dayName, appointments]: any) => {
-                const rows = makeScheduleTableRows(appointments);
-                return <Day key={dayName} openModal={openModal} rows={rows} day={dayName} />;
-            })}
+                    const rows = makeScheduleTableRows(appointments);
+                    return <Day key={dayName} openModal={openModal} rows={rows} day={dayName}/>;
+                })}
             </div>
-            <ScheduleModal
-                isOpen={open}
-                closeModal={closeModal}
-                name={'Рассчитать'}
-            />
+            <ApolloConsumer>
+                {client => <ScheduleModal
+                    client={client as any}
+                    selectedAppointment={selectedAppointment}
+                    isOpen={open}
+                    closeModal={closeModal}
+                />}
+            </ApolloConsumer>
+
         </>
     );
 };

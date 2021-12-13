@@ -67,7 +67,9 @@ const DayTable: React.FC<IDayTableProps> = ({rowsData, openModal}) => {
                             const instagramLink = rowsData[currentRow].instagram;
                             return (
                                 <React.Fragment key={row.id}>
-                                    <TableExpandRow {...getRowProps({row})} >
+                                    <TableExpandRow {...getRowProps({row})} className={
+                                        rowsData[currentRow].status
+                                    }>
                                         {row.cells.map((cell: any) => {
                                             return (
                                                 <TableCell key={cell.id}

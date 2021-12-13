@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import {gql} from '@apollo/client';
 
 export const CREATE_APPOINTMENT = gql`
     mutation createAppointment($AppointmentInput: AppointmentInput!) {
@@ -18,3 +18,15 @@ export const DELETE_APPOINTMENT = gql`
     mutation deleteAppointment($id: ID!) {
         deleteAppointment(id: $id)
     }`;
+
+
+export const CALCULATE_APPOINTMENT = gql`
+    mutation calculateAppointment($id: ID!, $price: Int!, $paymentMethod: String!) {
+        calculateAppointment(id: $id, price:$price, paymentMethod:$paymentMethod ) {
+            _id
+            price
+            status
+        }
+    }
+
+`

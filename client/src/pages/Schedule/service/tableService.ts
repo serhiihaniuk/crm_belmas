@@ -58,8 +58,10 @@ export interface IScheduleTableRow {
     date: string;
     client: string;
     procedure: string;
-    price: number | null;
-    description: string | null;
+    price: number;
+    status: string
+    paymentMethod: string
+    description: string;
     timestamp: Date;
     employee: {
     _id: string
@@ -77,10 +79,13 @@ export function makeScheduleTableRows(appointments: IAppointment[]): IScheduleTa
                 date: time,
                 client: appointment.client,
                 procedure: appointment.procedure,
-                price: appointment.price,
-                description: appointment.description,
+                price: appointment.price || 0,
+                description: appointment.description || '',
                 timestamp: appointment.date,
-                employee: appointment.employee
+                employee: appointment.employee,
+                status: appointment.status,
+                paymentMethod: appointment.paymentMethod || ''
+
             };
         }
     );

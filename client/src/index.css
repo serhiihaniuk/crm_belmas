@@ -197,8 +197,14 @@ textarea {
 .bx--data-table td, .bx--data-table tbody th {
     padding-right: 1rem;
     padding-left: 1rem;
-    border-top: 1px solid #CDD0CB !important;
-    border-bottom: 1px solid #CDD0CB !important;
+    border-top: 1px solid #CFDAC8 !important;
+    border-bottom: 1px solid #CFDAC8 !important;
+}
+
+.bx--parent-row.finished td {
+    background-color: #EEEBDD !important;
+    border-top: 1px solid #EEEBDD !important;
+    border-bottom: 1px solid #EEEBDD !important;
 }
 
 .bx--data-table-container {
@@ -213,5 +219,6 @@ textarea {
 .bx--modal-content {
     margin-bottom: 1rem !important;
 }
+
 
 

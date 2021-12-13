@@ -9,6 +9,7 @@ export interface BookTableRow {
     description: string | null;
     instagram: string | null;
     timestamp: Date;
+    status: string;
     employee: {
         _id: string
     };
@@ -43,7 +44,8 @@ export function makeRows(appointments: IAppointment[]): BookTableRow[] {
                 description: appointment.description,
                 instagram: appointment.instagram,
                 timestamp: appointment.date,
-                employee: appointment.employee
+                employee: appointment.employee,
+                status: appointment.status,
             };
         }
     );

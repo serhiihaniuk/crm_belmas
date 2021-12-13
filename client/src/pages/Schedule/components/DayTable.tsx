@@ -28,18 +28,22 @@ const buttonWrapper = css`
 const expandedRow = css`
   td {
     padding: 0 !important;
+
     p {
       font-size: 12px;
       padding: 10px;
     }
   }
+  
 `
 
+
 interface IDayTableProps {
-    openModal: (day: string) => void;
+    openModal: (day: IScheduleTableRow) => void;
     rowsData: IScheduleTableRow[];
     day: string;
 }
+
 const DayTable: React.FC<IDayTableProps> = ({openModal, rowsData, day}) => {
     return (
         <DataTable size="sm" rows={rowsData} headers={headers}>
@@ -51,11 +55,13 @@ const DayTable: React.FC<IDayTableProps> = ({openModal, rowsData, day}) => {
               }: any) => (
                 <TableContainer
                     {...getTableContainerProps()}>
-                    <Table {...getTableProps()}>
-                        <TableBody>
+                    <Table {...getTableProps()} >
+                        <TableBody >
                             {rows.map((row: any, currentRow: any) => (
                                 <React.Fragment key={row.id}>
-                                    <TableExpandRow {...getRowProps({row})} style={{background: 'red'}}>
+                                    <TableExpandRow {...getRowProps({row})} className={
+                                        rowsData[currentRow].status
+                                    }>
                                         {row.cells.map((cell: any) => (
                                             <TableCell key={cell.id}>{cell.value}</TableCell>
                                         ))}
@@ -63,17 +69,21 @@ const DayTable: React.FC<IDayTableProps> = ({openModal, rowsData, day}) => {
                                     <TableExpandedRow
                                         colSpan={headers.length + 1}
                                         className={expandedRow}>
-                                        <p >
+                                        <p>
                                             {rowsData[currentRow].description}
                                         </p>
                                         <div className={buttonWrapper}>
                                             <Button
-                                                onClick={openModal as any}
+                                                onClick={() => openModal(rowsData[currentRow])}
                                                 renderIcon={Checkmark32}
                                                 iconDescription="Add"
                                                 size="small"
                                                 kind="tertiary"
-                                            >Рассчитать</Button>
+                                            >
+                                                {
+                                                    rowsData[currentRow].status === "finished"
+                                                        ? "Изменить" : "Рассчитать"}
+                                            </Button>
 
                                         </div>
                                     </TableExpandedRow>

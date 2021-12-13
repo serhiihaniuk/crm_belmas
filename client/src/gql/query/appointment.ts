@@ -6,6 +6,8 @@ export const GET_APPOINTMENTS = gql`
             _id
             client
             price
+            status
+            paymentMethod
             date
             instagram
             procedure
