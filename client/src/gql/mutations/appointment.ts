@@ -6,3 +6,15 @@ export const CREATE_APPOINTMENT = gql`
             _id
         }
     }`;
+
+export const UPDATE_APPOINTMENT = gql`
+    mutation updateAppointment($appointmentID: ID!, $AppointmentInput: AppointmentInput!) {
+        updateAppointment(appointmentID: $appointmentID, AppointmentInput: $AppointmentInput) {
+            _id
+        }
+    }`;
+
+export const DELETE_APPOINTMENT = gql`
+    mutation deleteAppointment($id: ID!) {
+        deleteAppointment(id: $id)
+    }`;

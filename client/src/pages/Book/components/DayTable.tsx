@@ -23,11 +23,13 @@ const booktable = css`
 `;
 const buttonWrapper = css`
   display: flex;
-
+  justify-content: center;
   button {
     margin: 5px;
     border: 0;
     color: darkslategrey;
+    flex: 0 0 100px;
+    justify-content: flex-end;
   }
 `;
 const expandedRow = css`
@@ -91,15 +93,6 @@ const DayTable: React.FC<IDayTableProps> = ({ rowsData, openModal }) => {
                         size='small'
                         kind='tertiary'
                       >Редактировать</Button>
-                      <Button
-                        onClick={() => {
-                        }}
-                        renderIcon={TrashCan32}
-                        iconDescription='Add'
-                        size='small'
-                        kind='tertiary'
-                      >Удалить</Button>
-
                     </div>
                   </TableExpandedRow>
                 </React.Fragment>

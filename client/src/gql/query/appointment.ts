@@ -24,7 +24,5 @@ export const GET_APPOINTMENT_FROM_CACHE = gql`
         description
         instagram
         date
-        time
-        employee
         creator
     }`;

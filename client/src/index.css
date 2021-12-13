@@ -1,5 +1,4 @@
 @import "~carbon-components/css/carbon-components.css";
-
 body {
     padding: 50px 0 20px;
     margin: 0;
@@ -10,7 +9,26 @@ body {
     -moz-osx-font-smoothing: grayscale;
     background: #E8EAE6;
 }
+::-webkit-scrollbar {
+    width: 0px;
+}
 
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
 body {
     font-size: 16px;
 }
@@ -192,3 +210,6 @@ textarea {
 /*timepicker*/
 
 
+.bx--modal-content {
+    margin-bottom: 1rem !important;
+}

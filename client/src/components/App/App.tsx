@@ -19,7 +19,7 @@ function App() {
       localStorage.setItem('token', data.checkAuth.accessToken);
       dispatch(setEmployeeAction(data.checkAuth.employee));
     }
-  }, [data]);
+  }, [data, dispatch]);
   if (loading) return (
     <Loading withOverlay={true} />
   );
