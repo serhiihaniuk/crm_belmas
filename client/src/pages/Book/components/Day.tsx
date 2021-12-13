@@ -3,7 +3,8 @@ import DayTable from './DayTable';
 import { css } from '@emotion/css';
 import { Button, Tag } from 'carbon-components-react';
 import { Add16 } from '@carbon/icons-react';
-import { BookTableRow, getDayName } from '../service/tableService';
+import { BookTableRow } from '../service/tableService';
+import {getDayName} from "../../../helpers/utils";
 
 const wrapper = css`
   padding: 10px 0;

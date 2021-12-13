@@ -11,13 +11,14 @@ import {
     TextInput
 } from 'carbon-components-react';
 import {TimePicker} from '@atlaskit/datetime-picker';
-import {dateToTimestamp, mapTimeToTimepicker} from '../service/tableService';
+import { mapTimeToTimepicker} from '../service/tableService';
 import {css} from '@emotion/css';
 import {useTypedSelector} from '../../../hooks/useTypedSelector';
 import {useMutation} from '@apollo/client';
 import {CREATE_APPOINTMENT, DELETE_APPOINTMENT, UPDATE_APPOINTMENT} from '../../../gql/mutations/appointment';
 import {IApolloClient} from '../../../index';
 import {TrashCan32} from "@carbon/icons-react";
+import {dateToTimestamp} from "../../../helpers/utils";
 
 
 const timePickerCss = css`

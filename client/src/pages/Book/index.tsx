@@ -3,9 +3,10 @@ import BookModal from './components/BookModal';
 import { pageWrapper } from '../../globalStyles';
 import { Tab, Tabs } from 'carbon-components-react';
 import { ApolloConsumer, useQuery } from '@apollo/client';
-import { BookTableRow, currentMonthFirstAndListDayTimestamp } from './service/tableService';
+import { BookTableRow } from './service/tableService';
 import { GET_EMPLOYEES } from '../../gql/query/employees';
 import TabTemplate from './components/TabTemplate';
+import {currentMonthFirstAndListDayTimestamp} from "../../helpers/utils";
 
 const Book: React.FC = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);

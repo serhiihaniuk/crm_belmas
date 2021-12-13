@@ -10,17 +10,21 @@ import {
     TableExpandedRow,
     TableExpandRow
 } from "carbon-components-react";
-import {headers, rows} from "../service/tableService";
+import {headers, IScheduleTableRow, rows} from "../service/tableService";
 import {css} from "@emotion/css";
 
 const buttonWrapper = css`
   display: flex;
+  justify-content: center;
+
   button {
     margin: 5px;
     border: 0;
     color: darkslategrey;
+    flex: 0 0 100px;
+    justify-content: flex-end;
   }
-`
+`;
 const expandedRow = css`
   td {
     padding: 0 !important;
@@ -32,11 +36,13 @@ const expandedRow = css`
 `
 
 interface IDayTableProps {
-    openModal: () => void;
+    openModal: (day: string) => void;
+    rowsData: IScheduleTableRow[];
+    day: string;
 }
-const DayTable: React.FC<IDayTableProps> = ({openModal}) => {
+const DayTable: React.FC<IDayTableProps> = ({openModal, rowsData, day}) => {
     return (
-        <DataTable size="sm" rows={rows} headers={headers}>
+        <DataTable size="sm" rows={rowsData} headers={headers}>
             {({
                   rows,
                   getRowProps,
@@ -47,7 +53,7 @@ const DayTable: React.FC<IDayTableProps> = ({openModal}) => {
                     {...getTableContainerProps()}>
                     <Table {...getTableProps()}>
                         <TableBody>
-                            {rows.map((row: any) => (
+                            {rows.map((row: any, currentRow: any) => (
                                 <React.Fragment key={row.id}>
                                     <TableExpandRow {...getRowProps({row})} style={{background: 'red'}}>
                                         {row.cells.map((cell: any) => (
@@ -58,20 +64,11 @@ const DayTable: React.FC<IDayTableProps> = ({openModal}) => {
                                         colSpan={headers.length + 1}
                                         className={expandedRow}>
                                         <p >
-                                            Комментарий:
-                                            В отличии от lorem ipsum, текст рыба на русском языке наполнит любой
-                                            макет непонятным смыслом и придаст неповторимый колорит советских времен.
+                                            {rowsData[currentRow].description}
                                         </p>
                                         <div className={buttonWrapper}>
                                             <Button
-                                                onClick={openModal}
-                                                renderIcon={RequestQuote32}
-                                                iconDescription="Add"
-                                                size="small"
-                                                kind="tertiary"
-                                            >Редактировать</Button>
-                                            <Button
-                                                onClick={openModal}
+                                                onClick={openModal as any}
                                                 renderIcon={Checkmark32}
                                                 iconDescription="Add"
                                                 size="small"

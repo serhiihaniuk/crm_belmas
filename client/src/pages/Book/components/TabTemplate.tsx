@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { makeRows, splitAppointmentsByDays } from '../service/tableService';
+import { makeRows } from '../service/tableService';
 import Day from './Day';
 import { useQuery } from '@apollo/client';
 import { GET_APPOINTMENTS } from '../../../gql/query/appointment';
 import { InlineLoading } from 'carbon-components-react';
 import { css } from '@emotion/css';
+import {splitAppointmentsByDays} from "../../../helpers/appointments-helpers";
 
 const loadingCSS = css`
   display: flex;
