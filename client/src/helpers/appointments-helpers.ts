@@ -1,7 +1,7 @@
 import {IAppointment} from "../types/appointment-types";
 
-export function mapDaysBetweenDates(startDateTimestamp: number, endDateTimestamp: number) {
-    const daysBetweenDates: any = {};
+export function mapDaysBetweenDates(startDateTimestamp: number, endDateTimestamp: number): IMappedDaysWithAppointments {
+    const daysBetweenDates: IMappedDaysWithAppointments = {};
     let currentDateTimestamp = startDateTimestamp;
 
     while (currentDateTimestamp <= endDateTimestamp) {
@@ -14,9 +14,13 @@ export function mapDaysBetweenDates(startDateTimestamp: number, endDateTimestamp
     return daysBetweenDates;
 }
 
-export function splitAppointmentsByDays(appointments: IAppointment[], startDayTimestamp: number | string, endDayTimestamp: number | string): IAppointment[][] {
+interface IMappedDaysWithAppointments {
+    [key: string]: IAppointment[];
+}
 
-    const daysToMap = mapDaysBetweenDates(+startDayTimestamp, +endDayTimestamp);
+export function splitAppointmentsByDays(appointments: IAppointment[], startDayTimestamp: number | string, endDayTimestamp: number | string): IMappedDaysWithAppointments {
+
+    const daysToMap: IMappedDaysWithAppointments = mapDaysBetweenDates(+startDayTimestamp, +endDayTimestamp);
     appointments.forEach(appointment => {
         const date = new Date(Number(appointment.date));
         const fullDateName = `${date.getFullYear()}_${date.getMonth()}_${date.getDate()}`;

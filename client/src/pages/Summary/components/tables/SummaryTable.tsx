@@ -10,7 +10,7 @@ import {
   TableRow,
   Tag
 } from 'carbon-components-react';
-import { headers, rows } from '../../service/summaryService.ts.js';
+import { headers } from '../../service/summaryService';
 import { css } from '@emotion/css';
 
 const wrapper = css`
@@ -27,7 +27,7 @@ const SummaryTable: React.FC<ISummaryTableProps> = ({ name }) => {
       <div className="header">
         <Tag>{name}</Tag>
       </div>
-      <DataTable size="sm" rows={rows} headers={headers}>
+      <DataTable size="sm" rows={[]} headers={headers}>
         {({
           rows,
           getRowProps,
@@ -39,7 +39,7 @@ const SummaryTable: React.FC<ISummaryTableProps> = ({ name }) => {
             <Table {...getTableProps()}>
               <TableHead>
                 <TableRow>
-                  {headers.map((header) => (
+                  {headers.map((header: any) => (
                     <TableHeader {...getHeaderProps({ header })}>
                       {header.header}
                     </TableHeader>

@@ -11,9 +11,9 @@ import {
   Tag
 } from 'carbon-components-react';
 import {
+  IRevenueTableRow,
   revenueTableHeaders as headers,
-  revenueTableRows as rows
-} from '../../service/summaryService.ts.js';
+} from '../../service/summaryService';
 import { css } from '@emotion/css';
 
 const table = css`
@@ -38,11 +38,13 @@ const table = css`
   }
   
 `;
-
-const RevenueTable: React.FC = () => {
+interface IRevenueTableProps {
+  rowData: IRevenueTableRow[]
+}
+const RevenueTable: React.FC<IRevenueTableProps> = ({ rowData}) => {
   return (
     <>
-      <DataTable size="sm" rows={rows} headers={headers}>
+      <DataTable size="sm" rows={rowData} headers={headers}>
         {({
           rows,
           getRowProps,
@@ -54,7 +56,7 @@ const RevenueTable: React.FC = () => {
             <Table {...getTableProps()} className={table}>
               <TableHead>
                 <TableRow>
-                  {headers.map((header) => (
+                  {headers.map((header: any) => (
                     <TableHeader {...getHeaderProps({ header })}>
                       {header.header}
                     </TableHeader>
