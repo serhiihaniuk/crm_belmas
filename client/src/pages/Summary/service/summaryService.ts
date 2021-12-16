@@ -1,4 +1,4 @@
-import {IAppointment} from "../../../types/appointment-types";
+import {IAppointment, IAppointmentGroupByDate} from "../../../types/appointment-types";
 import {splitAppointmentsByDays} from "../../../helpers/appointments-helpers";
 
 export const headers = [
@@ -39,27 +39,31 @@ export interface IRevenueTableRow {
     cashless: number;
 }
 
-export const makeRevenueRows = (appointments: IAppointment[], startDayTimestamp: number | string, endDayTimestamp: number | string): IRevenueTableRow[] => {
-    const appointmentsByDays = splitAppointmentsByDays(appointments, startDayTimestamp, endDayTimestamp);
-    const earningsByDays = [];
-    for (let day in appointmentsByDays) {
-        const dayAppointments = appointmentsByDays[day];
-        const dayEarnings = dayAppointments.reduce((acc, appointment) => {
-            const price = appointment.price || 0
-            acc.cash = appointment.paymentMethod === 'cash' ? acc.cash + price : acc.cash;
-            acc.cashless = appointment.paymentMethod === 'cashless' ? acc.cashless + price : acc.cashless;
-            return acc;
-        }, {
-            cash: 0,
-            cashless: 0,
-        });
-        const formattedDay = `${day.split("_")[2]}.${day.split("_")[1]}`
-        earningsByDays.push({
-            date: formattedDay,
-            cash: dayEarnings.cash,
-            cashless: dayEarnings.cashless,
-        });
-    }
+export const makeRevenueRows = (appointmentsByDays: IAppointmentGroupByDate[]): IRevenueTableRow[] => {
+
+    const earningsByDays = appointmentsByDays.map(({date, appointments}) => {
+        const splitDateString = date.split('-')
+        const formattedDate = `${splitDateString[2]}.${splitDateString[1]}`;
+        const res = appointments.reduce((acc, appo) => {
+            if (!appo.price) {
+                return acc
+            }
+            const cash = appo.paymentMethod === 'cash' ? appo.price : 0;
+            const cashless = appo.paymentMethod === 'cashless' ? appo.price : 0;
+            return {
+                cash: acc.cash + cash,
+                cashless: acc.cashless + cashless,
+            }
+
+        }, {cash: 0, cashless: 0});
+        return {
+            id: date,
+            date: formattedDate,
+            cash: res.cash,
+            cashless: res.cashless,
+        }
+
+    });
     return earningsByDays.map(earning => ({
         id: earning.date,
         date: earning.date,

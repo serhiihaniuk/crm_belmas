@@ -12,3 +12,19 @@ export interface IAppointment {
     status: string;
     paymentMethod: string | null;
 }
+
+export interface IAppointmentGroup {
+    _id: {
+        count: number
+        appointments: IAppointment[]
+    }
+}
+
+export interface IAppointmentGroupByDate {
+    date: string;
+    appointments: IAppointment[];
+}
+
+export interface IAppointmentGroupByDateQuery {
+    getAppointmentsByDate: IAppointmentGroupByDate[]
+}

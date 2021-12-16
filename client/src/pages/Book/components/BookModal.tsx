@@ -105,10 +105,11 @@ const BookModal: React.FC<IBookModal> = ({isOpen, closeModal, selectedDay, emplo
             selectedDay.day = `${dateFromTS.getFullYear()}_${dateFromTS.getMonth()}_${dateFromTS.getDate()}`;
         }
 
-        const [year, month, day] = selectedDay.day.split('_');
+        const [year, month, day] = selectedDay.day.split('-');
         const [hour, minute] = appointmentTemplate.date.split(':');
-
+        console.log(year, month, day)
         appointmentTemplate.date = String(dateToTimestamp(+year, +month, +day, +hour, +minute));
+
         appointmentTemplate.employee = employee;
         appointmentTemplate.creator = createdBy;
         try {
@@ -129,7 +130,7 @@ const BookModal: React.FC<IBookModal> = ({isOpen, closeModal, selectedDay, emplo
                 );
             }
             await apolloClient.refetchQueries({
-                include: ['GET_APPOINTMENTS']
+                include: ['GET_APPOINTMENTS_BY_DAYS']
             });
             closeModal();
         } catch (e) {

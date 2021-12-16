@@ -3,12 +3,12 @@ import Day from './components/Day';
 import ScheduleModal from './components/ScheduleModal';
 import {pageWrapper} from '../../globalStyles';
 import {ApolloConsumer, useQuery} from "@apollo/client";
-import {GET_APPOINTMENTS} from "../../gql/query/appointment";
+import { GET_APPOINTMENTS_BY_DAYS} from "../../gql/query/appointment";
 import {InlineLoading} from "carbon-components-react";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
-import {splitAppointmentsByDays} from "../../helpers/appointments-helpers";
 import {currentMonthFirstAndListDayTimestamp} from "../../helpers/utils";
 import {IScheduleTableRow, makeScheduleTableRows} from "./service/tableService";
+import {IAppointmentGroupByDateQuery} from "../../types/appointment-types";
 
 const Schedule = () => {
     const [open, setOpen] = React.useState(false);
@@ -20,29 +20,24 @@ const Schedule = () => {
     const closeModal = () => setOpen(false);
     const {firstDayTimestamp, lastDayTimestamp} = currentMonthFirstAndListDayTimestamp();
     const employee = useTypedSelector(state => state.employee._id);
-    const {data, loading} = useQuery(GET_APPOINTMENTS, {
+    const {data: appointmentsByDays, loading} = useQuery<IAppointmentGroupByDateQuery>(GET_APPOINTMENTS_BY_DAYS, {
         variables: {
-            employee: employee,
-            dateFrom: String(firstDayTimestamp),
-            dateTo: String(lastDayTimestamp)
+            AppointmentsByDatesInput: {
+                employee: employee,
+                dateFrom: "2021-12-01",
+                dateTo: "2021-12-23"
+            }
         }
     });
-
-    const [days, setDays] = useState<any>([]);
-    useEffect(() => {
-        if (data) {
-            setDays(Object.entries(splitAppointmentsByDays(data.getAppointments, firstDayTimestamp, lastDayTimestamp)));
-        }
-    }, [data, firstDayTimestamp, lastDayTimestamp]);
-    if (loading) {
+    if (loading || !appointmentsByDays) {
         return <InlineLoading description='Загрузка'/>
     }
     return (
         <>
             <div className={pageWrapper}>
-                {days.map(([dayName, appointments]: any) => {
+                {appointmentsByDays.getAppointmentsByDate.map(({date, appointments}) => {
                     const rows = makeScheduleTableRows(appointments);
-                    return <Day key={dayName} openModal={openModal} rows={rows} day={dayName}/>;
+                    return <Day key={date} openModal={openModal} rows={rows} day={date}/>;
                 })}
             </div>
             <ApolloConsumer>

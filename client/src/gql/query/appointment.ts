@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import {gql} from '@apollo/client';
 
 export const GET_APPOINTMENTS = gql`
     query GET_APPOINTMENTS($employee: ID!, $dateFrom: String, $dateTo: String, $sortBy: String) {
@@ -18,13 +18,24 @@ export const GET_APPOINTMENTS = gql`
         }
     }`;
 
-export const GET_APPOINTMENT_FROM_CACHE = gql`
-    fragment selectedAppointment on Appointment {
-        _id
-        client
-        procedure
-        description
-        instagram
-        date
-        creator
-    }`;
+export const GET_APPOINTMENTS_BY_DAYS = gql`
+    query GET_APPOINTMENTS_BY_DAYS($AppointmentsByDatesInput: AppointmentsByDatesInput!) {
+        getAppointmentsByDate(AppointmentsByDatesInput: $AppointmentsByDatesInput){
+            date
+            appointments{
+                _id
+                client
+                price
+                status
+                paymentMethod
+                date
+                instagram
+                procedure
+                description
+                employee{
+                    _id
+                }
+            }
+        }
+    }
+`

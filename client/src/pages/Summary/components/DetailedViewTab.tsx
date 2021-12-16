@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useQuery} from '@apollo/client';
-import {GET_APPOINTMENTS} from '../../../gql/query/appointment';
+import {GET_APPOINTMENTS, GET_APPOINTMENTS_BY_DAYS} from '../../../gql/query/appointment';
 import {InlineLoading} from 'carbon-components-react';
 import {css} from '@emotion/css';
 import {splitAppointmentsByDays} from "../../../helpers/appointments-helpers";
@@ -8,6 +8,7 @@ import {currentMonthFirstAndListDayTimestamp} from "../../../helpers/utils";
 import SummaryTable from "./tables/SummaryTable";
 import {makeRevenueRows} from "../service/summaryService";
 import RevenueTable from "./tables/RevenueTable";
+import {IAppointmentGroupByDateQuery} from "../../../types/appointment-types";
 
 const loadingCSS = css`
   display: flex;
@@ -19,18 +20,21 @@ const DetailedViewTab: React.FC<any> = ({selected, openModal, employee}) => {
     const [rowsData, setRowsData] = useState<any>([]);
 
     const {firstDayTimestamp, lastDayTimestamp} = currentMonthFirstAndListDayTimestamp();
-    const {data, loading} = useQuery(GET_APPOINTMENTS, {
+    const {data: appointmentsByDays, loading} = useQuery<IAppointmentGroupByDateQuery>(GET_APPOINTMENTS_BY_DAYS, {
         variables: {
-            employee: employee,
-            dateFrom: String(firstDayTimestamp),
-            dateTo: String(lastDayTimestamp + 86400000)
+            AppointmentsByDatesInput: {
+                employee: employee,
+                dateFrom: "2021-12-01",
+                dateTo: "2021-12-22"
+            }
         }
     });
+
     useEffect(() => {
-        if (data) {
-            setRowsData(makeRevenueRows(data.getAppointments, firstDayTimestamp, lastDayTimestamp))
+        if (appointmentsByDays) {
+            setRowsData(makeRevenueRows(appointmentsByDays.getAppointmentsByDate))
         }
-    }, [data])
+    }, [appointmentsByDays]);
     if (loading) {
         return <InlineLoading className={loadingCSS} description='Загрузка'/>
     }
