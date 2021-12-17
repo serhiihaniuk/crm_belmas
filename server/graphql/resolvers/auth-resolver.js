@@ -3,15 +3,18 @@ const bcrypt = require("bcryptjs");
 const { getEmployeeFromDB } = require("./merge-resolvers");
 const { generateTokens } = require("../helpers/tokens");
 const ApiError = require("../helpers/api-error");
+const Employee = require("../../models/employee-model");
 
-const login = async (parent, { login, password }, { req, res, setCookies }) => {
+const login = async (parent, { login, password }) => {
   try {
-    const employee = await getEmployeeFromDB(login, true);
+    const employee = await Employee.findOne({ login: login });
 
     if (!employee) {
       return new Error("No such user");
     }
-
+    console.log(123)
+    console.log(login, password)
+    console.log(345)
     const isPasswordValid = bcrypt.compareSync(password, employee.password);
     if (!isPasswordValid) {
       return new Error("Invalid password");

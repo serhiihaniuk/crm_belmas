@@ -22,7 +22,7 @@ module.exports = {
     },
   },
   Mutation: {
-    createEmployee: async ({ EmployeeInput }) => {
+    createEmployee: async (parent, { EmployeeInput }) => {
       try {
         validateCredentials(EmployeeInput.login, EmployeeInput.password);
 
