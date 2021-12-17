@@ -146,7 +146,7 @@ const BookModal: React.FC<IBookModal> = ({isOpen, closeModal, selectedDay, emplo
                 }
             });
             await apolloClient.refetchQueries({
-                include: ['GET_APPOINTMENTS']
+                include: ['GET_APPOINTMENTS_BY_DAYS']
             });
             closeModal();
         } catch (e) {

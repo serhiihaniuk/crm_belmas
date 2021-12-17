@@ -27,7 +27,6 @@ class EmployeeController {
                 return {
                     ...employee._doc,
                     _id: employee.id,
-                    appointments: AppointmentController.getAppointments.bind(this, { employee: employee._id })
                 };
             })
 

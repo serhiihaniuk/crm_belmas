@@ -64,6 +64,7 @@ const DayTable: React.FC<IDayTableProps> = ({rowsData, openModal}) => {
                 <Table {...getTableProps()}>
                     <TableBody>
                         {rows.map((row: any, currentRow: any) => {
+                            if(!rowsData[currentRow]) return null
                             const instagramLink = rowsData[currentRow].instagram;
                             return (
                                 <React.Fragment key={row.id}>
