@@ -8,7 +8,6 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  Tag
 } from 'carbon-components-react';
 import {
   IRevenueTableRow,

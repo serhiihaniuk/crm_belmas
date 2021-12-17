@@ -5,11 +5,18 @@ const checkAuthAndResolve = require("../helpers/check-auth");
 const AppointmentController = require("../../controllers/appointment-controller");
 module.exports = {
   Query: {
-    getAppointments: async (parent, args, context) => {
+    getAppointmentsTotalPrice: async (parent, args, context) => {
       return checkAuthAndResolve(
           context.req.headers.authorization,
           "admin",
-          AppointmentController.getAppointments.bind(this, args)
+          AppointmentController.getAppointmentsTotalPrice.bind(this, args)
+      );
+    },
+    getAppointmentsByDate: async (parent, args, context) => {
+      return checkAuthAndResolve(
+          context.req.headers.authorization,
+          "admin",
+          AppointmentController.getAppointmentsByDate.bind(this, args)
       );
     },
   },

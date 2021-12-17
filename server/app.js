@@ -52,7 +52,7 @@ async function startServer() {
 }
 
 startServer();
-
+let db
 async function start() {
   try {
     await mongoose.connect(
@@ -66,6 +66,7 @@ async function start() {
           console.log(err);
         }
         console.log("Connected to mongoDB");
+        db = mongoose.connection.db
       }
     );
     app.listen(process.env.PORT, () => {
@@ -78,3 +79,5 @@ async function start() {
 }
 
 start();
+
+module.exports = db

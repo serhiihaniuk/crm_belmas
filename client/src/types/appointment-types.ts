@@ -1,7 +1,6 @@
 export interface IAppointment {
     _id: string;
     client: string;
-    price: number | null;
     date: Date;
     instagram: string | null;
     procedure: string;
@@ -11,6 +10,8 @@ export interface IAppointment {
     }
     status: string;
     paymentMethod: string | null;
+    cash: number | null;
+    cashless: number | null;
 }
 
 export interface IAppointmentGroup {

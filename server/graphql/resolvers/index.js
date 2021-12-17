@@ -3,6 +3,7 @@ const employeeResolver = require("./employee-resolver");
 const authResolver = require("./auth-resolver");
 
 
+
 const rootResolver = {
   Query: {
     ...appointmentsResolver.Query,

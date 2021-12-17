@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import Day from './components/Day';
 import ScheduleModal from './components/ScheduleModal';
 import {pageWrapper} from '../../globalStyles';
@@ -6,7 +6,6 @@ import {ApolloConsumer, useQuery} from "@apollo/client";
 import { GET_APPOINTMENTS_BY_DAYS} from "../../gql/query/appointment";
 import {InlineLoading} from "carbon-components-react";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
-import {currentMonthFirstAndListDayTimestamp} from "../../helpers/utils";
 import {IScheduleTableRow, makeScheduleTableRows} from "./service/tableService";
 import {IAppointmentGroupByDateQuery} from "../../types/appointment-types";
 
@@ -18,7 +17,7 @@ const Schedule = () => {
         setSelectedAppointment(appointment)
     }
     const closeModal = () => setOpen(false);
-    const {firstDayTimestamp, lastDayTimestamp} = currentMonthFirstAndListDayTimestamp();
+
     const employee = useTypedSelector(state => state.employee._id);
     const {data: appointmentsByDays, loading} = useQuery<IAppointmentGroupByDateQuery>(GET_APPOINTMENTS_BY_DAYS, {
         variables: {
