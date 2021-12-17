@@ -50,7 +50,7 @@ const ScheduleModal: React.FC<IScheduleModalProps> = ({
       paymentMethod: ''
     }
   });
-  const [calculateAppointment] = useMutation(CALCULATE_APPOINTMENT);
+  const [calculateAppointment, { data, loading, error }] = useMutation(CALCULATE_APPOINTMENT);
 
   useEffect(() => {
     if (selectedAppointment) {
@@ -80,11 +80,12 @@ const ScheduleModal: React.FC<IScheduleModalProps> = ({
       await client.refetchQueries({
         include: ['GET_APPOINTMENTS_BY_DATE']
       });
-      closeModal();
+
     } catch (e) {
       console.log(e);
     }
   };
+
   return (
     <Modal
       open={isOpen}
@@ -104,35 +105,35 @@ const ScheduleModal: React.FC<IScheduleModalProps> = ({
     >
       <form>
         <Controller
-          name="price"
-          control={control as any}
-          rules={{ required: true, min: 1 }}
-          render={({ field }) => (
-            <NumberInput
-              label="Стоимость"
-              id="calculatePrice"
-              light={true}
-              hideSteppers={true}
-              {...field}
-            />
-          )}
+            name="price"
+            control={control as any}
+            rules={{ required: true, min: 1 }}
+            render={({ field }) => (
+                <NumberInput
+                    label="Стоимость"
+                    id="calculatePrice"
+                    light={true}
+                    hideSteppers={true}
+                    {...field}
+                />
+            )}
         />
         {errors.price && (
-          <span style={{ color: 'red', height: 12, fontSize: 10 }}>
+            <span style={{ color: 'red', height: 12, fontSize: 10 }}>
             Это поле обязательно
           </span>
         )}
         <Select
-          id="select-1"
-          defaultValue="placeholder-item"
-          labelText="Способ оплаты"
-          {...register('paymentMethod', { required: true })}
+            id="select-1"
+            defaultValue="placeholder-item"
+            labelText="Способ оплаты"
+            {...register('paymentMethod', { required: true })}
         >
           <SelectItem value="cash" text="Наличные" />
           <SelectItem value="cashless" text="Терминал" />
         </Select>
         {errors.paymentMethod && (
-          <span style={{ color: 'red', height: 12, fontSize: 10 }}>
+            <span style={{ color: 'red', height: 12, fontSize: 10 }}>
             Это поле обязательно
           </span>
         )}

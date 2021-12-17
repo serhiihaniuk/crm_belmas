@@ -1,6 +1,5 @@
 const Appointment = require("../models/appointment-model");
 const Employee = require("../models/employee-model");
-const { getEmployeeFromDB } = require("../graphql/resolvers/merge-resolvers");
 const mongoose = require("mongoose");
 const {
   mapDaysBetweenDates,
