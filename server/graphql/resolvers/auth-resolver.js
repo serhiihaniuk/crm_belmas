@@ -7,7 +7,7 @@ const Employee = require("../../models/employee-model");
 
 const login = async (parent, { login, password }) => {
   try {
-    const employee = await Employee.findOne({ login: login }).maxTimeMS(100000)
+    const employee = await Employee.findOne({ login: login })
 
     if (!employee) {
       return new Error("No such user");
