@@ -12,9 +12,11 @@ const appointmentSchema = new Schema({
   },
   cash: {
     type: Number,
+    default: 0,
   },
   cashless: {
     type: Number,
+    default: 0,
   },
   paymentMethod: {
     type: String,
@@ -44,6 +46,10 @@ const appointmentSchema = new Schema({
     ref: "Employee",
     required: true,
   },
+  month: {
+    type: Schema.Types.ObjectId,
+    ref: "MonthTotal",
+  }
 });
 
 module.exports = mongoose.model("Appointment", appointmentSchema);

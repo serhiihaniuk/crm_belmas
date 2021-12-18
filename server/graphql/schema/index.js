@@ -72,6 +72,7 @@ const typeDefs = gql`
     procedure: String!
     employee: String!
     creator: String!
+    monthCode: String!
   }
   input AppointmentsByDatesInput {
     dateFrom: String!

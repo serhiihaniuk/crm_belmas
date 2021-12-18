@@ -63,6 +63,7 @@ interface IAppointmentTemplate {
     procedure: string;
     employee: string;
     creator: string;
+    monthCode: string;
 }
 
 
@@ -107,9 +108,9 @@ const BookModal: React.FC<IBookModal> = ({isOpen, closeModal, selectedDay, emplo
 
         const [year, month, day] = selectedDay.day.split('-');
         const [hour, minute] = appointmentTemplate.date.split(':');
-        console.log(year, month, day)
-        appointmentTemplate.date = String(dateToTimestamp(+year, +month, +day, +hour, +minute));
 
+        appointmentTemplate.date = String(dateToTimestamp(+year, +month, +day, +hour, +minute));
+        appointmentTemplate.monthCode = `${year}-${month}`;
         appointmentTemplate.employee = employee;
         appointmentTemplate.creator = createdBy;
         try {
