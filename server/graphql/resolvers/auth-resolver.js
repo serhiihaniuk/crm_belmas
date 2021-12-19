@@ -12,9 +12,7 @@ const login = async (parent, { login, password }) => {
     if (!employee) {
       return new Error("No such user");
     }
-    console.log(123)
-    console.log(login, password)
-    console.log(345)
+
     const isPasswordValid = bcrypt.compareSync(password, employee.password);
     if (!isPasswordValid) {
       return new Error("Invalid password");
