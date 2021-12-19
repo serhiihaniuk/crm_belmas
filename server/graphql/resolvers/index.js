@@ -11,6 +11,7 @@ const rootResolver = {
     ...appointmentsResolver.Query,
     ...employeeResolver.Query,
     ...monthResolver.Query,
+    ...expensesResolver.Query,
     ...authResolver
   },
   Mutation: {

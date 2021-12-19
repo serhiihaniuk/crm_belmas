@@ -3,19 +3,19 @@ const MonthController = require("./month-controller");
 const MonthTotal = require("../models/month-total-model");
 
 class ExpensesController {
-  static async addNewExpense({ newExpenseInput }) {
+  static async addNewExpense({ expenseInput }) {
     try {
       const month = await MonthController.getMonthByCode(
-        newExpenseInput.monthCode
+        expenseInput.monthCode
       );
       const newExpense = new Expenses({
-        cash: newExpenseInput.cash,
-        cashless: newExpenseInput.cashless,
+        cash: expenseInput.cash,
+        cashless: expenseInput.cashless,
         month: month,
         date: Date.now(),
-        category: newExpenseInput.category,
-        invoice: newExpenseInput.invoice,
-        description: newExpenseInput.description,
+        category: expenseInput.category,
+        invoice: expenseInput.invoice,
+        description: expenseInput.description,
       });
       const savedExpense = await newExpense.save();
 
@@ -30,29 +30,44 @@ class ExpensesController {
     }
   }
 
-  static async editExpense(args) {
+  static async editExpense({ expenseID, expenseInput }) {
     const expense = {
-      cash: args.cash,
-      cashless: args.cashless,
-      category: args.category,
-      invoice: args.invoice,
-      description: args.description,
+      cash: expenseInput.cash,
+      cashless: expenseInput.cashless,
+      category: expenseInput.category,
+      invoice: expenseInput.invoice,
+      description: expenseInput.description,
     };
+
     try {
-      return await Expenses.findByIdAndUpdate(args.id, expense, { new: true });
+      return await Expenses.findByIdAndUpdate(expenseID, expense, {
+        new: true,
+      });
     } catch (error) {
       throw error;
     }
   }
 
-  static async deleteExpense(args) {
+  static async deleteExpense({ expenseID }) {
     try {
-      const expense = await Expenses.findById(args.id);
-      const month = await MonthController.getMonthByCode(expense.month.code);
-      await MonthTotal.findByIdAndUpdate(month.id, {
-        $pull: { expenses: expense },
-      });
-      return await Expenses.findByIdAndDelete(args.id);
+      const expense = await Expenses.findById(expenseID);
+
+      const month = await MonthTotal.findById(expense.month)
+      month.expenses.pull(expenseID);
+      await month.save();
+
+      await Expenses.findByIdAndDelete(expenseID);
+
+      return "success";
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getExpensesByMonth({ monthCode }) {
+    try {
+      const month = await MonthController.getMonthByCode(monthCode);
+      return await Expenses.find({ month: month.id });
     } catch (error) {
       throw error;
     }
@@ -60,3 +75,4 @@ class ExpensesController {
 }
 
 module.exports = ExpensesController;
+// 61bf440576440897fa4c5617

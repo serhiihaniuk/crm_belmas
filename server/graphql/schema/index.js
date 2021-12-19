@@ -12,6 +12,7 @@ const typeDefs = gql`
         login(login: String, password: String): AuthData!
         logout: Boolean!
         checkAuth: AuthData!
+        getExpensesByMonth(monthCode: String!): [Expense!]!
     }
     type Mutation {
         createAppointment(AppointmentInput: AppointmentInput): Appointment
@@ -27,7 +28,9 @@ const typeDefs = gql`
         ): Appointment!
         deleteAppointment(id: ID!): String
         createEmployee(EmployeeInput: EmployeeInput): Employee
-        addNewExpense(newExpenseInput: NewExpenseInput!): Expense!
+        addNewExpense(newExpenseInput: ExpenseInput!): Expense!
+        editExpense(expenseID: ID!, expenseInput: ExpenseInput!): Expense!
+        deleteExpense(expenseID: ID!): String!
     }
     type MonthStats {
         _id: ID!
@@ -110,7 +113,7 @@ const typeDefs = gql`
         qualification: String
         role: String
     }
-    input NewExpenseInput{
+    input ExpenseInput{
         cash: Int!
         cashless: Int!
         monthCode: String!
