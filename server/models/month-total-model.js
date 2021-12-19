@@ -28,9 +28,29 @@ const monthTotalSchema = new Schema({
     type: Number,
     required: true,
   },
+  currentCash: {
+    type: Number,
+    required: true,
+  },
+  currentCashless: {
+    type: Number,
+    required: true,
+  },
+  expensesCash: {
+    type: Number,
+    required: true,
+  },
+  expensesCashless: {
+    type: Number,
+    required: true,
+  },
   appointments: [{
     type: Schema.Types.ObjectId,
     ref: "Appointment",
+  }],
+  expenses: [{
+    type: Schema.Types.ObjectId,
+    ref: "Expenses",
   }],
   status: {
     type: String,

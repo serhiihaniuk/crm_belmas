@@ -21,6 +21,10 @@ class MonthController {
       cashlessAtTheBeginning: 0,
       cash: 0,
       cashless: 0,
+      currentCashless: 0,
+      currentCash: 0,
+      expensesCashless: 0,
+      expensesCash: 0,
     });
     try {
       return await newMonth.save();
@@ -31,9 +35,9 @@ class MonthController {
 
   static async getMonthStats(monthCode) {
     try {
-      let month = await MonthTotal.findOne({ monthCode: monthCode }).populate(
-        "appointments"
-      );
+      let month = await MonthTotal.findOne({ monthCode: monthCode })
+        .populate("appointments")
+        .populate("expenses");
       if (!month) {
         month = await this.createMonth(monthCode);
       }
@@ -48,40 +52,37 @@ class MonthController {
           cashless: 0,
         }
       );
-
-      const updatedMonth = await MonthTotal.findOneAndUpdate(
+      const  totalExpenses = month.expenses.reduce(
+        (acc, curr) => {
+          acc.cash += curr.cash;
+          acc.cashless += curr.cashless;
+          return acc;
+        },
+        {
+          cash: 0,
+          cashless: 0,
+        }
+      );
+      return await MonthTotal.findOneAndUpdate(
         { monthCode: monthCode },
         {
           $set: {
             cash: totalEarnings.cash,
             cashless: totalEarnings.cashless,
+            expensesCash: totalExpenses.cash,
+            expensesCashless: totalExpenses.cashless,
+            currentCash: totalEarnings.cash - totalExpenses.cash,
+            currentCashless:
+              totalEarnings.cashless -
+              totalExpenses.cashless +
+              month.cashlessAtTheBeginning,
           },
         },
         { new: true }
       );
-      /*
-       {
-        _id: new ObjectId("61be21576efa3a9f29bb3176"),
-        monthCode: '2021-12',
-        month: '12',
-        year: '2021',
-        cashlessAtTheBeginning: 0,
-        cash: 123,
-        cashless: 112,
-        __v: 0,
-        appointments: [
-          new ObjectId("61be286294521c3c8750a81a"),
-          new ObjectId("61be396b85ecf2be1d2be37f"),
-          new ObjectId("61be3fc614028397cdbcb472")
-        ]
-      }*/
-      return updatedMonth;
     } catch (e) {
       throw e;
     }
   }
 }
-
-MonthController.getMonthStats("2021-12");
-
 module.exports = MonthController;

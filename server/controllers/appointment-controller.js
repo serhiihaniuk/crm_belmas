@@ -85,7 +85,14 @@ class AppointmentController {
 
     async deleteAppointment({id}) {
         try {
-            await Appointment.findByIdAndDelete(id);
+            const deletedAppointment = await Appointment.findByIdAndDelete(id);
+            const month = await MonthController.getMonthByCode(deletedAppointment.month.code);
+            await Employee.findByIdAndUpdate(deletedAppointment.employee, {
+                $pull: {appointments: deletedAppointment},
+            });
+            await MonthTotal.findByIdAndUpdate(month.id, {
+                $pull: {appointments: deletedAppointment},
+            });
             return "success";
         } catch (err) {
             throw err;
