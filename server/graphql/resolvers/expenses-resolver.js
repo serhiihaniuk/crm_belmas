@@ -12,6 +12,8 @@ module.exports = {
   },
   Mutation: {
     addNewExpense: async (parent, args, context) => {
+      console.log(args, 'asfdasdasdfsdfa')
+
       return checkAuthAndResolve(
         context.req.headers.authorization,
         "admin",

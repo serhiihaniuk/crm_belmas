@@ -23,3 +23,23 @@ export function getDayName(dateString: string): string | Date {
     return String(day);
 }
 
+// timestamp to YYYY-MM-DD-HH-MM
+type YearFormat = 'YYYY';
+type MonthFormat = 'MM';
+type DayFormat = 'DD';
+type HoursFormat = 'HH'
+type MinutesFormat = 'mm'
+
+type DateFormat = YearFormat | MonthFormat | DayFormat | HoursFormat | MinutesFormat;
+export function timestampToDate(timestamp: number, format: any = 'YYYY-MM-DD-HH-mm', splitter: string = '-'): string {
+    const date = new Date(timestamp);
+    const dateObject = {
+        'YYYY': String(date.getFullYear()),
+        'MM': String(date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1),
+        'DD': String(date.getDate() < 10 ? '0' + date.getDate() : date.getDate()),
+        'HH': String(date.getHours() < 10 ? '0' + date.getHours() : date.getHours()),
+        'mm': String(date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()),
+    };
+    const requiredValues: DateFormat[] = format.split('-');
+    return requiredValues.map(value => dateObject[value]).join(splitter);
+    }

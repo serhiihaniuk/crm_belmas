@@ -28,9 +28,9 @@ const typeDefs = gql`
         ): Appointment!
         deleteAppointment(id: ID!): String
         createEmployee(EmployeeInput: EmployeeInput): Employee
-        addNewExpense(newExpenseInput: ExpenseInput!): Expense!
-        editExpense(expenseID: ID!, expenseInput: ExpenseInput!): Expense!
-        deleteExpense(expenseID: ID!): String!
+        addNewExpense(ExpenseInput: ExpenseInput!): Expense!
+        editExpense(ExpenseID: ID!, ExpenseInput: ExpenseInput!): Expense!
+        deleteExpense(ExpenseID: ID!): String!
     }
     type MonthStats {
         _id: ID!
@@ -68,8 +68,9 @@ const typeDefs = gql`
         description: String!
         cash: Int!
         cashless: Int!
-        monthCode: String!
         invoice: Boolean!
+        category: String!
+        date: String!
     }
     type Employee {
         _id: ID!
@@ -120,6 +121,7 @@ const typeDefs = gql`
         invoice: Boolean!
         category: String!
         description: String!
+        date: String!
     }
     type AppointmentsByDates {
         date: String!

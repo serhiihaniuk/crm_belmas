@@ -12,6 +12,7 @@ const addButton = css`
 const Expenses: React.FC = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [name, setName] = useState('');
+  const [month, setMonth] = useState('2021-12');
 
   const openModal = () => {
     setIsOpenModal(true);
@@ -23,13 +24,10 @@ const Expenses: React.FC = () => {
     <div className={pageWrapper}>
       <Tabs>
         <Tab id="tab-1" label="Материалы">
-          <ExpensesTable />
-        </Tab>
-        <Tab id="tab-2" label="Студия">
-          <ExpensesTable />
+          <ExpensesTable monthCode={month}/>
         </Tab>
         <Tab id="tab-3" label="Зарплата">
-          <ExpensesTable />
+          <ExpensesTable monthCode={month}/>
         </Tab>
       </Tabs>
       <ExpensesModal isOpen={isOpenModal} closeModal={closeModal} name={name} />

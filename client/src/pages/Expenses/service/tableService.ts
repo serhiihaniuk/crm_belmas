@@ -1,66 +1,46 @@
+import {timestampToDate} from "../../../helpers/utils";
+
 export const headers = [
   {
-    key: 'time',
+    key: 'date',
     header: 'Дата'
   },
   {
-    key: 'name',
-    header: 'Название'
+    key: 'description',
+    header: 'Описание'
   },
   {
     key: 'category',
     header: 'Кат'
   },
   {
-    key: 'payment',
-    header: 'О'
-  }
-  ,
+    key: 'cash',
+    header: 'Нал'
+  },
   {
-    key: 'sum',
-    header: 'Сумма'
+    key: 'cashless',
+    header: 'Безнал'
   }
 ];
 
-export const rows = [
-  {
-    id: "1",
-    time: '1.03',
-    name: 'Balkon',
-    category: 'Отдых',
-    payment: 'Н',
-    sum: '23'
-  },
-  {
-    id: "2",
-    time: '1.03',
-    name: 'fdsfs',
-    category: 'Отдых',
-    payment: 'Н',
-    sum: '131'
-  },
-  {
-    id: "3",
-    time: '1.03',
-    name: 'Wsfagasdg',
-    category: 'Отдых',
-    payment: 'Н',
-    sum: '22'
-  },
-  {
-    id: "4",
-    time: '1.03',
-    name: 'asefsf',
-    category: 'Отдых',
-    payment: 'Н',
-    sum: '312'
-  },
-  {
-    id: "5",
-    time: '1.03',
-    name: 'sfdsadfsdf',
-    category: 'Отдых',
-    payment: 'Б-Н',
-    sum: '213'
-  }
-];
+interface IExpense {
+  _id: number;
+  date: string;
+  description: string;
+  category: string;
+  cash: number;
+  cashless: number;
+}
+
+export function CreateExpensesRows(expenses: IExpense[]) {
+  return expenses.map((expense) => {
+    return {
+      id: expense._id,
+      date: timestampToDate(+expense.date, 'MM-DD', '.'),
+      description: expense.description,
+      category: expense.category,
+      cash: expense.cash,
+      cashless: expense.cashless
+    };
+  });
+}
