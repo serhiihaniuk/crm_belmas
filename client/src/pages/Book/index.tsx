@@ -35,7 +35,6 @@ const Book: React.FC = () => {
 
   const openModal = (day: string, selectedAppointment: BookTableRow | undefined, isEditingExisting = false) => {
     setIsOpenModal(true);
-    console.log(day)
     setSelectedAppointment(
       {
         day,

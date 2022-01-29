@@ -94,7 +94,7 @@ const BookModal: React.FC<IBookModal> = ({isOpen, closeModal, selectedDay, emplo
         }
         reset()
 
-    }, [selectedAppointment]);
+    }, [selectedAppointment, reset, setValue]);
     useEffect(() => {
         if (!isOpen) {
             setShowDeleteBtn(false)

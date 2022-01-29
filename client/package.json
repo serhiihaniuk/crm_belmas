@@ -63,7 +63,9 @@
     "arrowParens": "always",
     "bracketSpacing": true,
     "semi": true,
-    "trailingComma": "none"
+    "trailingComma": "none",
+    "printWidth": 120,
+    "tabWidth": 4
   },
   "devDependencies": {
     "prettier": "^2.5.1"
