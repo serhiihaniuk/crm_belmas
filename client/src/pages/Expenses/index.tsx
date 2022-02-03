@@ -6,12 +6,14 @@ import ExpensesModal from './components/ExpensesModal';
 import ExpensesTable from './components/ExpensesTable';
 import { pageWrapper } from '../../globalStyles';
 import { ApolloConsumer } from '@apollo/client';
+import { IExpenseItem } from './service/tableService';
 
 const addButton = css`
     margin: 10px 0 0 71%;
 `;
 const Expenses: React.FC = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [selectedExpense, setSelectedExpense] = useState<IExpenseItem | undefined>();
     const [name, setName] = useState('');
     const [month, setMonth] = useState('2021-12');
 
@@ -19,16 +21,28 @@ const Expenses: React.FC = () => {
         setIsOpenModal(true);
     };
     const closeModal = () => {
+        setSelectedExpense(undefined);
         setIsOpenModal(false);
     };
     return (
         <div className={pageWrapper}>
             <Tabs>
                 <Tab id="tab-1" label="Материалы">
-                    <ExpensesTable monthCode={month} />
+                    <ExpensesTable monthCode={month} setSelectedExpense={setSelectedExpense} openModal={openModal} />
+                    <Button
+                        className={addButton}
+                        onClick={openModal}
+                        renderIcon={Add16}
+                        iconDescription="Add"
+                        hasIconOnly
+                        size="small"
+                        kind="tertiary"
+                    >
+                        Добавить
+                    </Button>
                 </Tab>
                 <Tab id="tab-3" label="Зарплата">
-                    <ExpensesTable monthCode={month} />
+                    'Зарплата'
                 </Tab>
             </Tabs>
             <ApolloConsumer>
@@ -38,21 +52,10 @@ const Expenses: React.FC = () => {
                         closeModal={closeModal}
                         name={name}
                         apolloClient={client as any}
+                        selectedExpense={selectedExpense}
                     />
                 )}
             </ApolloConsumer>
-
-            <Button
-                className={addButton}
-                onClick={openModal}
-                renderIcon={Add16}
-                iconDescription="Add"
-                hasIconOnly
-                size="small"
-                kind="tertiary"
-            >
-                Добавить
-            </Button>
         </div>
     );
 };

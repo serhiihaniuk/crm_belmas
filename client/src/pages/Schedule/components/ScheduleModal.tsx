@@ -12,6 +12,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { CALCULATE_APPOINTMENT } from '../../../gql/mutations/appointment';
 import { InlineLoading } from 'carbon-components-react';
 import { useMutation } from '@apollo/client';
+import ModalInlineLoading from "../../../components/shared/ModalInlineLoading";
 
 const modal = css`
     .bx--modal-container {
@@ -19,11 +20,6 @@ const modal = css`
     }
 `;
 
-const loadingStyle = css`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 136px;`
 
 
 interface IScheduleModalProps {
@@ -112,7 +108,7 @@ const ScheduleModal: React.FC<IScheduleModalProps> = ({
             onRequestSubmit={handleSubmit(onSubmit)}
             className={modal}
         >
-            {loading && <InlineLoading className={loadingStyle} description='Загрузка' />}
+            {loading && <ModalInlineLoading/>}
             {!loading && <form>
                 <Controller
                     name="price"

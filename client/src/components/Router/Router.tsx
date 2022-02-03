@@ -25,7 +25,7 @@ const Router: React.FC<IRouterProps> = ({ isAuth }) => {
             );
           }
         )}
-        <Redirect to={isAuth ? '/' : '/login'} />
+        <Redirect to={isAuth ? permittedRoutes[0].path : '/login'} />
       </Switch>
     </BrowserRouter>
   );

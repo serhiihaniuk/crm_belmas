@@ -16,7 +16,7 @@ export interface IRoute {
 export const routes: IRoute[] = [
   {
     name: 'Записи',
-    path: '/',
+    path: '/book',
     exact: true,
     component: Book,
     isAuth: true
