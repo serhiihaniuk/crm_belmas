@@ -52,6 +52,10 @@ const monthTotalSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Expenses",
   }],
+  salaryTables: [{
+    type: Schema.Types.ObjectId,
+    ref: "SalaryTable",
+  }],
   status: {
     type: String,
     default: "active",

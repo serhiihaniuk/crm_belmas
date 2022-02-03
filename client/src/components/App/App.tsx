@@ -16,8 +16,8 @@ function App() {
 
   useEffect(() => {
     if (data) {
-      localStorage.setItem('token', data.checkAuth.accessToken);
-      dispatch(setEmployeeAction(data.checkAuth.employee));
+      localStorage.setItem('token', data?.checkAuth?.accessToken);
+      dispatch(setEmployeeAction(data?.checkAuth?.employee));
     }
   }, [data, dispatch]);
   if (loading) return (
