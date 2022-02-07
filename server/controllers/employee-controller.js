@@ -9,10 +9,11 @@ class EmployeeController {
             if(!withPassword) {
                 employee._doc.password = null;
             }
+
             return {
                 ...employee._doc,
                 _id: employee.id,
-                appointments: AppointmentController.getAppointments.bind(this, { employee: employee._id })
+                appointments: []
             };
         } catch (err) {
             throw err;

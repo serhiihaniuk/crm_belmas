@@ -1,17 +1,17 @@
-const Employee = require("../../models/employee-model");
-const Appointment = require("../../models/appointment-model");
+const Employee = require('../../models/employee-model');
+const Appointment = require('../../models/appointment-model');
 
 const getEmployeeFromDB = async (field, withPassword = false) => {
     try {
         const employee = await Employee.findOne({ field });
 
-        if(!withPassword) {
+        if (!withPassword) {
             employee._doc.password = null;
         }
         return {
             ...employee._doc,
             _id: employee.id,
-            appointments: getAppointments.bind(this, employee._doc.appointments),
+            appointments: getAppointments.bind(this, employee._doc.appointments)
         };
     } catch (err) {
         throw err;
@@ -26,7 +26,7 @@ const getAppointments = async (appointmentsIds) => {
             return {
                 ...appointment._doc,
                 _id: appointment.id,
-                employee: getEmployeeFromDB.bind(this, appointment.employee),
+                employee: getEmployeeFromDB.bind(this, appointment.employee)
             };
         });
     } catch (err) {
@@ -36,6 +36,5 @@ const getAppointments = async (appointmentsIds) => {
 
 module.exports = {
     getEmployeeFromDB,
-    getAppointments,
+    getAppointments
 };
-
