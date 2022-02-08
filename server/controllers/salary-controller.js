@@ -9,9 +9,7 @@ class SalaryController {
 		try {
 			const [monthCode, employeeID] = salaryTableCode.split('_');
 			const month = await MonthController.getMonthByCode(monthCode);
-			const employee = await EmployeeController.getEmployee({
-				_id: employeeID
-			});
+			const employee = await EmployeeController.getEmployeeByID(employeeID);
 			const newSalaryTable = new Salary({
 				salaryTableCode: salaryTableCode,
 				employee: employee,
@@ -33,6 +31,7 @@ class SalaryController {
 		}
 	}
 	static async getSalaryTableByCode({ salaryTableCode }) {
+
 		const [, employeeID] = salaryTableCode.split('_');
 		try {
 			let salaryTable = await Salary.findOne({
@@ -41,9 +40,7 @@ class SalaryController {
 			if (!salaryTable) {
 				salaryTable = await SalaryController.createSalaryTable(salaryTableCode);
 			}
-			const employee = await EmployeeController.getEmployee({
-				_id: employeeID
-			});
+			const employee = await EmployeeController.getEmployeeByID(employeeID);
 
 			return { ...salaryTable._doc, _id: salaryTable.id, employee: { ...employee } };
 		} catch (e) {
@@ -53,12 +50,14 @@ class SalaryController {
 
 	static async addSalaryPayment({ SalaryPaymentInput }) {
 		try {
-			const month = await MonthController.getMonthByCode(SalaryPaymentInput.monthCode);
+			const [monthCode, employeeID] = SalaryPaymentInput.salaryTableCode.split('_');
+			const month = await MonthController.getMonthByCode(monthCode);
 
-			const employee = await EmployeeController.getEmployee({
-				_id: SalaryPaymentInput.id
-			});
+			const employee = await EmployeeController.getEmployeeByID(employeeID);
 
+            if(!employee) {
+				return new Error('Employee not found');
+			}
 			const salaryTable = await SalaryController.getSalaryTableByCode({
 				salaryTableCode: SalaryPaymentInput.salaryTableCode
 			});

@@ -56,8 +56,9 @@ let db
 async function start() {
   try {
     await mongoose.connect(
-      process.env.MONGO_URI,
+      process.env.MONGO_URI_LOCAL,
       {
+        dbName: 'bnsdb',
         useNewUrlParser: true,
         useUnifiedTopology: true,
       },
@@ -78,6 +79,6 @@ async function start() {
   }
 }
 
-start();
+start()
 
 module.exports = db

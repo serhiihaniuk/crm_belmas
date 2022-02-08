@@ -150,4 +150,4 @@ const typeDefs = gql`
 		monthCode: String!
 	}
 `;
-module.exports = { typeDefs };
+module.exports = { typeDefs }

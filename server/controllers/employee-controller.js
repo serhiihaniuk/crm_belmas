@@ -19,6 +19,22 @@ class EmployeeController {
             throw err;
         }
     };
+    async getEmployeeByID (id, withPassword = false)  {
+        try {
+            const employee = await Employee.findById(id);
+            if(!withPassword) {
+                employee._doc.password = null;
+            }
+
+            return {
+                ...employee._doc,
+                _id: employee.id,
+                appointments: []
+            };
+        } catch (err) {
+            throw err;
+        }
+    };
     async getEmployees (query)  {
 
         try {
