@@ -18,7 +18,6 @@ class SalaryController {
 				payedCashless: 0,
 				tips: 0,
 				month: month,
-				test: [3, 3, 3, 3, 3]
 			});
 			const newSalaryTableSaved = await newSalaryTable.save();
 			await MonthTotal.findByIdAndUpdate(month.id, {

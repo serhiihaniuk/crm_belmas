@@ -1,0 +1,75 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx_server
+    build:
+      context: nginx
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    command: /bin/sh -c "nginx -g 'daemon off;'"
+    depends_on:
+      bns_server:
+        condition: service_healthy
+      bns_client:
+        condition: service_started
+    networks:
+      - bns_network
+  bns_client:
+    container_name: bns_react
+    image: bns_react:1.0.0
+    build:
+      context: client
+      target: production
+      dockerfile: Dockerfile
+    networks:
+      - bns_network
+    ports:
+      - '3000:3000'
+    restart: unless-stopped
+  mongodb:
+    image: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - shared_database:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin_bns
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    networks:
+      - bns_network
+  mongo-express:
+    image: mongo-express
+    ports:
+      - '8081:8081'
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin_bns
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    networks:
+      - bns_network
+  bns_server:
+    container_name: bns_api
+    image: bns_api:1.0.0
+    build:
+      context: server
+      target: production
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb
+    networks:
+      - bns_network
+    ports:
+      - '6000:6000'
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', 'http://bns_server:6000']
+      interval: 5s
+      timeout: 3s
+      retries: 6
+volumes:
+  shared_database:
+    driver: local
+networks:
+  bns_network:

@@ -53,6 +53,7 @@ async function startServer() {
 
 startServer();
 let db
+
 async function start() {
   try {
     await mongoose.connect(
@@ -65,6 +66,7 @@ async function start() {
       (err) => {
         if (err) {
           console.log(err);
+          return;
         }
         console.log("Connected to mongoDB");
         db = mongoose.connection.db

@@ -100,6 +100,7 @@ class AppointmentController {
     }
 
     async getAppointmentsTotalPrice({dateFrom, dateTo}) {
+        console.log(dateFrom, dateTo);
         try {
             const match = {
                 $match: {
@@ -121,7 +122,12 @@ class AppointmentController {
             };
             const pipeline = [match, group];
             const result = await Appointment.aggregate(pipeline);
-            console.log(result);
+            if (!result.length) {
+                return {
+                    cash: 0,
+                    cashless: 0,
+                };
+            }
             return result[0];
         } catch (err) {
             throw err;
