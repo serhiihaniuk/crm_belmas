@@ -21,7 +21,6 @@ services:
     image: bns_react:1.0.0
     build:
       context: client
-      target: production
       dockerfile: Dockerfile
     networks:
       - bns_network
@@ -54,7 +53,6 @@ services:
     image: bns_api:1.0.0
     build:
       context: server
-      target: production
       dockerfile: Dockerfile
     depends_on:
       - mongodb
