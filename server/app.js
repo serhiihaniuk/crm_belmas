@@ -10,8 +10,11 @@ const {
 const { typeDefs } = require("./graphql/schema/index");
 const graphQlResolvers = require("./graphql/resolvers/index");
 const httpHeadersPlugin = require("apollo-server-plugin-http-headers");
+const info = require("./helpers/info");
 
 require("dotenv").config();
+const workingMode = process.env.NODE_ENV;
+info('Starting server in ' + workingMode + ' mode');
 const corsOptions =  {
   credentials: true,
       origin: '*',
@@ -23,12 +26,12 @@ app.use(cors(corsOptions));
 
 app.get('/', (req, res)=>{
 
-  res.send('welcome to express app');
+  res.send('This is bns api');
 });
 
 let apolloServer;
 
-async function startServer() {
+async function startApolloServer() {
   apolloServer = new ApolloServer({
     cors: true,
     plugins: [
@@ -51,13 +54,17 @@ async function startServer() {
   });
 }
 
-startServer();
-let db
+startApolloServer().then(() => {
+  info('Apollo server started, path: ' + apolloServer.graphqlPath);
+})
 
-async function start() {
+let db
+const dataBaseURI = workingMode === 'production' ? process.env.MONGO_URI_LOCAL : process.env.MONGO_URI_DEVELOPMENT;
+info('connecting to database ' + dataBaseURI);
+async function startDB() {
   try {
     await mongoose.connect(
-      process.env.MONGO_URI_LOCAL,
+        dataBaseURI,
       {
         dbName: 'bnsdb',
         useNewUrlParser: true,
@@ -65,22 +72,23 @@ async function start() {
       },
       (err) => {
         if (err) {
-          console.log(err);
+          console.error(err);
           return;
         }
-        console.log("Connected to mongoDB");
         db = mongoose.connection.db
       }
     );
     app.listen(process.env.PORT, () => {
-      console.log(`Server running on port ${process.env.PORT}`);
-      console.log(`gql path is ${apolloServer.graphqlPath}`)
+      info(`Server running on port ${process.env.PORT}`);
+      info(`gql path is ${apolloServer.graphqlPath}`)
     });
   } catch (err) {
     console.log(err);
   }
 }
 
-start()
+startDB().then(() => {
+  info('...');
+});
 
 module.exports = db

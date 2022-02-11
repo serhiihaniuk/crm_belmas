@@ -1,11 +1,9 @@
-FROM node:14 as production 
+FROM node:14 as production
 
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-
+ENV NODE_ENV ${NODE_ENV}
 WORKDIR /usr/src/bns_client
 
-COPY . . 
+COPY . .
 
 RUN npm install --production
 
