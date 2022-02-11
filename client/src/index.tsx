@@ -6,11 +6,19 @@ import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from '@ap
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { setContext } from '@apollo/client/link/context';
-const uri = 'http://localhost/graphql'
+import info from "./helpers/info";
+
+const workingMode = process.env.NODE_ENV === 'development' ? 'development' : 'production' ;
+info('Environment mode: ' + workingMode);
+
+const uri = workingMode === 'development' ? 'http://localhost:6000/graphql': 'http://localhost/graphql';
+
+info('api_url: ' + String(uri));
+
 const httpLink = createHttpLink({
   uri: uri,
 });
-console.log(uri, 'changed uri');
+
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('token');
   return {
@@ -23,7 +31,7 @@ const authLink = setContext((_, { headers }) => {
 
 export const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  connectToDevTools: true,
+  connectToDevTools: workingMode === 'development',
   cache: new InMemoryCache({
 
   })
