@@ -1,4 +1,4 @@
-export interface IAppointment {
+export interface IAppointmentResponse {
     _id: string;
     client: string;
     date: Date;
@@ -17,13 +17,13 @@ export interface IAppointment {
 export interface IAppointmentGroup {
     _id: {
         count: number
-        appointments: IAppointment[]
+        appointments: IAppointmentResponse[]
     }
 }
 
 export interface IAppointmentGroupByDate {
     date: string;
-    appointments: IAppointment[];
+    appointments: IAppointmentResponse[];
 }
 
 export interface IAppointmentGroupByDateQuery {

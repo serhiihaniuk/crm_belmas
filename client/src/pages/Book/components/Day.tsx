@@ -3,7 +3,7 @@ import DayTable from './DayTable';
 import { css } from '@emotion/css';
 import { Button, Tag } from 'carbon-components-react';
 import { Add16 } from '@carbon/icons-react';
-import { BookTableRow } from '../service/tableService';
+import { IAppointment } from '../service/tableService';
 import {getDayName} from "../../../helpers/utils";
 
 const wrapper = css`
@@ -24,7 +24,7 @@ const divider = css`
 `;
 interface IDayProps {
   openModal: (day: string) => void;
-  rows: BookTableRow[];
+  rows: IAppointment[];
   day: string;
 }
 

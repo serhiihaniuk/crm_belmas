@@ -44,6 +44,14 @@ const monthTotalSchema = new Schema({
 		type: Number,
 		required: true
 	},
+	salaryCash: {
+		type: Number,
+		required: true
+	},
+	salaryCashless: {
+		type: Number,
+		required: true
+	},
 	appointments: [
 		{
 			type: Schema.Types.ObjectId,

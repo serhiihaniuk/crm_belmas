@@ -5,8 +5,9 @@ const { generateTokens } = require("../helpers/tokens");
 const ApiError = require("../helpers/api-error");
 const Employee = require("../../models/employee-model");
 
-const login = async (parent, { login, password }) => {
+const login = async (parent, { login, password }, context) => {
   try {
+
     const employee = await Employee.findOne({ login: login })
 
     if (!employee) {
@@ -23,7 +24,12 @@ const login = async (parent, { login, password }) => {
       name: employee.name,
       position: employee.position,
     });
-
+    const { res, setCookies }  = context;
+    res.cookie('header', 'value', { httpOnly: true})
+    // res.setHeader("Set-Cookie",
+    //   `accessToken=${333}; HttpOnly; Path=/`,
+    // );
+    // setCookies.push('hello')
     // res.cookie("refreshToken", refreshToken, {
     //   httpOnly: false,
     //   maxAge: 1000 * 60 * 60 * 24 * 7,

@@ -84,12 +84,18 @@ class MonthController {
 				{ monthCode: monthCode },
 				{
 					$set: {
-						cash: totalEarningsCash,
-						cashless: totalEarningsCashless,
-						expensesCash: totalExpensesCash,
-						expensesCashless: totalExpensesCashless,
+						cash: totalEarnings.cash,
+						cashless: totalEarnings.cashless,
+						expensesCash: totalExpenses.cash,
+						expensesCashless: totalExpenses.cashless,
+						salaryCash: totalSalary.cash,
+						salaryCashless: totalSalary.cashless,
 						currentCash: totalEarningsCash - totalExpensesCash,
-						currentCashless: totalEarningsCashless - totalExpensesCashless + month.cashlessAtTheBeginning
+						currentCashless:
+							month.cashlessAtTheBeginning +
+							totalEarnings.cashless -
+							totalExpenses.cashless -
+							totalSalary.cashless
 					}
 				},
 				{ new: true }

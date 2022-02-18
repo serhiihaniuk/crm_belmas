@@ -12,7 +12,7 @@ import {
 } from 'carbon-components-react';
 import { headers } from '../service/tableService';
 import { css } from '@emotion/css';
-import { BookTableRow } from '../service/tableService';
+import { IAppointment } from '../service/tableService';
 
 const booktable = css`
     .client {
@@ -45,8 +45,8 @@ const expandedRow = css`
 `;
 
 interface IDayTableProps {
-    rowsData: BookTableRow[];
-    openModal: (day: string, appointmentID: BookTableRow | undefined, isEditing: boolean) => void;
+    rowsData: IAppointment[];
+    openModal: (day: string, appointmentID: IAppointment | undefined, isEditing: boolean) => void;
 }
 
 const DayTable: React.FC<IDayTableProps> = ({ rowsData, openModal }) => {

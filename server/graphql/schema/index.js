@@ -37,6 +37,8 @@ const typeDefs = gql`
 		currentCash: Int!
 		expensesCash: Int!
 		expensesCashless: Int!
+		salaryCash: Int!
+		salaryCashless: Int!
 		appointments: [Appointment]!
 		expenses: [Expense]!
 	}
