@@ -1,7 +1,7 @@
 import React from 'react';
 import {
+    Button,
     DataTable,
-    InlineLoading,
     Table,
     TableBody,
     TableCell,
@@ -11,14 +11,11 @@ import {
     TableRow,
     Tag
 } from 'carbon-components-react';
-import { CreateExpensesRows, headers, IExpenseItem } from '../service/tableService';
+import { CreateSalaryPaymentsRows, salaryTableHeaders as headers } from '../service/tableService';
 import { css } from '@emotion/css';
-import { useQuery } from '@apollo/client';
-import { GET_EXPENSES_BY_MONTH } from '../../../gql/query/expenses';
+import { IPayment } from '../../../gql/query/salary';
+import { Add16 } from '@carbon/icons-react';
 
-const tagStyle = css`
-    margin: 10px 10px 5px 0;
-`;
 const table = css`
     td,
     th {
@@ -30,38 +27,38 @@ const table = css`
         text-align: left;
     }
 `;
-const loadingCSS = css`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 300px;
+const tableSalaryWrapper = css`
+    margin: 25px 0;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+      div{
+        padding: 0 25px;
+      }
+    }
 `;
 
-interface Props {
-    monthCode: string;
-    setSelectedExpense: (value: IExpenseItem) => void;
-    openModal: () => void;
+interface ISalaryTableProps {
+    payments: IPayment[];
+    employee: string;
 }
 
-const ExpensesTable: React.FC<Props> = ({ monthCode, setSelectedExpense, openModal }) => {
-    const { data, loading } = useQuery(GET_EXPENSES_BY_MONTH, {
-        variables: {
-            monthCode: monthCode
-        }
-    });
-    if (loading || !data) {
-        return <InlineLoading className={loadingCSS} description="Загрузка" />;
-    }
-    const rowsData = CreateExpensesRows(data.getExpensesByMonth);
+const SalaryTable: React.FC<ISalaryTableProps> = ({ payments, employee }) => {
+    const rowsData = CreateSalaryPaymentsRows(payments);
     return (
-        <>
-            <Tag type={'teal'} className={tagStyle}>
-                Всего: 2222 zł.
-            </Tag>
-            <Tag type={'teal'} className={tagStyle}>
-                {monthCode}
-            </Tag>
-
+        <div className={tableSalaryWrapper}>
+            <div className={'header'}>
+                <Tag type={'teal'}>{employee}</Tag>
+                <Button
+                    onClick={() => {}}
+                    renderIcon={Add16}
+                    iconDescription="Add"
+                    hasIconOnly
+                    size="small"
+                    kind="tertiary"
+                />
+            </div>
             {
                 <DataTable size="sm" rows={rowsData as any} headers={headers as any}>
                     {({ rows, getRowProps, getTableProps, getTableContainerProps, getHeaderProps }: any) => (
@@ -81,10 +78,7 @@ const ExpensesTable: React.FC<Props> = ({ monthCode, setSelectedExpense, openMod
                                                 <TableRow
                                                     {...getRowProps({ row })}
                                                     style={{ cursor: 'pointer' }}
-                                                    onClick={() => {
-                                                        setSelectedExpense(rowsData[currentRow]);
-                                                        openModal()
-                                                    }}
+                                                    onClick={() => {}}
                                                 >
                                                     {row.cells.map((cell: any) => {
                                                         return (
@@ -103,8 +97,8 @@ const ExpensesTable: React.FC<Props> = ({ monthCode, setSelectedExpense, openMod
                     )}
                 </DataTable>
             }
-        </>
+        </div>
     );
 };
 
-export default ExpensesTable;
+export default SalaryTable;

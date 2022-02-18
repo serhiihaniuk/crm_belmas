@@ -16,7 +16,6 @@ const PageHeader: React.FC<IPageHeaderProps> = ({ routes }) => {
       {
         routes.map(route => {
           const { path, name } = route;
-          console.log(pathname, path)
           const isActive = pathname.includes(path);
           return (
             <Link key={path} to={path}>

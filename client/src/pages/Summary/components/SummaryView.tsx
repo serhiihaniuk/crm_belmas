@@ -66,15 +66,17 @@ const rowStyle = css`
     }
 
     .bx--tag.cash {
-        background: #a2b29f;
+        background: #7C9473;
     }
 
     .bx--tag.cashless {
-        background: #769fcd;
+        background: #A0937D;
     }
 
     div:first-child {
         width: 150px;
+      background: #444444b3;
+ 
     }
 
     div {

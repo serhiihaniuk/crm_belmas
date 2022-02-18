@@ -4,7 +4,6 @@ const Salary = require('../models/salary-model');
 const SalaryPayment = require('../models/salary-payment-model');
 const MonthTotal = require('../models/month-total-model');
 
-
 class SalaryController {
 	static async createSalaryTable(salaryTableCode) {
 		try {
@@ -22,12 +21,10 @@ class SalaryController {
 			});
 
 			const newSalaryTableSaved = await newSalaryTable.save();
-			console.log(newSalaryTableSaved)
-			const month2 = await MonthTotal.findByIdAndUpdate(month.id, {
+			console.log(newSalaryTableSaved);
+			await MonthTotal.findByIdAndUpdate(month.id, {
 				$push: { salaryTables: newSalaryTable }
 			});
-
-			console.log(month2)
 
 			return newSalaryTableSaved;
 		} catch (e) {
@@ -40,7 +37,7 @@ class SalaryController {
 		try {
 			let salaryTable = await Salary.findOne({
 				salaryTableCode: salaryTableCode
-			});
+			}).populate('payments');
 			if (!salaryTable) {
 				salaryTable = await SalaryController.createSalaryTable(salaryTableCode);
 			}
@@ -49,6 +46,23 @@ class SalaryController {
 			return { ...salaryTable._doc, _id: salaryTable.id, employee: { ...employee } };
 		} catch (e) {
 			throw e;
+		}
+	}
+
+	static async getSalaryTablesByMonth({ monthCode }) {
+		try {
+			const employees = await EmployeeController.getEmployees();
+			let salaryTables = [];
+			for (let employee of employees) {
+				const salaryTableCode = `${monthCode}_${employee._id}`;
+				const salaryTable = await SalaryController.getSalaryTableByCode({ salaryTableCode });
+				console.log(salaryTable);
+				salaryTables.push(salaryTable);
+			}
+
+			return salaryTables;
+		} catch (e) {
+			return e;
 		}
 	}
 
@@ -96,7 +110,7 @@ class SalaryController {
 	}
 
 	static async deleteSalaryPayment({ SalaryPaymentID }) {
-		try	{
+		try {
 			const salaryPayment = await SalaryPayment.findByIdAndDelete(SalaryPaymentID);
 			const salaryTable = await SalaryController.getSalaryTableByCode({
 				salaryTableCode: salaryPayment.salaryTableCode
@@ -105,16 +119,13 @@ class SalaryController {
 			const payedCash = salaryTable.payedCash - salaryPayment.payedCash;
 			const payedCashless = salaryTable.payedCashless - salaryPayment.payedCashless;
 
-			await Salary.findByIdAndUpdate(
-				salaryTable._id,
-				{
-					$set: {
-						payedCash: payedCash,
-						payedCashless: payedCashless
-					},
-					$pull: { payments: salaryPayment._id }
-				}
-			);
+			await Salary.findByIdAndUpdate(salaryTable._id, {
+				$set: {
+					payedCash: payedCash,
+					payedCashless: payedCashless
+				},
+				$pull: { payments: salaryPayment._id }
+			});
 
 			return 'Successfully deleted';
 		} catch (error) {

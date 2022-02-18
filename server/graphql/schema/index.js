@@ -12,6 +12,7 @@ const typeDefs = gql`
 		checkAuth: AuthData!
 		getExpensesByMonth(monthCode: String!): [Expense!]!
 		getSalaryTableByCode(salaryTableCode: String!): SalaryTable!
+		getSalaryTablesByMonth(monthCode: String!): [SalaryTable!]!
 	}
 	type Mutation {
 		createAppointment(AppointmentInput: AppointmentInput): Appointment

@@ -76,10 +76,6 @@ class MonthController {
 				}
 			);
 
-			const totalEarningsCash = totalEarnings.cash;
-			const totalEarningsCashless = totalEarnings.cashless;
-			const totalExpensesCash = totalExpenses.cash + totalSalary.cashless;
-			const totalExpensesCashless = totalExpenses.cashless + totalSalary.cash;
 			return await MonthTotal.findOneAndUpdate(
 				{ monthCode: monthCode },
 				{
@@ -90,7 +86,7 @@ class MonthController {
 						expensesCashless: totalExpenses.cashless,
 						salaryCash: totalSalary.cash,
 						salaryCashless: totalSalary.cashless,
-						currentCash: totalEarningsCash - totalExpensesCash,
+						currentCash: totalEarnings.cash - totalSalary.cash - totalExpenses.cash,
 						currentCashless:
 							month.cashlessAtTheBeginning +
 							totalEarnings.cashless -

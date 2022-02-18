@@ -9,6 +9,13 @@ module.exports = {
 				'admin',
 				SalaryController.getSalaryTableByCode.bind(this, args)
 			);
+		},
+		getSalaryTablesByMonth: async (parent, args, context) => {
+			return checkAuthAndResolve(
+				context.req.headers.authorization,
+				'admin',
+				SalaryController.getSalaryTablesByMonth.bind(this, args)
+			)
 		}
 	},
 	Mutation: {
@@ -26,6 +33,6 @@ module.exports = {
 				'admin',
 				SalaryController.deleteSalaryPayment.bind(this, args)
 			);
-		},
+		}
 	}
 };
