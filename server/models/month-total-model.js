@@ -59,7 +59,7 @@ const monthTotalSchema = new Schema({
 	salaryTables: [
 		{
 			type: Schema.Types.ObjectId,
-			ref: 'SalaryTable'
+			ref: 'Salary'
 		}
 	],
 	status: {

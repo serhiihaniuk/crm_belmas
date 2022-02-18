@@ -23,6 +23,7 @@ const typeDefs = gql`
 		editExpense(ExpenseID: ID!, ExpenseInput: ExpenseInput!): Expense!
 		deleteExpense(ExpenseID: ID!): String!
 		addSalaryPayment(SalaryPaymentInput: SalaryPaymentInput!): SalaryPayment!
+		deleteSalaryPayment(SalaryPaymentID: ID!): String!
 	}
 	type MonthStats {
 		_id: ID!

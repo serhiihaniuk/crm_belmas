@@ -19,8 +19,9 @@ const login = async (parent, { login, password }) => {
     }
 
     const { accessToken } = generateTokens({
-      ...employee,
-      password: null,
+      id: employee._id,
+      name: employee.name,
+      position: employee.position,
     });
 
     // res.cookie("refreshToken", refreshToken, {
@@ -58,14 +59,15 @@ const checkAuth = async (parent, args, { req, res }) => {
   const token = req.headers.authorization.split(" ")[1];
 
   const verifyJWT = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-  const employee = await getEmployeeFromDB(verifyJWT.login);
+  const employee = await getEmployeeFromDB(verifyJWT.id);
   if (!employee) {
     return ApiError.UnauthorizedError();
   }
 
   const { accessToken } = generateTokens({
-    ...employee,
-    password: null,
+    id: employee._id,
+    name: employee.name,
+    position: employee.position,
   });
 
   return {

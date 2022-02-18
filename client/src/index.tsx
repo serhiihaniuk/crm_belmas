@@ -8,10 +8,11 @@ import { store } from './redux/store';
 import { setContext } from '@apollo/client/link/context';
 import info from "./helpers/info";
 
-const workingMode = process.env.NODE_ENV === 'development' ? 'development' : 'production' ;
+console.log(123,process.env.NODE_ENV)
+const workingMode = process.env.NODE_ENV ? 'development' : 'production' ;
 info('Environment mode: ' + workingMode);
 
-const uri = workingMode === 'development' ? 'http://localhost:6000/graphql': 'http://localhost/graphql';
+const uri = workingMode === 'development' ? 'http://localhost:3001/graphql': 'http://localhost/graphql';
 
 info('api_url: ' + String(uri));
 

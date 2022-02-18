@@ -5,7 +5,7 @@ class MonthController {
 		try {
 			let month = await MonthTotal.findOne({ monthCode: monthCode });
 			if (!month) {
-				month = await this.createMonth(monthCode);
+				month = await MonthController.createMonth(monthCode);
 			}
 			return month;
 		} catch (e) {
@@ -37,9 +37,10 @@ class MonthController {
 		try {
 			let month = await MonthTotal.findOne({ monthCode: monthCode })
 				.populate('appointments')
-				.populate('expenses');
+				.populate('expenses')
+				.populate('salaryTables');
 			if (!month) {
-				month = await this.createMonth(monthCode);
+				month = await MonthController.createMonth(monthCode);
 			}
 			const totalEarnings = month.appointments.reduce(
 				(acc, curr) => {
@@ -63,16 +64,32 @@ class MonthController {
 					cashless: 0
 				}
 			);
+			const totalSalary = month.salaryTables.reduce(
+				(acc, curr) => {
+					acc.cash += curr.payedCash;
+					acc.cashless += curr.payedCashless;
+					return acc;
+				},
+				{
+					cash: 0,
+					cashless: 0
+				}
+			);
+
+			const totalEarningsCash = totalEarnings.cash;
+			const totalEarningsCashless = totalEarnings.cashless;
+			const totalExpensesCash = totalExpenses.cash + totalSalary.cashless;
+			const totalExpensesCashless = totalExpenses.cashless + totalSalary.cash;
 			return await MonthTotal.findOneAndUpdate(
 				{ monthCode: monthCode },
 				{
 					$set: {
-						cash: totalEarnings.cash,
-						cashless: totalEarnings.cashless,
-						expensesCash: totalExpenses.cash,
-						expensesCashless: totalExpenses.cashless,
-						currentCash: totalEarnings.cash - totalExpenses.cash,
-						currentCashless: totalEarnings.cashless - totalExpenses.cashless + month.cashlessAtTheBeginning
+						cash: totalEarningsCash,
+						cashless: totalEarningsCashless,
+						expensesCash: totalExpensesCash,
+						expensesCashless: totalExpensesCashless,
+						currentCash: totalEarningsCash - totalExpensesCash,
+						currentCashless: totalEarningsCashless - totalExpensesCashless + month.cashlessAtTheBeginning
 					}
 				},
 				{ new: true }
@@ -82,4 +99,5 @@ class MonthController {
 		}
 	}
 }
+
 module.exports = MonthController;

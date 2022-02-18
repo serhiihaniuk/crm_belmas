@@ -11,6 +11,7 @@ const {
 class AppointmentController {
     async createAppointment({AppointmentInput}) {
         try {
+            console.log('asdfsadfasdf', AppointmentInput.monthCode)
             const month = await MonthController.getMonthByCode(AppointmentInput.monthCode)
             const appointment = new Appointment({
                 client: AppointmentInput.client,

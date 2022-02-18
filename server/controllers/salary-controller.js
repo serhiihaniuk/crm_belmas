@@ -3,7 +3,8 @@ const EmployeeController = require('./employee-controller');
 const Salary = require('../models/salary-model');
 const SalaryPayment = require('../models/salary-payment-model');
 const MonthTotal = require('../models/month-total-model');
-// salaryTableCode: "2021-12_61b2467ea827d113c5e46ac7"
+
+
 class SalaryController {
 	static async createSalaryTable(salaryTableCode) {
 		try {
@@ -17,20 +18,24 @@ class SalaryController {
 				payedCash: 0,
 				payedCashless: 0,
 				tips: 0,
-				month: month,
+				month: month
 			});
+
 			const newSalaryTableSaved = await newSalaryTable.save();
-			await MonthTotal.findByIdAndUpdate(month.id, {
+			console.log(newSalaryTableSaved)
+			const month2 = await MonthTotal.findByIdAndUpdate(month.id, {
 				$push: { salaryTables: newSalaryTable }
 			});
+
+			console.log(month2)
 
 			return newSalaryTableSaved;
 		} catch (e) {
 			throw e;
 		}
 	}
-	static async getSalaryTableByCode({ salaryTableCode }) {
 
+	static async getSalaryTableByCode({ salaryTableCode }) {
 		const [, employeeID] = salaryTableCode.split('_');
 		try {
 			let salaryTable = await Salary.findOne({
@@ -54,7 +59,7 @@ class SalaryController {
 
 			const employee = await EmployeeController.getEmployeeByID(employeeID);
 
-            if(!employee) {
+			if (!employee) {
 				return new Error('Employee not found');
 			}
 			const salaryTable = await SalaryController.getSalaryTableByCode({
@@ -68,7 +73,7 @@ class SalaryController {
 				employee: employee,
 				salaryTableCode: SalaryPaymentInput.salaryTableCode
 			});
-            const payedCash = SalaryPaymentInput.payedCash + salaryTable.payedCash;
+			const payedCash = SalaryPaymentInput.payedCash + salaryTable.payedCash;
 			const payedCashless = SalaryPaymentInput.payedCashless + salaryTable.payedCashless;
 
 			const savedSalaryPayment = await newSalaryPayment.save();
@@ -77,7 +82,7 @@ class SalaryController {
 				{
 					$set: {
 						payedCash: payedCash,
-						payedCashless: payedCashless,
+						payedCashless: payedCashless
 					},
 					$push: { payments: savedSalaryPayment }
 				}
@@ -86,6 +91,33 @@ class SalaryController {
 			return savedSalaryPayment;
 		} catch (error) {
 			console.log(error);
+			throw error;
+		}
+	}
+
+	static async deleteSalaryPayment({ SalaryPaymentID }) {
+		try	{
+			const salaryPayment = await SalaryPayment.findByIdAndDelete(SalaryPaymentID);
+			const salaryTable = await SalaryController.getSalaryTableByCode({
+				salaryTableCode: salaryPayment.salaryTableCode
+			});
+
+			const payedCash = salaryTable.payedCash - salaryPayment.payedCash;
+			const payedCashless = salaryTable.payedCashless - salaryPayment.payedCashless;
+
+			await Salary.findByIdAndUpdate(
+				salaryTable._id,
+				{
+					$set: {
+						payedCash: payedCash,
+						payedCashless: payedCashless
+					},
+					$pull: { payments: salaryPayment._id }
+				}
+			);
+
+			return 'Successfully deleted';
+		} catch (error) {
 			throw error;
 		}
 	}

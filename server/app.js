@@ -78,8 +78,8 @@ async function startDB() {
         db = mongoose.connection.db
       }
     );
-    app.listen(process.env.PORT, () => {
-      info(`Server running on port ${process.env.PORT}`);
+    app.listen(3001, () => {
+      info(`Server running on port ${process.env.PORT}`)
       info(`gql path is ${apolloServer.graphqlPath}`)
     });
   } catch (err) {
