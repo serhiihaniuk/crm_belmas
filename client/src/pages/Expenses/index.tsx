@@ -7,6 +7,7 @@ import ExpensesTable from './components/ExpensesTable';
 import { pageWrapper } from '../../globalStyles';
 import { ApolloConsumer } from '@apollo/client';
 import { IExpenseItem } from './service/tableService';
+import Salary from "./components/Salary";
 
 const addButton = css`
     margin: 10px 0 0 71%;
@@ -42,7 +43,7 @@ const Expenses: React.FC = () => {
                     </Button>
                 </Tab>
                 <Tab id="tab-3" label="Зарплата">
-                    'Зарплата'
+                    <Salary month={month}/>
                 </Tab>
             </Tabs>
             <ApolloConsumer>

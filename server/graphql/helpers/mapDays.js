@@ -1,4 +1,5 @@
 function mapDaysBetweenDates(startDate, endDate) {
+    console.log(startDate, endDate);
     const daysBetweenDates = {};
     const startDateTimestamp = new Date(startDate).getTime();
     const endDateTimestamp = new Date(endDate).getTime();

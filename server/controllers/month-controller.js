@@ -5,7 +5,7 @@ class MonthController {
 		try {
 			let month = await MonthTotal.findOne({ monthCode: monthCode });
 			if (!month) {
-				month = await this.createMonth(monthCode);
+				month = await MonthController.createMonth(monthCode);
 			}
 			return month;
 		} catch (e) {
@@ -37,9 +37,10 @@ class MonthController {
 		try {
 			let month = await MonthTotal.findOne({ monthCode: monthCode })
 				.populate('appointments')
-				.populate('expenses');
+				.populate('expenses')
+				.populate('salaryTables');
 			if (!month) {
-				month = await this.createMonth(monthCode);
+				month = await MonthController.createMonth(monthCode);
 			}
 			const totalEarnings = month.appointments.reduce(
 				(acc, curr) => {
@@ -63,6 +64,18 @@ class MonthController {
 					cashless: 0
 				}
 			);
+			const totalSalary = month.salaryTables.reduce(
+				(acc, curr) => {
+					acc.cash += curr.payedCash;
+					acc.cashless += curr.payedCashless;
+					return acc;
+				},
+				{
+					cash: 0,
+					cashless: 0
+				}
+			);
+
 			return await MonthTotal.findOneAndUpdate(
 				{ monthCode: monthCode },
 				{
@@ -71,8 +84,14 @@ class MonthController {
 						cashless: totalEarnings.cashless,
 						expensesCash: totalExpenses.cash,
 						expensesCashless: totalExpenses.cashless,
-						currentCash: totalEarnings.cash - totalExpenses.cash,
-						currentCashless: totalEarnings.cashless - totalExpenses.cashless + month.cashlessAtTheBeginning
+						salaryCash: totalSalary.cash,
+						salaryCashless: totalSalary.cashless,
+						currentCash: totalEarnings.cash - totalSalary.cash - totalExpenses.cash,
+						currentCashless:
+							month.cashlessAtTheBeginning +
+							totalEarnings.cashless -
+							totalExpenses.cashless -
+							totalSalary.cashless
 					}
 				},
 				{ new: true }
@@ -82,4 +101,5 @@ class MonthController {
 		}
 	}
 }
+
 module.exports = MonthController;

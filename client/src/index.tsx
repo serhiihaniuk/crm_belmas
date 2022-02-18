@@ -8,15 +8,17 @@ import { store } from './redux/store';
 import { setContext } from '@apollo/client/link/context';
 import info from "./helpers/info";
 
-const workingMode = process.env.NODE_ENV === 'development' ? 'development' : 'production' ;
+const workingMode = process.env.NODE_ENV ? 'development' : 'production' ;
 info('Environment mode: ' + workingMode);
 
-const uri = workingMode === 'development' ? 'http://localhost:6000/graphql': 'http://localhost/graphql';
+const uri = 'http://localhost:3001/graphql'
 
 info('api_url: ' + String(uri));
 
 const httpLink = createHttpLink({
   uri: uri,
+  credentials: 'include',
+
 });
 
 const authLink = setContext((_, { headers }) => {

@@ -3,7 +3,7 @@ import BookModal from './components/BookModal';
 import { pageWrapper } from '../../globalStyles';
 import { Tab, Tabs } from 'carbon-components-react';
 import { ApolloConsumer, useQuery } from '@apollo/client';
-import { BookTableRow } from './service/tableService';
+import { IAppointment } from './service/tableService';
 import { GET_EMPLOYEES } from '../../gql/query/employees';
 import TabTemplate from './components/TabTemplate';
 import { currentMonthFirstAndListDayTimestamp } from '../../helpers/utils';
@@ -32,7 +32,7 @@ const Book: React.FC = () => {
         }
     }, [employeesData, selectedTab]);
 
-    const openModal = (day: string, selectedAppointment: BookTableRow | undefined, isEditingExisting = false) => {
+    const openModal = (day: string, selectedAppointment: IAppointment | undefined, isEditingExisting = false) => {
         setIsOpenModal(true);
         setSelectedAppointment({
             day,

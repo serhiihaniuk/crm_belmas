@@ -1,4 +1,4 @@
-const consoleLogStyles = 'background: #BF9270; color: #E60965; font-size: 14px;'
+const consoleLogStyles = 'color: #E60965; font-size: 14px;'
 
 function info(message: string | number | boolean ): void {
     console.log(`%c info: ${message}`, consoleLogStyles);

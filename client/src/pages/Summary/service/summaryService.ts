@@ -1,5 +1,5 @@
 import {
-  IAppointment,
+  IAppointmentResponse,
   IAppointmentGroupByDate
 } from '../../../types/appointment-types';
 import { splitAppointmentsByDays } from '../../../helpers/appointments-helpers';
@@ -76,7 +76,7 @@ export interface ITotalEarnings {
 }
 
 export function calculateTotalEarnings(
-  appointments: IAppointment[]
+  appointments: IAppointmentResponse[]
 ): ITotalEarnings {
   let cashTotal = 0;
   let cashlessTotal = 0;

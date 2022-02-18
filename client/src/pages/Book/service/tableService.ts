@@ -1,7 +1,7 @@
-import { IAppointment } from "../../../types/appointment-types";
+import { IAppointmentResponse } from "../../../types/appointment-types";
 
 
-export interface BookTableRow {
+export interface IAppointment {
     id: string;
     client: string;
     date: string;
@@ -30,7 +30,7 @@ export const headers = [
     }
 ];
 
-export function makeRows(appointments: IAppointment[]): BookTableRow[] {
+export function makeRows(appointments: IAppointmentResponse[]): IAppointment[] {
     return appointments.map(appointment => {
             const date = new Date(Number(appointment.date));
             const hours = date.getHours();

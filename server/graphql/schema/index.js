@@ -12,6 +12,7 @@ const typeDefs = gql`
 		checkAuth: AuthData!
 		getExpensesByMonth(monthCode: String!): [Expense!]!
 		getSalaryTableByCode(salaryTableCode: String!): SalaryTable!
+		getSalaryTablesByMonth(monthCode: String!): [SalaryTable!]!
 	}
 	type Mutation {
 		createAppointment(AppointmentInput: AppointmentInput): Appointment
@@ -23,6 +24,7 @@ const typeDefs = gql`
 		editExpense(ExpenseID: ID!, ExpenseInput: ExpenseInput!): Expense!
 		deleteExpense(ExpenseID: ID!): String!
 		addSalaryPayment(SalaryPaymentInput: SalaryPaymentInput!): SalaryPayment!
+		deleteSalaryPayment(SalaryPaymentID: ID!): String!
 	}
 	type MonthStats {
 		_id: ID!
@@ -36,6 +38,8 @@ const typeDefs = gql`
 		currentCash: Int!
 		expensesCash: Int!
 		expensesCashless: Int!
+		salaryCash: Int!
+		salaryCashless: Int!
 		appointments: [Appointment]!
 		expenses: [Expense]!
 	}

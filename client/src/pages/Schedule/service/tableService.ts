@@ -1,4 +1,4 @@
-import {IAppointment} from "../../../types/appointment-types";
+import {IAppointmentResponse} from "../../../types/appointment-types";
 
 
 export const headers = [
@@ -69,7 +69,7 @@ export interface IScheduleTableRow {
 };}
 
 
-export function makeScheduleTableRows(appointments: IAppointment[]): IScheduleTableRow[] {
+export function makeScheduleTableRows(appointments: IAppointmentResponse[]): IScheduleTableRow[] {
     return appointments.map(appointment => {
             const date = new Date(Number(appointment.date));
             const minutes = `${date.getMinutes()}`.padStart(2, '0');
