@@ -2,7 +2,7 @@ import React from 'react';
 import DetailedView from './components/DetailedView';
 import { pageWrapper } from '../../globalStyles';
 
-const Summary = ({ location, match }: any) => {
+const Summary = () => {
   return (
     <div className={pageWrapper}>
           <DetailedView />

@@ -19,7 +19,8 @@ const SummaryView: React.FC<ISummaryViewProps> = () => {
     const { data, loading } = useQuery<IMonthTotalQuery>(GET_MONTH_STATS, {
         variables: {
             monthCode: '2021-12'
-        }
+        },
+        pollInterval: 5000,
     });
 
     if (loading || !data) {

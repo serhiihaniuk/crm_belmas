@@ -56,7 +56,6 @@ class SalaryController {
 			for (let employee of employees) {
 				const salaryTableCode = `${monthCode}_${employee._id}`;
 				const salaryTable = await SalaryController.getSalaryTableByCode({ salaryTableCode });
-				console.log(salaryTable);
 				salaryTables.push(salaryTable);
 			}
 
@@ -102,7 +101,7 @@ class SalaryController {
 				}
 			);
 
-			return savedSalaryPayment;
+			return { ...savedSalaryPayment._doc, employee: { ...employee } };
 		} catch (error) {
 			console.log(error);
 			throw error;
