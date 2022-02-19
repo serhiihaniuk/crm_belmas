@@ -21,7 +21,14 @@ const Salary: React.FC<SalaryProps> = ({ month }) => {
     return (
         <div>
             {salaryTables.map((table) => {
-                return <SalaryTable key={table._id} payments={table.payments} employee={table.employee.name}/>;
+                return (
+                    <SalaryTable
+                        key={table._id}
+                        payments={table.payments}
+                        employee={table.employee.name}
+                        employeeID={table.employee._id}
+                    />
+                );
             })}
         </div>
     );
