@@ -8,6 +8,7 @@ import { pageWrapper } from '../../globalStyles';
 import { ApolloConsumer } from '@apollo/client';
 import { IExpenseItem } from './service/tableService';
 import Salary from "./components/Salary";
+import {useTypedSelector} from "../../hooks/useTypedSelector";
 
 const addButton = css`
     margin: 10px 0 0 71%;
@@ -15,8 +16,7 @@ const addButton = css`
 const Expenses: React.FC = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [selectedExpense, setSelectedExpense] = useState<IExpenseItem | undefined>();
-    const [name, setName] = useState('');
-    const [month, setMonth] = useState('2021-12');
+    const {from} = useTypedSelector(state => state.date);
 
     const openModal = () => {
         setIsOpenModal(true);
@@ -29,7 +29,7 @@ const Expenses: React.FC = () => {
         <div className={pageWrapper}>
             <Tabs>
                 <Tab id="tab-1" label="Материалы">
-                    <ExpensesTable monthCode={month} setSelectedExpense={setSelectedExpense} openModal={openModal} />
+                    <ExpensesTable monthCode={`${from.YYYY}-${from.MM}`} setSelectedExpense={setSelectedExpense} openModal={openModal} />
                     <Button
                         className={addButton}
                         onClick={openModal}
@@ -43,7 +43,7 @@ const Expenses: React.FC = () => {
                     </Button>
                 </Tab>
                 <Tab id="tab-3" label="Зарплата">
-                    <Salary month={month}/>
+                    <Salary month={`${from.YYYY}-${from.MM}`}/>
                 </Tab>
             </Tabs>
             <ApolloConsumer>
@@ -51,7 +51,7 @@ const Expenses: React.FC = () => {
                     <ExpensesModal
                         isOpen={isOpenModal}
                         closeModal={closeModal}
-                        name={name}
+                        name={'Расходы'}
                         apolloClient={client as any}
                         selectedExpense={selectedExpense}
                     />

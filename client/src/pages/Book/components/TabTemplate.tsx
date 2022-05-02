@@ -18,8 +18,8 @@ const TabTemplate: React.FC<any> = ({selected, openModal, employee, dateFrom, da
         variables: {
             AppointmentsByDatesInput: {
                 employee: employee,
-                dateFrom: "2021-12-01",
-                dateTo: "2021-12-22"
+                dateFrom: dateFrom,
+                dateTo: dateTo
             }
         }
     });

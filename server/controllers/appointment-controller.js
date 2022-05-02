@@ -11,7 +11,6 @@ const {
 class AppointmentController {
     async createAppointment({AppointmentInput}) {
         try {
-            console.log('asdfsadfasdf', AppointmentInput.monthCode)
             const month = await MonthController.getMonthByCode(AppointmentInput.monthCode)
             const appointment = new Appointment({
                 client: AppointmentInput.client,
@@ -23,7 +22,8 @@ class AppointmentController {
                 creator: AppointmentInput.creator,
                 createdAt: Date.now(),
                 status: "booked",
-                month: month
+                month: month,
+                monthCode: AppointmentInput.monthCode
             });
 
             const savedAppointment = await appointment.save();
@@ -87,15 +87,16 @@ class AppointmentController {
     async deleteAppointment({id}) {
         try {
             const deletedAppointment = await Appointment.findByIdAndDelete(id);
-            const month = await MonthController.getMonthByCode(deletedAppointment.month.code);
+            const month = await MonthController.getMonthByCode(deletedAppointment.monthCode);
             await Employee.findByIdAndUpdate(deletedAppointment.employee, {
-                $pull: {appointments: deletedAppointment},
+                $pull: {appointments: deletedAppointment._id},
             });
             await MonthTotal.findByIdAndUpdate(month.id, {
-                $pull: {appointments: deletedAppointment},
+                $pull: {appointments: deletedAppointment._id},
             });
             return "success";
         } catch (err) {
+            console.log(err);
             throw err;
         }
     }

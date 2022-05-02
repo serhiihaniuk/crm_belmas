@@ -6,7 +6,7 @@ import { ApolloConsumer, useQuery } from '@apollo/client';
 import { IAppointment } from './service/tableService';
 import { GET_EMPLOYEES } from '../../gql/query/employees';
 import TabTemplate from './components/TabTemplate';
-import { currentMonthFirstAndListDayTimestamp } from '../../helpers/utils';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 const Book: React.FC = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
@@ -16,7 +16,7 @@ const Book: React.FC = () => {
     });
     const [employee, setEmployee] = useState<string>('');
     const [selectedTab, setSelectedTab] = useState<number>(0);
-    const { firstDayTimestamp, lastDayTimestamp } = currentMonthFirstAndListDayTimestamp();
+    const { from, to } = useTypedSelector((state) => state.date);
 
     const { data: employeesData } = useQuery(GET_EMPLOYEES, {
         variables: {
@@ -53,7 +53,7 @@ const Book: React.FC = () => {
                             setSelectedTab(idx);
                         }}
                     >
-                        {employeesData.getEmployees.map((employee: any, idx: any) => {
+                        {employeesData.getEmployees.map((employee: any) => {
                             return (
                                 <Tab
                                     key={employee._id}
@@ -65,8 +65,8 @@ const Book: React.FC = () => {
                                                 {selected && (
                                                     <TabTemplate
                                                         employee={employee._id}
-                                                        dateFrom={firstDayTimestamp}
-                                                        dateTo={lastDayTimestamp}
+                                                        dateFrom={`${from.YYYY}-${from.MM}-${from.DD}`}
+                                                        dateTo={`${to.YYYY}-${to.MM}-${to.DD}`}
                                                         openModal={openModal}
                                                     />
                                                 )}
