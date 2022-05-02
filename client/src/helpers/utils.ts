@@ -21,7 +21,7 @@ export const dateToTimestamp = (
 
 export function getDayName(dateString: string, onlyMonth?: boolean): string | Date {
     const dateArr = dateString.split('-');
-    const date = new Date(+dateArr[0], +dateArr[1] -1, +dateArr[2]);
+    const date = new Date(+dateArr[0], +dateArr[1] - 1, +dateArr[2]);
     const dayName = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'][date.getDay()];
     const monthName = [
         'января',

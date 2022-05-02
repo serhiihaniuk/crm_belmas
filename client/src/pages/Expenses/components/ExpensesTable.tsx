@@ -15,7 +15,7 @@ import { CreateExpensesRows, headers, IExpenseItem } from '../service/tableServi
 import { css } from '@emotion/css';
 import { useQuery } from '@apollo/client';
 import { GET_EXPENSES_BY_MONTH } from '../../../gql/query/expenses';
-import {getMonthName} from "../../../helpers/utils";
+import { getMonthName } from '../../../helpers/utils';
 
 const tagStyle = css`
     margin: 10px 10px 5px 0;
@@ -84,7 +84,7 @@ const ExpensesTable: React.FC<Props> = ({ monthCode, setSelectedExpense, openMod
                                                     style={{ cursor: 'pointer' }}
                                                     onClick={() => {
                                                         setSelectedExpense(rowsData[currentRow]);
-                                                        openModal()
+                                                        openModal();
                                                     }}
                                                 >
                                                     {row.cells.map((cell: any) => {

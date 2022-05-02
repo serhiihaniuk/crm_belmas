@@ -1,5 +1,4 @@
-import { IAppointmentResponse } from "../../../types/appointment-types";
-
+import { IAppointmentResponse } from '../../../types/appointment-types';
 
 export interface IAppointment {
     id: string;
@@ -11,7 +10,7 @@ export interface IAppointment {
     timestamp: Date;
     status: string;
     employee: {
-        _id: string
+        _id: string;
     };
 }
 
@@ -31,28 +30,24 @@ export const headers = [
 ];
 
 export function makeRows(appointments: IAppointmentResponse[]): IAppointment[] {
-    return appointments.map(appointment => {
-            const date = new Date(Number(appointment.date));
-            const hours = date.getHours();
-            const minutes = `${date.getMinutes()}`.padStart(2, '0');
-            const time = hours + ':' + minutes;
-            return {
-                id: appointment._id,
-                date: time,
-                client: appointment.client,
-                procedure: appointment.procedure,
-                description: appointment.description,
-                instagram: appointment.instagram,
-                timestamp: appointment.date,
-                employee: appointment.employee,
-                status: appointment.status,
-            };
-        }
-    );
+    return appointments.map((appointment) => {
+        const date = new Date(Number(appointment.date));
+        const hours = date.getHours();
+        const minutes = `${date.getMinutes()}`.padStart(2, '0');
+        const time = hours + ':' + minutes;
+        return {
+            id: appointment._id,
+            date: time,
+            client: appointment.client,
+            procedure: appointment.procedure,
+            description: appointment.description,
+            instagram: appointment.instagram,
+            timestamp: appointment.date,
+            employee: appointment.employee,
+            status: appointment.status
+        };
+    });
 }
-
-
-
 
 export function mapTimeToTimepicker() {
     const times = [];

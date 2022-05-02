@@ -24,7 +24,7 @@ const DetailedViewTab: React.FC<any> = ({ employee }) => {
             AppointmentsByDatesInput: {
                 employee: employee,
                 dateFrom: `${from.YYYY}-${from.MM}-${from.DD}`,
-                dateTo: `${to.YYYY}-${to.MM}-${to.DD}`,
+                dateTo: `${to.YYYY}-${to.MM}-${to.DD}`
             }
         }
     });

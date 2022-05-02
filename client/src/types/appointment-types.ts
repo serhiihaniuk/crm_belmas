@@ -6,8 +6,8 @@ export interface IAppointmentResponse {
     procedure: string;
     description: string | null;
     employee: {
-        _id: string
-    }
+        _id: string;
+    };
     status: string;
     paymentMethod: string | null;
     cash: number | null;
@@ -16,9 +16,9 @@ export interface IAppointmentResponse {
 
 export interface IAppointmentGroup {
     _id: {
-        count: number
-        appointments: IAppointmentResponse[]
-    }
+        count: number;
+        appointments: IAppointmentResponse[];
+    };
 }
 
 export interface IAppointmentGroupByDate {
@@ -27,5 +27,5 @@ export interface IAppointmentGroupByDate {
 }
 
 export interface IAppointmentGroupByDateQuery {
-    getAppointmentsByDate: IAppointmentGroupByDate[]
+    getAppointmentsByDate: IAppointmentGroupByDate[];
 }

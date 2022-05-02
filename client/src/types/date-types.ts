@@ -6,8 +6,7 @@ export interface IDateFormat {
     MinutesFormat: 'mm';
 }
 
-
 export type DateFormat = IDateFormat[keyof IDateFormat];
 export type IDate = {
-    [ key in DateFormat]: string;
-}
+    [key in DateFormat]: string;
+};

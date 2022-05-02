@@ -7,6 +7,7 @@ import { IAppointment } from './service/tableService';
 import { GET_EMPLOYEES } from '../../gql/query/employees';
 import TabTemplate from './components/TabTemplate';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { IApolloClient } from '../../index';
 
 const Book: React.FC = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
@@ -82,7 +83,7 @@ const Book: React.FC = () => {
             <ApolloConsumer>
                 {(client) => (
                     <BookModal
-                        apolloClient={client as any}
+                        apolloClient={client as IApolloClient}
                         closeModal={closeModal}
                         isOpen={isOpenModal}
                         selectedDay={selectedAppointment}

@@ -2,50 +2,47 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App/App';
-import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from '@apollo/client';
+import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { setContext } from '@apollo/client/link/context';
-import info from "./helpers/info";
+import info from './helpers/info';
 
-const workingMode = process.env.NODE_ENV ? 'development' : 'production' ;
+const workingMode = process.env.NODE_ENV ? 'development' : 'production';
 info('Environment mode: ' + workingMode);
 
-const uri = 'http://192.168.1.101:3001/graphql'
+const uri = 'http://192.168.1.101:3001/graphql';
 
 info('api_url: ' + String(uri));
 
 const httpLink = createHttpLink({
-  uri: uri,
-  credentials: 'include',
-
+    uri: uri,
+    credentials: 'include'
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('token');
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : "",
-    }
-  }
+    const token = localStorage.getItem('token');
+    return {
+        headers: {
+            ...headers,
+            authorization: token ? `Bearer ${token}` : ''
+        }
+    };
 });
 
 export const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  connectToDevTools: workingMode === 'development',
-  cache: new InMemoryCache({
-
-  })
+    link: authLink.concat(httpLink),
+    connectToDevTools: workingMode === 'development',
+    cache: new InMemoryCache({})
 });
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </ApolloProvider>,
-  document.getElementById('root')
+    <ApolloProvider client={client}>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </ApolloProvider>,
+    document.getElementById('root')
 );
 
 export type IApolloClient = typeof client;

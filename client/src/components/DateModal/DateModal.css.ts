@@ -31,6 +31,6 @@ export const openModalBTN = css`
 export const setCurrentMonthBTN = css`
     margin: 25px 0 5px;
     padding: 10px;
-    border: 2px solid #7C9473;
+    border: 2px solid #7c9473;
     width: 100%;
 `;

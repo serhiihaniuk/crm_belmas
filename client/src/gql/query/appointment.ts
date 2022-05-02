@@ -1,18 +1,19 @@
-import {gql} from '@apollo/client';
+import { gql } from '@apollo/client';
 
 export const GET_APPOINTMENTS_TOTAL_PRICE = gql`
     query GET_APPOINTMENTS_TOTAL_PRICE($dateFrom: String, $dateTo: String) {
-        getAppointmentsTotalPrice( dateFrom: $dateFrom, dateTo: $dateTo){
+        getAppointmentsTotalPrice(dateFrom: $dateFrom, dateTo: $dateTo) {
             cash
             cashless
         }
-    }`;
+    }
+`;
 
 export const GET_APPOINTMENTS_BY_DAYS = gql`
     query GET_APPOINTMENTS_BY_DAYS($AppointmentsByDatesInput: AppointmentsByDatesInput!) {
-        getAppointmentsByDate(AppointmentsByDatesInput: $AppointmentsByDatesInput){
+        getAppointmentsByDate(AppointmentsByDatesInput: $AppointmentsByDatesInput) {
             date
-            appointments{
+            appointments {
                 _id
                 client
                 cash
@@ -23,10 +24,10 @@ export const GET_APPOINTMENTS_BY_DAYS = gql`
                 instagram
                 procedure
                 description
-                employee{
+                employee {
                     _id
                 }
             }
         }
     }
-`
+`;

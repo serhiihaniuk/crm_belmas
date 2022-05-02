@@ -1,5 +1,5 @@
-import React, { useState, FC } from 'react';
-import {  DatePicker, DatePickerInput, Modal, NumberInput, Select, SelectItem } from 'carbon-components-react';
+import React, { FC, useState } from 'react';
+import { DatePicker, DatePickerInput, Modal, NumberInput, Select, SelectItem } from 'carbon-components-react';
 import ModalInlineLoading from '../../../components/shared/ModalInlineLoading';
 import { dateToTimestamp, timestampToDate } from '../../../helpers/utils';
 import { useMutation } from '@apollo/client';
