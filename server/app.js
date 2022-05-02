@@ -15,7 +15,7 @@ const workingMode = process.env.NODE_ENV;
 info('Starting server in ' + workingMode + ' mode');
 const corsOptions = {
 	credentials: true,
-	origin: 'http://localhost:3000'
+	origin: 'http://localhost:3002'
 };
 const app = express();
 app.use(express.json());
