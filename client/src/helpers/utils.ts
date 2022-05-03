@@ -1,9 +1,9 @@
 import { DateFormat, IDate } from '../types/date-types';
 
-export function currentMonthFirstAndListDayTimestamp(): { firstDayTimestamp: number; lastDayTimestamp: number } {
+export function getMonthFirstAndLastDayTimestamp( offset = 0): { firstDayTimestamp: number; lastDayTimestamp: number } {
     const date = new Date();
-    const firstDayTimestamp = dateToTimestamp(date.getFullYear(), date.getMonth(), 1);
-    const lastDayTimestamp = dateToTimestamp(date.getFullYear(), date.getMonth() + 1, 0);
+    const firstDayTimestamp = dateToTimestamp(date.getFullYear(), date.getMonth() + offset, 1);
+    const lastDayTimestamp = dateToTimestamp(date.getFullYear(), date.getMonth() + 1 + offset, 0);
     return { firstDayTimestamp, lastDayTimestamp };
 }
 

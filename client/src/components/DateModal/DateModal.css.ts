@@ -29,8 +29,29 @@ export const openModalBTN = css`
 `;
 
 export const setCurrentMonthBTN = css`
-    margin: 25px 0 5px;
+    position: relative;
     padding: 10px;
     border: 2px solid #7c9473;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    svg {
+        position: absolute;
+        left: 5px;
+        margin: 0 15px;
+        width: 20px;
+        height: 20px;
+    }
+`;
+export const buttonWrapper = css`
+    margin: 20px auto 10px;
+    max-width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    gap: 10px;
 `;

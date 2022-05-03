@@ -59,12 +59,9 @@ const ExpensesTable: React.FC<Props> = ({ monthCode, setSelectedExpense, openMod
             <Tag type={'teal'} className={tagStyle}>
                 Всего: 2222 zł.
             </Tag>
-            <Tag type={'teal'} className={tagStyle}>
-                {getMonthName(monthCode.split('-')[1])}
-            </Tag>
 
             {
-                <DataTable size="sm" rows={rowsData as any} headers={headers as any}>
+                !!rowsData.length && <DataTable size="sm" rows={rowsData as any} headers={headers as any}>
                     {({ rows, getRowProps, getTableProps, getTableContainerProps, getHeaderProps }: any) => (
                         <TableContainer {...getTableContainerProps()}>
                             <Table {...getTableProps()} className={table}>
