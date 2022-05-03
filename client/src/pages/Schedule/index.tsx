@@ -30,7 +30,7 @@ const Schedule = () => {
         }
     });
     if (loading || !appointmentsByDays) {
-        return <InlineLoading description="Загрузка" />;
+        return <div className={pageWrapper}><InlineLoading description="Загрузка" /></div>
     }
     return (
         <>

@@ -3,36 +3,15 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import { Button, FormLabel, Modal, Select, SelectItem, TextArea, TextInput } from 'carbon-components-react';
 import { TimePicker } from '@atlaskit/datetime-picker';
-import { mapTimeToTimepicker } from '../service/tableService';
-import { css } from '@emotion/css';
-import { useTypedSelector } from '../../../hooks/useTypedSelector';
+import { mapTimeToTimepicker } from '../../service/tableService';
+import { useTypedSelector } from '../../../../hooks/useTypedSelector';
 import { useMutation } from '@apollo/client';
-import { CREATE_APPOINTMENT, DELETE_APPOINTMENT, UPDATE_APPOINTMENT } from '../../../gql/mutations/appointment';
-import { IApolloClient } from '../../../index';
+import { CREATE_APPOINTMENT, DELETE_APPOINTMENT, UPDATE_APPOINTMENT } from '../../../../gql/mutations/appointment';
+import { IApolloClient } from '../../../../index';
 import { TrashCan32 } from '@carbon/icons-react';
-import { dateToTimestamp } from '../../../helpers/utils';
-import ModalInlineLoading from '../../../components/shared/ModalInlineLoading';
-
-const timePickerCss = css`
-    width: 100%;
-
-    & > div {
-        margin-top: 2px;
-        background-color: #fff;
-        border-bottom: 1px solid #8d8d8d;
-    }
-`;
-const deleteBtn = css`
-    display: flex;
-    justify-content: center;
-    margin: 2rem 0 1rem;
-    width: 100%;
-`;
-const errorSpan = css`
-    color: #ff6662;
-    height: 7px;
-    font-size: 12px;
-`;
+import { dateToTimestamp } from '../../../../helpers/utils';
+import ModalInlineLoading from '../../../../components/shared/ModalInlineLoading';
+import { bookModalForm, deleteBtn, errorSpan, timePickerCss } from './BookModal.css';
 
 interface IBookModal {
     isOpen: boolean;
@@ -166,15 +145,21 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, selectedDay, empl
             {isLoading ? (
                 <ModalInlineLoading />
             ) : (
-                <form>
+                <form className={bookModalForm}>
                     <TextInput
                         labelText="Введите имя"
                         id="clientNameBook"
+                        warn={!!errors.client}
+                        warnText={'Это поле обязательно'}
                         {...register('client', { required: true })}
                     />
-                    {errors.client && <span className={errorSpan}>Это поле обязательно</span>}
-
-                    <Select id="select-1" labelText="Выберите процедуру" {...register('procedure', { required: true })}>
+                    <Select
+                        id="select-1"
+                        labelText="Выберите процедуру"
+                        {...register('procedure', { required: true })}
+                        warn={!!errors.procedure}
+                        warnText={'Это поле обязательно'}
+                    >
                         <SelectItem value="manicure" text="Маникюр" />
                         <SelectItem value="pedicure" text="Педикюр" />
                     </Select>
@@ -192,10 +177,10 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, selectedDay, empl
                                     appearance={'subtle'}
                                     {...field}
                                 />
+                                {errors.date && <span className={errorSpan}>Это поле обязательно</span>}
                             </FormLabel>
                         )}
                     />
-                    {errors.date && <span className={errorSpan}>Это поле обязательно</span>}
 
                     <TextInput labelText="профиль инстаграм" id="name" {...register('instagram')} />
                     <TextArea
