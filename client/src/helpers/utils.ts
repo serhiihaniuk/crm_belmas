@@ -19,9 +19,9 @@ export const dateToTimestamp = (
     return date.getTime();
 };
 
-export function getDayName(dateString: string): string | Date {
+export function getDayName(dateString: string, onlyMonth?: boolean): string | Date {
     const dateArr = dateString.split('-');
-    const date = new Date(+dateArr[0], +dateArr[1], +dateArr[2]);
+    const date = new Date(+dateArr[0], +dateArr[1] - 1, +dateArr[2]);
     const dayName = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'][date.getDay()];
     const monthName = [
         'января',
@@ -37,8 +37,29 @@ export function getDayName(dateString: string): string | Date {
         'ноября',
         'декабря'
     ][+dateArr[1] - 1];
+
+    if (onlyMonth) return monthName;
+
     const day = date.getDate() + ' ' + monthName + ', ' + dayName;
     return String(day);
+}
+
+export function getMonthName(month: number | string): string {
+    return [
+        'monthIndexCantBe = 0',
+        'Январь',
+        'Февраль',
+        'Март',
+        'Апрель',
+        'Май',
+        'Июнь',
+        'Июль',
+        'Август',
+        'Сентябрь',
+        'Октябрь',
+        'Ноябрь',
+        'Декабрь'
+    ][+month];
 }
 
 export function getDateObject(timestamp: number): IDate {
@@ -50,6 +71,10 @@ export function getDateObject(timestamp: number): IDate {
         HH: String(date.getHours() < 10 ? '0' + date.getHours() : date.getHours()),
         mm: String(date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
     };
+}
+
+export function getDateFromDateObject(dateObject: IDate): Date {
+    return new Date(+dateObject.YYYY, +dateObject.MM - 1, +dateObject.DD, +dateObject.HH, +dateObject.mm);
 }
 
 export function timestampToDate(

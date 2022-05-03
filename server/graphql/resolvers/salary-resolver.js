@@ -6,16 +6,16 @@ module.exports = {
 		getSalaryTableByCode: async (parent, args, context) => {
 			return checkAuthAndResolve(
 				context.req.headers.authorization,
-				'admin',
+				['root'],
 				SalaryController.getSalaryTableByCode.bind(this, args)
 			);
 		},
 		getSalaryTablesByMonth: async (parent, args, context) => {
 			return checkAuthAndResolve(
 				context.req.headers.authorization,
-				'admin',
+				['root'],
 				SalaryController.getSalaryTablesByMonth.bind(this, args)
-			)
+			);
 		}
 	},
 	Mutation: {
@@ -23,14 +23,14 @@ module.exports = {
 			console.log(args);
 			return checkAuthAndResolve(
 				context.req.headers.authorization,
-				'admin',
+				['root'],
 				SalaryController.addSalaryPayment.bind(this, args)
 			);
 		},
 		deleteSalaryPayment: async (parent, args, context) => {
 			return checkAuthAndResolve(
 				context.req.headers.authorization,
-				'admin',
+				['root'],
 				SalaryController.deleteSalaryPayment.bind(this, args)
 			);
 		}

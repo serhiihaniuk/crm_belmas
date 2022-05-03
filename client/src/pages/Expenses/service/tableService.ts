@@ -1,5 +1,5 @@
 import { timestampToDate } from '../../../helpers/utils';
-import {IPayment} from "../../../gql/query/salary";
+import { IPayment } from '../../../gql/query/salary';
 
 export const headers = [
     {
@@ -56,6 +56,7 @@ export function CreateExpensesRows(expenses: IExpense[]): IExpenseItem[] {
         };
     });
 }
+
 export const salaryTableHeaders = [
     {
         key: 'date',
@@ -70,19 +71,20 @@ export const salaryTableHeaders = [
         header: 'Безнал'
     }
 ];
+
 export interface ISalaryTableRow {
-    id: string
-    cash: number
-    cashless: number
+    id: string;
+    cash: number;
+    cashless: number;
 }
+
 export function CreateSalaryPaymentsRows(payments: IPayment[]): ISalaryTableRow[] {
     return payments.map((payment) => {
         return {
             id: payment._id,
             date: timestampToDate(+payment.date, 'MM-DD', '.'),
             cash: payment.payedCash,
-            cashless: payment.payedCashless,
-
+            cashless: payment.payedCashless
         };
     });
 }

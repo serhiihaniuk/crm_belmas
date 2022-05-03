@@ -11,7 +11,6 @@ const {
 class AppointmentController {
     async createAppointment({AppointmentInput}) {
         try {
-            console.log('asdfsadfasdf', AppointmentInput.monthCode)
             const month = await MonthController.getMonthByCode(AppointmentInput.monthCode)
             const appointment = new Appointment({
                 client: AppointmentInput.client,
@@ -23,7 +22,8 @@ class AppointmentController {
                 creator: AppointmentInput.creator,
                 createdAt: Date.now(),
                 status: "booked",
-                month: month
+                month: month,
+                monthCode: AppointmentInput.monthCode
             });
 
             const savedAppointment = await appointment.save();
@@ -51,7 +51,6 @@ class AppointmentController {
             employee: AppointmentInput.employee,
             creator: AppointmentInput.creator,
             createdAt: AppointmentInput.date,
-            status: "booked",
         };
         try {
             const updatedAppointment = await Appointment.findByIdAndUpdate(
@@ -87,21 +86,21 @@ class AppointmentController {
     async deleteAppointment({id}) {
         try {
             const deletedAppointment = await Appointment.findByIdAndDelete(id);
-            const month = await MonthController.getMonthByCode(deletedAppointment.month.code);
+            const month = await MonthController.getMonthByCode(deletedAppointment.monthCode);
             await Employee.findByIdAndUpdate(deletedAppointment.employee, {
-                $pull: {appointments: deletedAppointment},
+                $pull: {appointments: deletedAppointment._id},
             });
             await MonthTotal.findByIdAndUpdate(month.id, {
-                $pull: {appointments: deletedAppointment},
+                $pull: {appointments: deletedAppointment._id},
             });
             return "success";
         } catch (err) {
+            console.log(err);
             throw err;
         }
     }
 
     async getAppointmentsTotalPrice({dateFrom, dateTo}) {
-        console.log(dateFrom, dateTo);
         try {
             const match = {
                 $match: {
@@ -149,36 +148,37 @@ class AppointmentController {
         }
         try {
             const pipeline = [
-                {
-                    $match: match,
-                },
-                {
-                    $group: {
-                        _id: {
-                            $dateToString: {
-                                format: "%Y-%m-%d",
-                                date: "$date",
-                            },
-                        },
-                        appointments: {$push: "$$ROOT"},
-                    },
-                },
-                {
-                    $unwind: "$appointments",
-                },
-                {
-                    $sort: {
-                        "appointments.date": 1,
-                    },
-                },
-                {
-                    $group: {
-                        _id: "$_id",
-                        appointments: {$push: "$appointments"},
-                    },
-                },
-            ];
+				{
+					$match: match
+				},
+				{
+					$group: {
+						_id: {
+							$dateToString: {
+								format: '%Y-%m-%d',
+								date: '$date'
+							}
+						},
+						appointments: { $push: '$$ROOT' }
+					}
+				},
+				{
+					$unwind: '$appointments'
+				},
+				{
+					$sort: {
+						'appointments.date': 1
+					}
+				},
+				{
+					$group: {
+						_id: '$_id',
+						appointments: { $push: '$appointments' }
+					}
+				}
+			];
             const res = await Appointment.aggregate(pipeline);
+
             const daysTotal = mapDaysBetweenDates(
                 AppointmentsByDatesInput.dateFrom,
                 AppointmentsByDatesInput.dateTo
@@ -196,6 +196,7 @@ class AppointmentController {
             return response;
         } catch (e) {
             console.log(e);
+            return e;
         }
     }
 }

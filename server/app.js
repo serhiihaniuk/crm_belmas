@@ -22,10 +22,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors(corsOptions));
 
-app.get('/', (req, res) => {
-	res.send('This is bns api');
-});
-
 let apolloServer;
 
 async function startApolloServer() {

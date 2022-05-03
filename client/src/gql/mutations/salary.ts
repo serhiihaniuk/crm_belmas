@@ -1,7 +1,9 @@
 import { gql } from '@apollo/client';
+
 export interface IAddSalaryPayment {
-    addSalaryPayment: ISalaryPayment
+    addSalaryPayment: ISalaryPayment;
 }
+
 export interface ISalaryPaymentInput extends ISalaryPayment {
     monthCode: string;
 }

@@ -26,7 +26,7 @@ class MonthController {
 			expensesCashless: 0,
 			expensesCash: 0,
 			salaryCashless: 0,
-			salaryCash: 0,
+			salaryCash: 0
 		});
 		try {
 			return await newMonth.save();
@@ -77,7 +77,6 @@ class MonthController {
 					cashless: 0
 				}
 			);
-			console.log(totalEarnings, totalExpenses, totalSalary);
 			return await MonthTotal.findOneAndUpdate(
 				{ monthCode: monthCode },
 				{

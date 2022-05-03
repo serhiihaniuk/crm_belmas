@@ -18,7 +18,6 @@ import { Add16 } from '@carbon/icons-react';
 import SalaryModal from './SalaryModal';
 import { ApolloConsumer } from '@apollo/client';
 
-
 const table = css`
     td,
     th {
@@ -98,13 +97,14 @@ const SalaryTable: React.FC<ISalaryTableProps> = ({ payments, employee, employee
                                 </TableHead>
                                 <TableBody className={table}>
                                     {rows.map((row: any, currentRow: number) => {
-
                                         return (
                                             <React.Fragment key={row.id}>
                                                 <TableRow
                                                     {...getRowProps({ row })}
                                                     style={{ cursor: 'pointer' }}
-                                                    onClick={() => {openModal(rowsData[currentRow].id)}}
+                                                    onClick={() => {
+                                                        openModal(rowsData[currentRow].id);
+                                                    }}
                                                 >
                                                     {row.cells.map((cell: any) => {
                                                         return (

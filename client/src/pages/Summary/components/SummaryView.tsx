@@ -5,6 +5,7 @@ import { InlineLoading, Tag } from 'carbon-components-react';
 import { css } from '@emotion/css';
 import { GET_MONTH_STATS, IMonthTotalQuery } from '../../../gql/query/month';
 import { Divider } from '../../../globalStyles';
+import { useTypedSelector } from '../../../hooks/useTypedSelector';
 
 interface ISummaryViewProps {}
 
@@ -16,11 +17,12 @@ const loadingCSS = css`
 `;
 
 const SummaryView: React.FC<ISummaryViewProps> = () => {
+    const { from } = useTypedSelector((state) => state.date);
     const { data, loading } = useQuery<IMonthTotalQuery>(GET_MONTH_STATS, {
         variables: {
-            monthCode: '2021-12'
+            monthCode: `${from.YYYY}-${from.MM}`
         },
-        pollInterval: 5000,
+        pollInterval: 5000
     });
 
     if (loading || !data) {
@@ -67,17 +69,16 @@ const rowStyle = css`
     }
 
     .bx--tag.cash {
-        background: #7C9473;
+        background: #7c9473;
     }
 
     .bx--tag.cashless {
-        background: #A0937D;
+        background: #a0937d;
     }
 
     div:first-child {
         width: 150px;
-      background: #444444b3;
- 
+        background: #444444b3;
     }
 
     div {

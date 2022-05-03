@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Link } from 'carbon-components-react';
-import { RequestQuote32 } from '@carbon/icons-react';
 import {
+    Button,
     DataTable,
+    Link,
     Table,
     TableBody,
     TableCell,
@@ -10,9 +10,9 @@ import {
     TableExpandedRow,
     TableExpandRow
 } from 'carbon-components-react';
-import { headers } from '../service/tableService';
+import { RequestQuote32 } from '@carbon/icons-react';
+import { headers, IAppointment } from '../service/tableService';
 import { css } from '@emotion/css';
-import { IAppointment } from '../service/tableService';
 
 const booktable = css`
     .client {

@@ -1,26 +1,18 @@
 import React, { useEffect } from 'react';
 
-import {
-    Modal,
-    NumberInput,
-    Select,
-    SelectItem
-} from 'carbon-components-react';
+import { Modal, NumberInput, Select, SelectItem } from 'carbon-components-react';
 import { css } from '@emotion/css';
 import { IScheduleTableRow } from '../service/tableService';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { CALCULATE_APPOINTMENT } from '../../../gql/mutations/appointment';
-import { InlineLoading } from 'carbon-components-react';
 import { useMutation } from '@apollo/client';
-import ModalInlineLoading from "../../../components/shared/ModalInlineLoading";
+import ModalInlineLoading from '../../../components/shared/ModalInlineLoading';
 
 const modal = css`
     .bx--modal-container {
-    width: 340px;
+        width: 340px;
     }
 `;
-
-
 
 interface IScheduleModalProps {
     client: any;
@@ -35,12 +27,7 @@ interface ICalculateAppointmentTemplate {
     paymentMethod: string;
 }
 
-const ScheduleModal: React.FC<IScheduleModalProps> = ({
-    isOpen,
-    closeModal,
-    selectedAppointment,
-    client
-}) => {
+const ScheduleModal: React.FC<IScheduleModalProps> = ({ isOpen, closeModal, selectedAppointment, client }) => {
     const {
         register,
         handleSubmit,
@@ -59,9 +46,7 @@ const ScheduleModal: React.FC<IScheduleModalProps> = ({
     useEffect(() => {
         if (selectedAppointment) {
             const price =
-                selectedAppointment.paymentMethod === 'cash'
-                    ? selectedAppointment.cash
-                    : selectedAppointment.cashless;
+                selectedAppointment.paymentMethod === 'cash' ? selectedAppointment.cash : selectedAppointment.cashless;
             setValue('id', selectedAppointment.id);
             setValue('price', price);
             setValue('paymentMethod', selectedAppointment.paymentMethod);
@@ -84,67 +69,57 @@ const ScheduleModal: React.FC<IScheduleModalProps> = ({
             await client.refetchQueries({
                 include: ['GET_APPOINTMENTS_BY_DATE']
             });
-
         } catch (e) {
             console.log(e);
         }
-        closeModal()
+        closeModal();
     };
 
     return (
         <Modal
             open={isOpen}
-            modalHeading={
-                selectedAppointment?.status === 'finished'
-                    ? 'Редактирование записи'
-                    : 'Рассчитать'
-            }
+            modalHeading={selectedAppointment?.status === 'finished' ? 'Редактирование записи' : 'Рассчитать'}
             modalLabel=""
-            primaryButtonText={
-                selectedAppointment?.status === 'finished' ? 'Сохранить' : 'Рассчитать'
-            }
+            primaryButtonText={selectedAppointment?.status === 'finished' ? 'Сохранить' : 'Рассчитать'}
             secondaryButtonText="Назад"
             onRequestClose={closeModal}
             onRequestSubmit={handleSubmit(onSubmit)}
             className={modal}
         >
-            {loading && <ModalInlineLoading/>}
-            {!loading && <form>
-                <Controller
-                    name="price"
-                    control={control as any}
-                    rules={{ required: true, min: 1 }}
-                    render={({ field }) => (
-                        <NumberInput
-                            label="Стоимость"
-                            id="calculatePrice"
-                            light={true}
-                            hideSteppers={true}
-                            {...field}
-                        />
+            {loading && <ModalInlineLoading />}
+            {!loading && (
+                <form>
+                    <Controller
+                        name="price"
+                        control={control as any}
+                        rules={{ required: true, min: 1 }}
+                        render={({ field }) => (
+                            <NumberInput
+                                label="Стоимость"
+                                id="calculatePrice"
+                                light={true}
+                                hideSteppers={true}
+                                {...field}
+                            />
+                        )}
+                    />
+                    {errors.price && (
+                        <span style={{ color: 'red', height: 12, fontSize: 10 }}>Это поле обязательно</span>
                     )}
-                />
-                {errors.price && (
-                    <span style={{ color: 'red', height: 12, fontSize: 10 }}>
-                        Это поле обязательно
-                    </span>
-                )}
-                <Select
-                    id="select-1"
-                    defaultValue="placeholder-item"
-                    labelText="Способ оплаты"
-                    {...register('paymentMethod', { required: true })}
-                >
-                    <SelectItem value="cash" text="Наличные" />
-                    <SelectItem value="cashless" text="Терминал" />
-                </Select>
-                {errors.paymentMethod && (
-                    <span style={{ color: 'red', height: 12, fontSize: 10 }}>
-                        Это поле обязательно
-                    </span>
-                )}
-            </form>}
-
+                    <Select
+                        id="select-1"
+                        defaultValue="placeholder-item"
+                        labelText="Способ оплаты"
+                        {...register('paymentMethod', { required: true })}
+                    >
+                        <SelectItem value="cash" text="Наличные" />
+                        <SelectItem value="cashless" text="Терминал" />
+                    </Select>
+                    {errors.paymentMethod && (
+                        <span style={{ color: 'red', height: 12, fontSize: 10 }}>Это поле обязательно</span>
+                    )}
+                </form>
+            )}
         </Modal>
     );
 };

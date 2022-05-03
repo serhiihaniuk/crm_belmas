@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { SubmitHandler, useForm, Controller } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import { Button, FormLabel, Modal, Select, SelectItem, TextArea, TextInput } from 'carbon-components-react';
 import { TimePicker } from '@atlaskit/datetime-picker';
@@ -76,9 +76,15 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, selectedDay, empl
     });
     const { selectedAppointment, isEditingExisting } = selectedDay;
     const createdBy = useTypedSelector((state) => state.employee._id);
-    const [addAppointment, { loading: aaLoading }] = useMutation(CREATE_APPOINTMENT);
-    const [updateAppointment, { loading: uaLoading }] = useMutation(UPDATE_APPOINTMENT);
-    const [deleteAppointment, { loading: daLoading }] = useMutation(DELETE_APPOINTMENT);
+    const [addAppointment, { loading: aaLoading }] = useMutation(CREATE_APPOINTMENT, {
+        onCompleted: closeModal
+    });
+    const [updateAppointment, { loading: uaLoading }] = useMutation(UPDATE_APPOINTMENT, {
+        onCompleted: closeModal
+    });
+    const [deleteAppointment, { loading: daLoading }] = useMutation(DELETE_APPOINTMENT, {
+        onCompleted: closeModal
+    });
     const [showDeleteBtn, setShowDeleteBtn] = React.useState(false);
     useEffect(() => {
         if (selectedAppointment) {
@@ -89,7 +95,7 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, selectedDay, empl
             setValue('date', selectedAppointment.date);
             return;
         }
-    }, [selectedAppointment, reset, setValue,]);
+    }, [selectedAppointment, reset, setValue]);
     useEffect(() => {
         if (!isOpen) {
             reset();
@@ -104,8 +110,7 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, selectedDay, empl
 
         const [year, month, day] = selectedDay.day.split('-');
         const [hour, minute] = appointmentTemplate.date.split(':');
-
-        appointmentTemplate.date = String(dateToTimestamp(+year, +month, +day, +hour, +minute));
+        appointmentTemplate.date = String(dateToTimestamp(+year, +month - 1, +day, +hour, +minute));
         appointmentTemplate.monthCode = `${year}-${month}`;
         appointmentTemplate.employee = employee;
         appointmentTemplate.creator = createdBy;
@@ -128,7 +133,6 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, selectedDay, empl
             await apolloClient.refetchQueries({
                 include: ['GET_APPOINTMENTS_BY_DAYS']
             });
-            closeModal();
         } catch (e) {
             console.log(e);
         }
@@ -140,15 +144,15 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, selectedDay, empl
                     id: selectedAppointment.id
                 }
             });
-            await apolloClient.refetchQueries({
+            apolloClient.refetchQueries({
                 include: ['GET_APPOINTMENTS_BY_DAYS']
             });
-            closeModal();
         } catch (e) {
             console.log(e);
         }
     };
     const isLoading = aaLoading || uaLoading || daLoading;
+
     return (
         <Modal
             open={isOpen}

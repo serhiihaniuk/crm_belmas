@@ -1,6 +1,6 @@
-const consoleLogStyles = 'color: #E60965; font-size: 14px;'
+const consoleLogStyles = 'color: #E60965; font-size: 14px;';
 
-function info(message: string | number | boolean ): void {
+function info(message: string | number | boolean): void {
     console.log(`%c info: ${message}`, consoleLogStyles);
 }
 

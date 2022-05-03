@@ -24,7 +24,7 @@ function App() {
     return (
         <>
             <Router isAuth={isAuth} />
-            <DateModal />
+            <DateModal isAuth={isAuth} />
         </>
     );
 }
