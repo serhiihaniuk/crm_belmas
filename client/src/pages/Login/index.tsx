@@ -13,17 +13,17 @@ const loginForm = css`
 
     form {
         display: flex;
+        gap: 20px;
         flex-direction: column;
         align-items: center;
     }
 
     input {
         width: 300px;
-        margin: 0 0 15px;
     }
 
     button {
-        margin: 0 10px;
+        margin: 25px 10px;
         align-self: flex-end;
     }
 `;
@@ -56,6 +56,8 @@ const Login: React.FC = () => {
                     id={'login-input-login'}
                     value={login}
                     onChange={(e) => setUsername(e.target.value)}
+                    warn={!!error}
+                    warnText={'Неверный логин или пароль'}
                 />
                 <TextInput
                     type="password"
@@ -64,6 +66,8 @@ const Login: React.FC = () => {
                     id={'login-input-password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    warn={!!error}
+                    warnText={'Неверный логин или пароль'}
                 />
 
                 <Button renderIcon={Login32} type="submit">
@@ -71,7 +75,6 @@ const Login: React.FC = () => {
                 </Button>
             </Form>
 
-            {error && <div>Ошибка авторизации</div>}
         </div>
     );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import BookModal from './components/BookModal';
+import BookModal from './components/BookModal/BookModal';
 import { pageWrapper } from '../../globalStyles';
 import { Tab, Tabs } from 'carbon-components-react';
 import { ApolloConsumer, useQuery } from '@apollo/client';
