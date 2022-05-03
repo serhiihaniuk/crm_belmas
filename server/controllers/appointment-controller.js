@@ -51,7 +51,6 @@ class AppointmentController {
             employee: AppointmentInput.employee,
             creator: AppointmentInput.creator,
             createdAt: AppointmentInput.date,
-            status: "booked",
         };
         try {
             const updatedAppointment = await Appointment.findByIdAndUpdate(
@@ -102,7 +101,6 @@ class AppointmentController {
     }
 
     async getAppointmentsTotalPrice({dateFrom, dateTo}) {
-        console.log(dateFrom, dateTo);
         try {
             const match = {
                 $match: {
@@ -150,36 +148,37 @@ class AppointmentController {
         }
         try {
             const pipeline = [
-                {
-                    $match: match,
-                },
-                {
-                    $group: {
-                        _id: {
-                            $dateToString: {
-                                format: "%Y-%m-%d",
-                                date: "$date",
-                            },
-                        },
-                        appointments: {$push: "$$ROOT"},
-                    },
-                },
-                {
-                    $unwind: "$appointments",
-                },
-                {
-                    $sort: {
-                        "appointments.date": 1,
-                    },
-                },
-                {
-                    $group: {
-                        _id: "$_id",
-                        appointments: {$push: "$appointments"},
-                    },
-                },
-            ];
+				{
+					$match: match
+				},
+				{
+					$group: {
+						_id: {
+							$dateToString: {
+								format: '%Y-%m-%d',
+								date: '$date'
+							}
+						},
+						appointments: { $push: '$$ROOT' }
+					}
+				},
+				{
+					$unwind: '$appointments'
+				},
+				{
+					$sort: {
+						'appointments.date': 1
+					}
+				},
+				{
+					$group: {
+						_id: '$_id',
+						appointments: { $push: '$appointments' }
+					}
+				}
+			];
             const res = await Appointment.aggregate(pipeline);
+
             const daysTotal = mapDaysBetweenDates(
                 AppointmentsByDatesInput.dateFrom,
                 AppointmentsByDatesInput.dateTo
@@ -197,6 +196,7 @@ class AppointmentController {
             return response;
         } catch (e) {
             console.log(e);
+            return e;
         }
     }
 }

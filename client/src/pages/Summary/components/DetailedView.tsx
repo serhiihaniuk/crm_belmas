@@ -12,7 +12,7 @@ const DetailedView: React.FC = () => {
     const { data: employeesData, loading } = useQuery<IGetEmployeesQuery>(GET_EMPLOYEES, {
         variables: {
             query: {
-                position: 'admin'
+                role: 'master'
             }
         }
     });

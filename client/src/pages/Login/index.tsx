@@ -30,7 +30,7 @@ const loginForm = css`
 
 const Login: React.FC = () => {
     const dispatch = useDispatch();
-    const [tryLogIn, { data, loading }] = useLazyQuery(LOGIN);
+    const [tryLogIn, { data, loading, error }] = useLazyQuery(LOGIN);
     const [login, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
 
@@ -53,7 +53,7 @@ const Login: React.FC = () => {
                     type="text"
                     required
                     labelText={'Имя пользователя'}
-                    id={'1'}
+                    id={'login-input-login'}
                     value={login}
                     onChange={(e) => setUsername(e.target.value)}
                 />
@@ -61,7 +61,7 @@ const Login: React.FC = () => {
                     type="password"
                     required
                     labelText={'Пароль'}
-                    id={'2'}
+                    id={'login-input-password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
@@ -70,6 +70,8 @@ const Login: React.FC = () => {
                     {loading ? <InlineLoading description="Загрузка" /> : 'Войти'}
                 </Button>
             </Form>
+
+            {error && <div>Ошибка авторизации</div>}
         </div>
     );
 };

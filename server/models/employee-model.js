@@ -24,10 +24,10 @@ const EmployeeSchema = new Schema({
 		type: String,
 		required: true
 	},
-	role: {
+	role: [{
 		type: String,
 		required: true
-	},
+	}],
 	appointments: [
 		{
 			type: Schema.Types.ObjectId,

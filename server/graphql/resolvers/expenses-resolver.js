@@ -5,7 +5,7 @@ module.exports = {
 		getExpensesByMonth: async (parent, args, context) => {
 			return checkAuthAndResolve(
 				context.req.headers.authorization,
-				'admin',
+				["root"],
 				ExpensesController.getExpensesByMonth.bind(this, args)
 			);
 		}
@@ -14,21 +14,21 @@ module.exports = {
 		addNewExpense: async (parent, args, context) => {
 			return checkAuthAndResolve(
 				context.req.headers.authorization,
-				'admin',
+                ["root"],
 				ExpensesController.addNewExpense.bind(this, args)
 			);
 		},
 		editExpense: async (parent, args, context) => {
 			return checkAuthAndResolve(
 				context.req.headers.authorization,
-				'admin',
+                ["root"],
 				ExpensesController.editExpense.bind(this, args)
 			);
 		},
 		deleteExpense: async (parent, args, context) => {
 			return checkAuthAndResolve(
 				context.req.headers.authorization,
-				'admin',
+                ["root"],
 				ExpensesController.deleteExpense.bind(this, args)
 			);
 		}

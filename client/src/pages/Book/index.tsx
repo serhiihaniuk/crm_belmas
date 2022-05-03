@@ -22,7 +22,7 @@ const Book: React.FC = () => {
     const { data: employeesData } = useQuery(GET_EMPLOYEES, {
         variables: {
             query: {
-                position: 'admin'
+                role: "master"
             }
         }
     });

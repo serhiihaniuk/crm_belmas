@@ -4,6 +4,7 @@ import Summary from '../../pages/Summary';
 import Expenses from '../../pages/Expenses';
 import Login from '../../pages/Login';
 import React from 'react';
+import { UserRoles } from './service';
 
 export interface IRoute {
     name: string;
@@ -11,6 +12,7 @@ export interface IRoute {
     component: React.ComponentType;
     exact: boolean;
     isAuth: boolean;
+    expectedRole?: UserRoles;
 }
 
 export const routes: IRoute[] = [
@@ -19,28 +21,32 @@ export const routes: IRoute[] = [
         path: '/book',
         exact: true,
         component: Book,
-        isAuth: true
+        isAuth: true,
+        expectedRole: UserRoles.admin
     },
     {
         name: 'Рассписание',
         path: '/schedule',
         exact: true,
         component: Schedule,
-        isAuth: true
+        isAuth: true,
+        expectedRole: UserRoles.master
     },
     {
         name: 'BNS',
         path: '/summary',
         exact: false,
         component: Summary,
-        isAuth: true
+        isAuth: true,
+        expectedRole: UserRoles.root
     },
     {
         name: 'Рассходы',
         path: '/expenses',
         exact: true,
         component: Expenses,
-        isAuth: true
+        isAuth: true,
+        expectedRole: UserRoles.root
     },
     {
         name: 'Логин',

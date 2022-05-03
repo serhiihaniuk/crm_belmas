@@ -72,7 +72,7 @@ const typeDefs = gql`
 		name: String!
 		position: String!
 		qualification: String!
-		role: String!
+		role: [String!]!
 		login: String!
 		password: String
 		appointments: [Appointment]!
@@ -85,7 +85,7 @@ const typeDefs = gql`
 		name: String!
 		position: String!
 		qualification: String!
-		role: String!
+		role: [String!]!
 		login: String!
 		password: String
 	}
@@ -109,6 +109,7 @@ const typeDefs = gql`
 		qualification: String
 		role: String
 	}
+
 	input ExpenseInput {
 		cash: Int!
 		cashless: Int!
@@ -154,4 +155,4 @@ const typeDefs = gql`
 		monthCode: String!
 	}
 `;
-module.exports = { typeDefs }
+module.exports = {typeDefs}

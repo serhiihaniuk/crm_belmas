@@ -58,12 +58,3 @@ module.exports = {
 		}
 	}
 };
-
-// const emp = {
-// 	name: 'Serhii',
-// 	position: 'admin',
-// 	password: 'b33ongh',
-// 	qualification: 'admin',
-// 	login: 'admin',
-// 	role: 'admin'
-// };
