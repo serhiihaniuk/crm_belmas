@@ -45,5 +45,3 @@ const DetailedViewTab: React.FC<any> = ({ employee }) => {
 };
 
 export default DetailedViewTab;
-
-

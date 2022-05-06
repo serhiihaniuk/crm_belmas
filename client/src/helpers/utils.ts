@@ -108,10 +108,12 @@ function DayCodeToMonthCode(dayCode: DayCode): MonthCode {
     return (dayCode.split('-')[0] + '-' + dayCode.split('-')[1]) as MonthCode;
 }
 
-export default {
+const d = {
     DateObjectToMonthCode,
     DateObjectToDayCode,
     TimestampToMonthCode,
     TimestampToDayCode,
     DayCodeToMonthCode
 };
+
+export default d;

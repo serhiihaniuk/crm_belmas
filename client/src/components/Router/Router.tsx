@@ -17,7 +17,7 @@ const Router: React.FC<IRouterProps> = ({ isAuth }) => {
         }
 
         if (employee.role.includes(UserRoles.root) && route.isAuth) {
-            console.log({employee})
+            console.log({ employee });
             return true;
         }
 

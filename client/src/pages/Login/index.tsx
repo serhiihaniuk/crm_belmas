@@ -74,7 +74,6 @@ const Login: React.FC = () => {
                     {loading ? <InlineLoading description="Загрузка" /> : 'Войти'}
                 </Button>
             </Form>
-
         </div>
     );
 };

@@ -37,7 +37,6 @@ const Expenses: React.FC = () => {
     };
     return (
         <div className={pageWrapper}>
-
             <Tabs>
                 <Tab id="id-3-13" label="Материалы">
                     <ExpensesTable

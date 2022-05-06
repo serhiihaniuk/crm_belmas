@@ -15,7 +15,6 @@ import { CreateExpensesRows, headers, IExpenseItem } from '../service/tableServi
 import { css } from '@emotion/css';
 import { useQuery } from '@apollo/client';
 import { GET_EXPENSES_BY_MONTH } from '../../../gql/query/expenses';
-import { getMonthName } from '../../../helpers/utils';
 
 const tagStyle = css`
     margin: 10px 10px 5px 0;
@@ -60,8 +59,8 @@ const ExpensesTable: React.FC<Props> = ({ monthCode, setSelectedExpense, openMod
                 Всего: 2222 zł.
             </Tag>
 
-            {
-                !!rowsData.length && <DataTable size="sm" rows={rowsData as any} headers={headers as any}>
+            {!!rowsData.length && (
+                <DataTable size="sm" rows={rowsData as any} headers={headers as any}>
                     {({ rows, getRowProps, getTableProps, getTableContainerProps, getHeaderProps }: any) => (
                         <TableContainer {...getTableContainerProps()}>
                             <Table {...getTableProps()} className={table}>
@@ -100,7 +99,7 @@ const ExpensesTable: React.FC<Props> = ({ monthCode, setSelectedExpense, openMod
                         </TableContainer>
                     )}
                 </DataTable>
-            }
+            )}
         </>
     );
 };
