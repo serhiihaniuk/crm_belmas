@@ -3,8 +3,10 @@ import DayTable from './DayTable';
 import { css } from '@emotion/css';
 import { Button, Tag } from 'carbon-components-react';
 import { Add16 } from '@carbon/icons-react';
-import { IAppointment } from '../service/tableService';
 import { getDayName } from '../../../helpers/utils';
+import { IBookModalState } from '../index';
+import { IAppointment } from '../../../types/appointment-types';
+import { DayCode } from '../../../types/date-types';
 
 const wrapper = css`
     padding: 10px 0;
@@ -23,19 +25,19 @@ const divider = css`
 `;
 
 interface IDayProps {
-    openModal: (day: string) => void;
+    openModal: (bookModalState: IBookModalState) => void;
     rows: IAppointment[];
-    day: string;
+    dayCode: DayCode;
 }
 
-const Day: React.FC<IDayProps> = ({ openModal, rows, day }) => {
+const Day: React.FC<IDayProps> = ({ openModal, rows, dayCode }) => {
     return (
         <div className={wrapper}>
             <div className={dayHeader}>
-                <Tag type={'teal'}>{getDayName(day)}</Tag>
+                <Tag type={'teal'}>{getDayName(dayCode)}</Tag>
                 <Button
                     onClick={() => {
-                        openModal(day);
+                        openModal({ day: dayCode, isEditingExisting: false });
                     }}
                     renderIcon={Add16}
                     iconDescription="Add"

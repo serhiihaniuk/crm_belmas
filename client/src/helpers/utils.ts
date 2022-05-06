@@ -1,6 +1,6 @@
-import { DateFormat, IDate } from '../types/date-types';
+import { DateFormat, DayCode, IDate, MonthCode } from '../types/date-types';
 
-export function getMonthFirstAndLastDayTimestamp( offset = 0): { firstDayTimestamp: number; lastDayTimestamp: number } {
+export function getMonthFirstAndLastDayTimestamp(offset = 0): { firstDayTimestamp: number; lastDayTimestamp: number } {
     const date = new Date();
     const firstDayTimestamp = dateToTimestamp(date.getFullYear(), date.getMonth() + offset, 1);
     const lastDayTimestamp = dateToTimestamp(date.getFullYear(), date.getMonth() + 1 + offset, 0);
@@ -19,11 +19,12 @@ export const dateToTimestamp = (
     return date.getTime();
 };
 
-export function getDayName(dateString: string, onlyMonth?: boolean): string | Date {
+export function getDayName(dateString: DayCode): string {
     const dateArr = dateString.split('-');
     const date = new Date(+dateArr[0], +dateArr[1] - 1, +dateArr[2]);
     const dayName = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'][date.getDay()];
     const monthName = [
+        'month index cant be zero',
         'января',
         'февраля',
         'марта',
@@ -36,9 +37,7 @@ export function getDayName(dateString: string, onlyMonth?: boolean): string | Da
         'октября',
         'ноября',
         'декабря'
-    ][+dateArr[1] - 1];
-
-    if (onlyMonth) return monthName;
+    ][+dateArr[1]];
 
     const day = date.getDate() + ' ' + monthName + ', ' + dayName;
     return String(day);
@@ -86,3 +85,33 @@ export function timestampToDate(
     const requiredValues: DateFormat[] = format.split('-') as DateFormat[];
     return requiredValues.map((value) => dateObject[value]).join(splitter);
 }
+
+function DateObjectToMonthCode(dateObject: IDate): MonthCode {
+    return `${dateObject.YYYY}-${dateObject.MM}` as MonthCode;
+}
+
+function DateObjectToDayCode(dateObject: IDate): DayCode {
+    return `${dateObject.YYYY}-${dateObject.MM}-${dateObject.DD}` as DayCode;
+}
+
+function TimestampToDayCode(timestamp: string | number): DayCode {
+    const dateObject = getDateObject(+timestamp);
+    return DateObjectToDayCode(dateObject);
+}
+
+function TimestampToMonthCode(timestamp: string | number): MonthCode {
+    const dateObject = getDateObject(+timestamp);
+    return DateObjectToMonthCode(dateObject);
+}
+
+function DayCodeToMonthCode(dayCode: DayCode): MonthCode {
+    return (dayCode.split('-')[0] + '-' + dayCode.split('-')[1]) as MonthCode;
+}
+
+export default {
+    DateObjectToMonthCode,
+    DateObjectToDayCode,
+    TimestampToMonthCode,
+    TimestampToDayCode,
+    DayCodeToMonthCode
+};

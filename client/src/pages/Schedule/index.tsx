@@ -6,31 +6,36 @@ import { ApolloConsumer, useQuery } from '@apollo/client';
 import { GET_APPOINTMENTS_BY_DAYS } from '../../gql/query/appointment';
 import { InlineLoading } from 'carbon-components-react';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
-import { IScheduleTableRow, makeScheduleTableRows } from './service/tableService';
-import { IAppointmentGroupByDateQuery } from '../../types/appointment-types';
+import { makeScheduleTableRows } from './service/tableService';
+import { IAppointmentGroupByDateQuery, IScheduleAppointment } from '../../types/appointment-types';
+import d from '../../helpers/utils';
 
 const Schedule = () => {
     const [open, setOpen] = React.useState(false);
-    const [selectedAppointment, setSelectedAppointment] = useState<IScheduleTableRow | null>(null);
+    const [selectedAppointment, setSelectedAppointment] = useState<IScheduleAppointment | null>(null);
     const { from, to } = useTypedSelector((state) => state.date);
-    const openModal = (appointment: IScheduleTableRow) => {
+    const openModal = (appointment: IScheduleAppointment) => {
         setOpen(true);
         setSelectedAppointment(appointment);
     };
     const closeModal = () => setOpen(false);
 
-    const employee = useTypedSelector((state) => state.employee._id);
+    const employeeID = useTypedSelector((state) => state.employee._id);
     const { data: appointmentsByDays, loading } = useQuery<IAppointmentGroupByDateQuery>(GET_APPOINTMENTS_BY_DAYS, {
         variables: {
             AppointmentsByDatesInput: {
-                employee: employee,
-                dateFrom: `${from.YYYY}-${from.MM}-${from.DD}`,
-                dateTo: `${to.YYYY}-${to.MM}-${to.DD}`
+                employee: employeeID,
+                dateFrom: d.DateObjectToDayCode(from),
+                dateTo: d.DateObjectToDayCode(to)
             }
         }
     });
     if (loading || !appointmentsByDays) {
-        return <div className={pageWrapper}><InlineLoading description="Загрузка" /></div>
+        return (
+            <div className={pageWrapper}>
+                <InlineLoading description="Загрузка" />
+            </div>
+        );
     }
     return (
         <>

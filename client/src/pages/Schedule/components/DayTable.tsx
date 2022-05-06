@@ -10,8 +10,9 @@ import {
     TableExpandRow
 } from 'carbon-components-react';
 import { Checkmark32 } from '@carbon/icons-react';
-import { headers, IScheduleTableRow } from '../service/tableService';
+import { headers } from '../service/tableService';
 import { css } from '@emotion/css';
+import { IScheduleAppointment } from '../../../types/appointment-types';
 
 const buttonWrapper = css`
     display: flex;
@@ -37,12 +38,11 @@ const expandedRow = css`
 `;
 
 interface IDayTableProps {
-    openModal: (day: IScheduleTableRow) => void;
-    rowsData: IScheduleTableRow[];
-    day: string;
+    openModal: (day: IScheduleAppointment) => void;
+    rowsData: IScheduleAppointment[];
 }
 
-const DayTable: React.FC<IDayTableProps> = ({ openModal, rowsData, day }) => {
+const DayTable: React.FC<IDayTableProps> = ({ openModal, rowsData }) => {
     return (
         <DataTable size="sm" rows={rowsData} headers={headers}>
             {({ rows, getRowProps, getTableProps, getTableContainerProps }: any) => (

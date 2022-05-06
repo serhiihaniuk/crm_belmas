@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
-
 import { Modal, NumberInput, Select, SelectItem } from 'carbon-components-react';
 import { css } from '@emotion/css';
-import { IScheduleTableRow } from '../service/tableService';
 import { Controller, useForm } from 'react-hook-form';
 import { CALCULATE_APPOINTMENT } from '../../../gql/mutations/appointment';
 import { useMutation } from '@apollo/client';
 import ModalInlineLoading from '../../../components/shared/ModalInlineLoading';
+import { IScheduleAppointment } from '../../../types/appointment-types';
 
 const modal = css`
     .bx--modal-container {
@@ -18,7 +17,7 @@ interface IScheduleModalProps {
     client: any;
     isOpen: boolean;
     closeModal: () => void;
-    selectedAppointment: IScheduleTableRow | null;
+    selectedAppointment: IScheduleAppointment | null;
 }
 
 interface ICalculateAppointmentTemplate {

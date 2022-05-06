@@ -1,14 +1,10 @@
+import { IEmployee } from '../../types/employee-types';
+
 export enum EmployeeActionTypes {
     SET_EMPLOYEE = 'SET_EMPLOYEE'
 }
 
-export interface IEmployeeState {
-    _id: string;
-    name: string;
-    position: string;
-    qualification: string;
-    role: string;
-    login: string;
+export interface IEmployeeState extends IEmployee {
     isAuth: boolean;
 }
 
@@ -22,7 +18,7 @@ const initialState: IEmployeeState = {
     name: '',
     position: '',
     qualification: '',
-    role: '',
+    role: [],
     login: '',
     isAuth: false
 };

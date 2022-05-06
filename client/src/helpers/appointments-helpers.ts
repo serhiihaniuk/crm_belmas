@@ -1,4 +1,4 @@
-import { IAppointmentResponse } from '../types/appointment-types';
+import { IAppointmentRaw } from '../types/appointment-types';
 
 export function mapDaysBetweenDates(startDateTimestamp: number, endDateTimestamp: number): IMappedDaysWithAppointments {
     const daysBetweenDates: IMappedDaysWithAppointments = {};
@@ -15,11 +15,11 @@ export function mapDaysBetweenDates(startDateTimestamp: number, endDateTimestamp
 }
 
 interface IMappedDaysWithAppointments {
-    [key: string]: IAppointmentResponse[];
+    [key: string]: IAppointmentRaw[];
 }
 
 export function splitAppointmentsByDays(
-    appointments: IAppointmentResponse[],
+    appointments: IAppointmentRaw[],
     startDayTimestamp: number | string,
     endDayTimestamp: number | string
 ): IMappedDaysWithAppointments {
