@@ -1,4 +1,4 @@
-import { IAppointmentGroupByDate, IAppointmentResponse } from '../../../types/appointment-types';
+import { IAppointmentGroupByDate, IAppointmentRaw } from '../../../types/appointment-types';
 
 export const headers = [
     {
@@ -69,7 +69,7 @@ export interface ITotalEarnings {
     cashlessTotal: number;
 }
 
-export function calculateTotalEarnings(appointments: IAppointmentResponse[]): ITotalEarnings {
+export function calculateTotalEarnings(appointments: IAppointmentRaw[]): ITotalEarnings {
     let cashTotal = 0;
     let cashlessTotal = 0;
     appointments.forEach(({ cash, cashless }) => {

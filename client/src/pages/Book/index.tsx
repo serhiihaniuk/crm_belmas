@@ -3,26 +3,42 @@ import BookModal from './components/BookModal/BookModal';
 import { pageWrapper } from '../../globalStyles';
 import { Tab, Tabs } from 'carbon-components-react';
 import { ApolloConsumer, useQuery } from '@apollo/client';
-import { IAppointment } from './service/tableService';
 import { GET_EMPLOYEES } from '../../gql/query/employees';
 import TabTemplate from './components/TabTemplate';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { IApolloClient } from '../../index';
+import d from '../../helpers/utils';
+import { IGetEmployeesQuery } from '../../types/employee-types';
+import { IAppointment } from '../../types/appointment-types';
+import { DayCode } from '../../types/date-types';
+
+export type IEditingAppointment = {
+    selectedAppointment: IAppointment;
+    isEditingExisting: true;
+    day: DayCode;
+};
+
+export type IAddingNewAppointment = {
+    day: DayCode;
+    isEditingExisting: false;
+};
+
+export type IBookModalState = IEditingAppointment | IAddingNewAppointment;
 
 const Book: React.FC = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [selectedAppointment, setSelectedAppointment] = useState<any>({
-        day: '',
-        appointmentID: ''
+    const [bookModalState, setBookModalState] = useState<IBookModalState>({
+        day: '' as DayCode,
+        isEditingExisting: false
     });
     const [employee, setEmployee] = useState<string>('');
     const [selectedTab, setSelectedTab] = useState<number>(0);
     const { from, to } = useTypedSelector((state) => state.date);
 
-    const { data: employeesData } = useQuery(GET_EMPLOYEES, {
+    const { data: employeesData } = useQuery<IGetEmployeesQuery>(GET_EMPLOYEES, {
         variables: {
             query: {
-                role: "master"
+                role: 'master'
             }
         }
     });
@@ -33,13 +49,9 @@ const Book: React.FC = () => {
         }
     }, [employeesData, selectedTab]);
 
-    const openModal = (day: string, selectedAppointment: IAppointment | undefined, isEditingExisting = false) => {
+    const openModal = (BookModalState: IBookModalState) => {
         setIsOpenModal(true);
-        setSelectedAppointment({
-            day,
-            selectedAppointment,
-            isEditingExisting
-        });
+        setBookModalState(BookModalState);
     };
     const closeModal = () => {
         setIsOpenModal(false);
@@ -54,7 +66,7 @@ const Book: React.FC = () => {
                             setSelectedTab(idx);
                         }}
                     >
-                        {employeesData.getEmployees.map((employee: any) => {
+                        {employeesData.getEmployees.map((employee) => {
                             return (
                                 <Tab
                                     key={employee._id}
@@ -65,9 +77,10 @@ const Book: React.FC = () => {
                                             <>
                                                 {selected && (
                                                     <TabTemplate
-                                                        employee={employee._id}
-                                                        dateFrom={`${from.YYYY}-${from.MM}-${from.DD}`}
-                                                        dateTo={`${to.YYYY}-${to.MM}-${to.DD}`}
+                                                        selected={selected}
+                                                        employeeID={employee._id}
+                                                        dateFrom={d.DateObjectToDayCode(from)}
+                                                        dateTo={d.DateObjectToDayCode(to)}
                                                         openModal={openModal}
                                                     />
                                                 )}
@@ -86,7 +99,7 @@ const Book: React.FC = () => {
                         apolloClient={client as IApolloClient}
                         closeModal={closeModal}
                         isOpen={isOpenModal}
-                        selectedDay={selectedAppointment}
+                        bookModalState={bookModalState}
                         employee={employee}
                     />
                 )}

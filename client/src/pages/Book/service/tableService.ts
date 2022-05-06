@@ -1,18 +1,5 @@
-import { IAppointmentResponse } from '../../../types/appointment-types';
-
-export interface IAppointment {
-    id: string;
-    client: string;
-    date: string;
-    procedure: string;
-    description: string | null;
-    instagram: string | null;
-    timestamp: Date;
-    status: string;
-    employee: {
-        _id: string;
-    };
-}
+import { IAppointment, IAppointmentRaw } from '../../../types/appointment-types';
+import { HourCode } from '../../../types/date-types';
 
 export const headers = [
     {
@@ -29,33 +16,33 @@ export const headers = [
     }
 ];
 
-export function makeRows(appointments: IAppointmentResponse[]): IAppointment[] {
+export function makeRows(appointments: IAppointmentRaw[]): IAppointment[] {
     return appointments.map((appointment) => {
         const date = new Date(Number(appointment.date));
         const hours = date.getHours();
         const minutes = `${date.getMinutes()}`.padStart(2, '0');
-        const time = hours + ':' + minutes;
+        const time = (hours + ':' + minutes) as HourCode;
         return {
             id: appointment._id,
-            date: time,
+            time: time,
             client: appointment.client,
             procedure: appointment.procedure,
             description: appointment.description,
             instagram: appointment.instagram,
-            timestamp: appointment.date,
+            date: appointment.date,
             employee: appointment.employee,
             status: appointment.status
         };
     });
 }
 
-export function mapTimeToTimepicker() {
-    const times = [];
+export function mapTimeToTimepicker(): HourCode[] {
+    const times: HourCode[] = [];
     for (let i = 8; i <= 20; i++) {
-        times.push(`${i}:00`);
-        times.push(`${i}:15`);
-        times.push(`${i}:30`);
-        times.push(`${i}:45`);
+        times.push(`${i}:00` as HourCode);
+        times.push(`${i}:15` as HourCode);
+        times.push(`${i}:30` as HourCode);
+        times.push(`${i}:45` as HourCode);
     }
     return times;
 }

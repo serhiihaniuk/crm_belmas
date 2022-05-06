@@ -1,5 +1,5 @@
 import { css } from '@emotion/css';
-import { Button, Tab, Tabs } from 'carbon-components-react';
+import { Button, Tab, Tabs, Tag } from 'carbon-components-react';
 import { Add16 } from '@carbon/icons-react';
 import React, { useState } from 'react';
 import ExpensesModal from './components/ExpensesModal';
@@ -9,10 +9,20 @@ import { ApolloConsumer } from '@apollo/client';
 import { IExpenseItem } from './service/tableService';
 import Salary from './components/Salary';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { getMonthName } from '../../helpers/utils';
 
 const addButton = css`
     margin: 10px 0 0 71%;
 `;
+
+const monthTag = css`
+    min-width: 85px;
+    max-height: 15px;
+    box-shadow: none;
+    align-self: center;
+    margin-left: 20px;
+`;
+
 const Expenses: React.FC = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [selectedExpense, setSelectedExpense] = useState<IExpenseItem | undefined>();
@@ -27,8 +37,9 @@ const Expenses: React.FC = () => {
     };
     return (
         <div className={pageWrapper}>
+
             <Tabs>
-                <Tab id="tab-1" label="Материалы">
+                <Tab id="id-3-13" label="Материалы">
                     <ExpensesTable
                         monthCode={`${from.YYYY}-${from.MM}`}
                         setSelectedExpense={setSelectedExpense}
@@ -49,6 +60,9 @@ const Expenses: React.FC = () => {
                 <Tab id="tab-3" label="Зарплата">
                     <Salary month={`${from.YYYY}-${from.MM}`} />
                 </Tab>
+                <Tag type={'teal'} className={monthTag}>
+                    {getMonthName(from.MM)}
+                </Tag>
             </Tabs>
             <ApolloConsumer>
                 {(client) => (

@@ -84,7 +84,7 @@ const SalaryTable: React.FC<ISalaryTableProps> = ({ payments, employee, employee
                 />
             </div>
             {
-                <DataTable size="sm" rows={rowsData as any} headers={headers as any}>
+                !!rowsData.length && <DataTable size="sm" rows={rowsData as any} headers={headers as any}>
                     {({ rows, getRowProps, getTableProps, getTableContainerProps, getHeaderProps }: any) => (
                         <TableContainer {...getTableContainerProps()}>
                             <Table {...getTableProps()} className={table}>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-
+import d, { dateToTimestamp } from '../../../../helpers/utils';
 import { Button, FormLabel, Modal, Select, SelectItem, TextArea, TextInput } from 'carbon-components-react';
 import { TimePicker } from '@atlaskit/datetime-picker';
 import { mapTimeToTimepicker } from '../../service/tableService';
@@ -9,18 +9,15 @@ import { useMutation } from '@apollo/client';
 import { CREATE_APPOINTMENT, DELETE_APPOINTMENT, UPDATE_APPOINTMENT } from '../../../../gql/mutations/appointment';
 import { IApolloClient } from '../../../../index';
 import { TrashCan32 } from '@carbon/icons-react';
-import { dateToTimestamp } from '../../../../helpers/utils';
 import ModalInlineLoading from '../../../../components/shared/ModalInlineLoading';
 import { bookModalForm, deleteBtn, errorSpan, timePickerCss } from './BookModal.css';
+import { IBookModalState } from '../../index';
+import { HourCode, MonthCode } from '../../../../types/date-types';
 
 interface IBookModal {
     isOpen: boolean;
     closeModal: () => void;
-    selectedDay: {
-        day: string;
-        selectedAppointment: any;
-        isEditingExisting: boolean;
-    };
+    bookModalState: IBookModalState;
     employee: string;
     apolloClient: IApolloClient;
 }
@@ -33,10 +30,14 @@ interface IAppointmentTemplate {
     procedure: string;
     employee: string;
     creator: string;
-    monthCode: string;
+    monthCode: MonthCode;
+    time: HourCode;
 }
 
-const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, selectedDay, employee, apolloClient }) => {
+const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, employee, apolloClient }) => {
+    const gqlRequestOptions = {
+        onCompleted: closeModal
+    };
     const {
         register,
         handleSubmit,
@@ -48,49 +49,43 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, selectedDay, empl
         defaultValues: {
             client: '',
             description: '',
-            date: '',
+            time: '8:00',
             instagram: '',
             procedure: 'manicure'
         }
     });
-    const { selectedAppointment, isEditingExisting } = selectedDay;
+
+    const { isEditingExisting } = bookModalState;
     const createdBy = useTypedSelector((state) => state.employee._id);
-    const [addAppointment, { loading: aaLoading }] = useMutation(CREATE_APPOINTMENT, {
-        onCompleted: closeModal
-    });
-    const [updateAppointment, { loading: uaLoading }] = useMutation(UPDATE_APPOINTMENT, {
-        onCompleted: closeModal
-    });
-    const [deleteAppointment, { loading: daLoading }] = useMutation(DELETE_APPOINTMENT, {
-        onCompleted: closeModal
-    });
+    const [addAppointment, { loading: aaLoading }] = useMutation(CREATE_APPOINTMENT, gqlRequestOptions);
+    const [updateAppointment, { loading: uaLoading }] = useMutation(UPDATE_APPOINTMENT, gqlRequestOptions);
+    const [deleteAppointment, { loading: daLoading }] = useMutation(DELETE_APPOINTMENT, gqlRequestOptions);
     const [showDeleteBtn, setShowDeleteBtn] = React.useState(false);
+
     useEffect(() => {
-        if (selectedAppointment) {
+        if (bookModalState.isEditingExisting) {
+            const { selectedAppointment } = bookModalState;
             setValue('client', selectedAppointment.client);
-            setValue('description', selectedAppointment.description);
-            setValue('instagram', selectedAppointment.instagram);
+            setValue('description', selectedAppointment.description || '');
+            setValue('instagram', selectedAppointment.instagram || '');
             setValue('procedure', selectedAppointment.procedure);
-            setValue('date', selectedAppointment.date);
+            setValue('time', selectedAppointment.time);
             return;
         }
-    }, [selectedAppointment, reset, setValue]);
+    }, [bookModalState, reset, setValue]);
+
     useEffect(() => {
         if (!isOpen) {
             reset();
             setShowDeleteBtn(false);
         }
     }, [isOpen]);
-    const onSubmit: SubmitHandler<IAppointmentTemplate> = async (appointmentTemplate) => {
-        if (isEditingExisting) {
-            const dateFromTS = new Date(+selectedAppointment.timestamp);
-            selectedDay.day = `${dateFromTS.getFullYear()}-${dateFromTS.getMonth() + 1}-${dateFromTS.getDate()}`;
-        }
 
-        const [year, month, day] = selectedDay.day.split('-');
-        const [hour, minute] = appointmentTemplate.date.split(':');
+    const onSubmit: SubmitHandler<IAppointmentTemplate> = async (appointmentTemplate) => {
+        const [year, month, day] = bookModalState.day.split('-');
+        const [hour, minute] = appointmentTemplate.time.split(':');
         appointmentTemplate.date = String(dateToTimestamp(+year, +month - 1, +day, +hour, +minute));
-        appointmentTemplate.monthCode = `${year}-${month}`;
+        appointmentTemplate.monthCode = d.DayCodeToMonthCode(bookModalState.day);
         appointmentTemplate.employee = employee;
         appointmentTemplate.creator = createdBy;
 
@@ -98,7 +93,7 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, selectedDay, empl
             if (isEditingExisting) {
                 await updateAppointment({
                     variables: {
-                        appointmentID: selectedAppointment.id,
+                        appointmentID: bookModalState.selectedAppointment.id,
                         AppointmentInput: appointmentTemplate
                     }
                 });
@@ -117,10 +112,11 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, selectedDay, empl
         }
     };
     const onDelete = async () => {
+        if (!isEditingExisting) return;
         try {
             await deleteAppointment({
                 variables: {
-                    id: selectedAppointment.id
+                    id: bookModalState.selectedAppointment.id
                 }
             });
             apolloClient.refetchQueries({

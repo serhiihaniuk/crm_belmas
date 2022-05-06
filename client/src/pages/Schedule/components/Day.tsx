@@ -2,8 +2,9 @@ import React from 'react';
 import DayTable from './DayTable';
 import { css } from '@emotion/css';
 import { Tag } from 'carbon-components-react';
-import { IScheduleTableRow } from '../service/tableService';
 import { getDayName } from '../../../helpers/utils';
+import { IScheduleAppointment } from '../../../types/appointment-types';
+import { DayCode } from '../../../types/date-types';
 
 const wrapper = css`
     padding: 10px 0;
@@ -21,9 +22,9 @@ const divider = css`
 `;
 
 interface IDayProps {
-    openModal: (day: IScheduleTableRow) => void;
-    rows: IScheduleTableRow[];
-    day: string;
+    openModal: (day: IScheduleAppointment) => void;
+    rows: IScheduleAppointment[];
+    day: DayCode;
 }
 
 const Day: React.FC<IDayProps> = ({ openModal, rows, day }) => {
@@ -32,7 +33,7 @@ const Day: React.FC<IDayProps> = ({ openModal, rows, day }) => {
             <div className={dayHeader}>
                 <Tag type={'teal'}>{getDayName(day)}</Tag>
             </div>
-            {rows.length ? <DayTable rowsData={rows} openModal={openModal} day={day} /> : <div className={divider} />}
+            {rows.length ? <DayTable rowsData={rows} openModal={openModal} /> : <div className={divider} />}
         </div>
     );
 };

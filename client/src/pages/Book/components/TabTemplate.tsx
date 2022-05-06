@@ -6,6 +6,9 @@ import { GET_APPOINTMENTS_BY_DAYS } from '../../../gql/query/appointment';
 import { InlineLoading } from 'carbon-components-react';
 import { css } from '@emotion/css';
 import { IAppointmentGroupByDateQuery } from '../../../types/appointment-types';
+import { IBookModalState } from '../index';
+import { IEmployeeId } from '../../../types/employee-types';
+import { DayCode } from '../../../types/date-types';
 
 const loadingCSS = css`
     display: flex;
@@ -14,11 +17,19 @@ const loadingCSS = css`
     height: 300px;
 `;
 
-const TabTemplate: React.FC<any> = ({ selected, openModal, employee, dateFrom, dateTo }) => {
+interface TabTemplateProps {
+    selected: boolean;
+    openModal: (bookModalState: IBookModalState) => void;
+    employeeID: IEmployeeId;
+    dateFrom: DayCode;
+    dateTo: DayCode;
+}
+
+const TabTemplate: React.FC<TabTemplateProps> = ({ selected, openModal, employeeID, dateFrom, dateTo }) => {
     const { data: appointmentsByDays, loading } = useQuery<IAppointmentGroupByDateQuery>(GET_APPOINTMENTS_BY_DAYS, {
         variables: {
             AppointmentsByDatesInput: {
-                employee: employee,
+                employee: employeeID,
                 dateFrom: dateFrom,
                 dateTo: dateTo
             }
@@ -34,7 +45,7 @@ const TabTemplate: React.FC<any> = ({ selected, openModal, employee, dateFrom, d
             {!selected &&
                 appointmentsByDays.getAppointmentsByDate.map(({ date, appointments }) => {
                     const rows = makeRows(appointments);
-                    return <Day key={date} openModal={openModal} rows={rows} day={date} />;
+                    return <Day key={date} openModal={openModal} rows={rows} dayCode={date} />;
                 })}
         </>
     );

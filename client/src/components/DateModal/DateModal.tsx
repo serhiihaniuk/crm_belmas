@@ -2,15 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { DatePicker, DatePickerInput, Modal } from 'carbon-components-react';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useDispatch } from 'react-redux';
-import { setDate, setDateCurrentMonth, toggleDateModal } from '../../redux/actionCreators/date-actions';
+import {
+    setDate,
+    setDateCurrentMonth,
+    setDateNextMonth,
+    setDatePrevMonth,
+    toggleDateModal
+} from '../../redux/actionCreators/date-actions';
 import { getDateFromDateObject, getDateObject } from '../../helpers/utils';
 import { IDateState } from '../../redux/reducers/date-reducer';
-import { openModalBTN, setCurrentMonthBTN } from './DateModal.css';
+import { buttonWrapper, openModalBTN, setCurrentMonthBTN } from './DateModal.css';
 import { EventSchedule32 } from '@carbon/icons-react';
 
 const DateModal: React.FC<{ isAuth: boolean }> = ({ isAuth }) => {
     const isOpen = useTypedSelector((state) => state.date.isModalOpen);
-    const { from, to } = useTypedSelector((state) => state.date);
+    const { from, to, monthNames } = useTypedSelector((state) => state.date);
     const [dateInput, setDateInput] = useState<IDateState>({ from, to });
 
     const [datePickerValue, setDatePickerValue] = useState<Date[]>();
@@ -37,6 +43,14 @@ const DateModal: React.FC<{ isAuth: boolean }> = ({ isAuth }) => {
 
     const setCurrentMonthAsSelectedPeriod = () => {
         dispatch(setDateCurrentMonth());
+    };
+
+    const setNextMonthAsSelectedPeriod = () => {
+        dispatch(setDateNextMonth());
+    };
+
+    const setPreviousMonthAsSelectedPeriod = () => {
+        dispatch(setDatePrevMonth());
     };
 
     useEffect(() => {
@@ -76,9 +90,17 @@ const DateModal: React.FC<{ isAuth: boolean }> = ({ isAuth }) => {
                     <DatePickerInput placeholder="" labelText="До" id="date-modal-picker-end" />
                 </DatePicker>
 
-                <button className={setCurrentMonthBTN} onClick={setCurrentMonthAsSelectedPeriod}>
-                    Выбрать текущий месяц
-                </button>
+                <div className={buttonWrapper}>
+                    <button className={setCurrentMonthBTN} onClick={setNextMonthAsSelectedPeriod}>
+                        {monthNames?.next}
+                    </button>
+                    <button className={setCurrentMonthBTN} onClick={setCurrentMonthAsSelectedPeriod}>
+                        <EventSchedule32 /> {monthNames?.current}
+                    </button>
+                    <button className={setCurrentMonthBTN} onClick={setPreviousMonthAsSelectedPeriod}>
+                        {monthNames?.previous}
+                    </button>
+                </div>
             </Modal>
         </>
     );

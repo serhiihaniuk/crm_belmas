@@ -1,4 +1,5 @@
 import React from 'react';
+import d from '../../../helpers/utils';
 import {
     Button,
     DataTable,
@@ -11,8 +12,10 @@ import {
     TableExpandRow
 } from 'carbon-components-react';
 import { RequestQuote32 } from '@carbon/icons-react';
-import { headers, IAppointment } from '../service/tableService';
+import { headers } from '../service/tableService';
 import { css } from '@emotion/css';
+import { IBookModalState } from '../index';
+import { IAppointment } from '../../../types/appointment-types';
 
 const booktable = css`
     .client {
@@ -46,7 +49,7 @@ const expandedRow = css`
 
 interface IDayTableProps {
     rowsData: IAppointment[];
-    openModal: (day: string, appointmentID: IAppointment | undefined, isEditing: boolean) => void;
+    openModal: (bookModalState: IBookModalState) => void;
 }
 
 const DayTable: React.FC<IDayTableProps> = ({ rowsData, openModal }) => {
@@ -83,7 +86,11 @@ const DayTable: React.FC<IDayTableProps> = ({ rowsData, openModal }) => {
                                             <div className={buttonWrapper}>
                                                 <Button
                                                     onClick={() => {
-                                                        openModal('edit', rowsData[currentRow], true);
+                                                        openModal({
+                                                            isEditingExisting: true,
+                                                            selectedAppointment: rowsData[currentRow],
+                                                            day: d.TimestampToDayCode(rowsData[currentRow].date)
+                                                        });
                                                     }}
                                                     renderIcon={RequestQuote32}
                                                     iconDescription="Add"
