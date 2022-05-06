@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import {
     Button,
@@ -74,11 +74,19 @@ const ExpensesModal: React.FC<IExpensesModal> = ({ isOpen, closeModal, apolloCli
             amount: 0
         }
     });
+
     useEffect(() => {
         if (!isOpen) {
             setShowDeleteBtn(false);
         }
     }, [isOpen]);
+
+    const resetForm = useCallback(() => {
+        reset();
+        setDate('');
+        setPaymentMethod('cash');
+    }, [reset]);
+
     useEffect(() => {
         if (selectedExpense) {
             setIsEdit(true);
@@ -90,7 +98,7 @@ const ExpensesModal: React.FC<IExpensesModal> = ({ isOpen, closeModal, apolloCli
         }
         resetForm();
         setIsEdit(false);
-    }, [selectedExpense]);
+    }, [selectedExpense, resetForm, setValue]);
 
     const onSubmit: SubmitHandler<IExpenseFormTemplate> = async ({ description, category, amount }) => {
         const expense: IExpenseInput = {
@@ -150,11 +158,7 @@ const ExpensesModal: React.FC<IExpensesModal> = ({ isOpen, closeModal, apolloCli
         const dateString = timestampToDate(timestamp, 'YYYY-MM-DD');
         setDate(dateString);
     };
-    const resetForm = () => {
-        reset();
-        setDate('');
-        setPaymentMethod('cash');
-    };
+
     const isLoading = aneLoading || deLoading || eeLoading;
     return (
         <Modal

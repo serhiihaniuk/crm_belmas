@@ -83,8 +83,8 @@ const SalaryTable: React.FC<ISalaryTableProps> = ({ payments, employee, employee
                     kind="tertiary"
                 />
             </div>
-            {
-                !!rowsData.length && <DataTable size="sm" rows={rowsData as any} headers={headers as any}>
+            {!!rowsData.length && (
+                <DataTable size="sm" rows={rowsData as any} headers={headers as any}>
                     {({ rows, getRowProps, getTableProps, getTableContainerProps, getHeaderProps }: any) => (
                         <TableContainer {...getTableContainerProps()}>
                             <Table {...getTableProps()} className={table}>
@@ -122,7 +122,7 @@ const SalaryTable: React.FC<ISalaryTableProps> = ({ payments, employee, employee
                         </TableContainer>
                     )}
                 </DataTable>
-            }
+            )}
         </div>
     );
 };

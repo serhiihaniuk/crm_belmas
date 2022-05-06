@@ -1,5 +1,5 @@
 import { IDate } from '../../types/date-types';
-import {getDateObject, getMonthFirstAndLastDayTimestamp, getMonthName} from '../../helpers/utils';
+import { getDateObject, getMonthFirstAndLastDayTimestamp, getMonthName } from '../../helpers/utils';
 
 export enum DateActionTypes {
     SET_DATE = 'SET_DATE',

@@ -40,7 +40,7 @@ const ScheduleModal: React.FC<IScheduleModalProps> = ({ isOpen, closeModal, sele
             paymentMethod: ''
         }
     });
-    const [calculateAppointment, { data, loading, error }] = useMutation(CALCULATE_APPOINTMENT);
+    const [calculateAppointment, { loading }] = useMutation(CALCULATE_APPOINTMENT);
 
     useEffect(() => {
         if (selectedAppointment) {

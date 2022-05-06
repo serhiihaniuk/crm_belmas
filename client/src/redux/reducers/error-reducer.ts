@@ -6,19 +6,14 @@ enum ErrorTypes {
 const initialState = {
     error: null,
     message: null
-}
-
-interface ErrorState {
-    error: any | null,
-    message: string | null
-}
+};
 
 interface SetErrorAction {
-    type: ErrorTypes.SET_ERROR,
+    type: ErrorTypes.SET_ERROR;
     payload: {
-        error: any,
-        message: string
-    }
+        error: any;
+        message: string;
+    };
 }
 
 export const createErrorAction = (error: any, message: string): SetErrorAction => ({
@@ -36,14 +31,14 @@ export const ErrorReducer = (state = initialState, action: any) => {
                 ...state,
                 error: action.payload.error,
                 message: action.payload.message
-            }
+            };
         case ErrorTypes.CLEAR_ERROR:
             return {
                 ...state,
                 error: null,
                 message: null
-            }
+            };
         default:
-            return state
+            return state;
     }
-}
+};

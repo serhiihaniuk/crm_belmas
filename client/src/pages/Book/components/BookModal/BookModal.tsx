@@ -79,7 +79,7 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, e
             reset();
             setShowDeleteBtn(false);
         }
-    }, [isOpen]);
+    }, [isOpen, reset]);
 
     const onSubmit: SubmitHandler<IAppointmentTemplate> = async (appointmentTemplate) => {
         const [year, month, day] = bookModalState.day.split('-');
