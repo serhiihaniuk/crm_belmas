@@ -1,9 +1,11 @@
-const bcrypt = require('bcryptjs');
-const Employee = require('../../models/employee-model');
-const EmployeeController = require('../../controllers/employee-controller');
-const { validateCredentials } = require('../helpers/validate');
-const { generateTokens } = require('../helpers/tokens');
-module.exports = {
+import  bcrypt from 'bcryptjs'
+import  Employee from '../../models/employee-model.js'
+import  EmployeeController from '../../controllers/employee-controller.js'
+import  { validateCredentials } from '../helpers/validate.js'
+import  { generateTokens } from '../helpers/tokens.js'
+
+//todo add auth check
+export default {
 	Query: {
 		getEmployee: async (parent, args, context) => {
 			try {

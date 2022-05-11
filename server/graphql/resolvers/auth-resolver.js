@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const { generateTokens } = require('../helpers/tokens');
-const ApiError = require('../helpers/api-error');
-const Employee = require('../../models/employee-model');
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcryptjs'
+import { generateTokens } from '../helpers/tokens.js'
+import ApiError from '../helpers/api-error.js'
+import Employee from '../../models/employee-model.js'
 
 const login = async (parent, { login, password }, context) => {
 	try {
@@ -64,7 +64,7 @@ const checkAuth = async (parent, args, { req, res }) => {
 	};
 };
 
-module.exports = {
+export default {
     login,
     logout,
     checkAuth

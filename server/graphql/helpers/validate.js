@@ -1,4 +1,4 @@
-const validateCredentials = (login, password) => {
+export const validateCredentials = (login, password) => {
     const loginRegex = /^[a-zA-Z0-9]{3,20}$/;
     const passwordRegex = /^[a-zA-Z0-9]{3,20}$/;
 
@@ -11,4 +11,4 @@ const validateCredentials = (login, password) => {
     return true;
 }
 
-exports.validateCredentials = validateCredentials;
+

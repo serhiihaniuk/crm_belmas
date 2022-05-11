@@ -1,8 +1,8 @@
-const MonthController = require('./month-controller');
-const EmployeeController = require('./employee-controller');
-const Salary = require('../models/salary-model');
-const SalaryPayment = require('../models/salary-payment-model');
-const MonthTotal = require('../models/month-total-model');
+import MonthController from './month-controller.js'
+import EmployeeController from './employee-controller.js'
+import Salary from '../models/salary-model.js'
+import SalaryPayment from '../models/salary-payment-model.js'
+import MonthTotal from '../models/month-total-model.js'
 
 class SalaryController {
 	static async createSalaryTable(salaryTableCode) {
@@ -132,4 +132,4 @@ class SalaryController {
 	}
 }
 
-module.exports = SalaryController;
+export default SalaryController;

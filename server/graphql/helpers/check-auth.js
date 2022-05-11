@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken');
-const ApiError = require('./api-error');
-const Employee = require('../../models/employee-model');
+import jwt from 'jsonwebtoken'
+import ApiError from './api-error.js'
+import Employee from '../../models/employee-model.js'
 const checkAuthAndResolve = async (authorization, expectedRoles, controller) => {
 	const token = authorization.split(' ')[1];
 
@@ -11,7 +11,7 @@ const checkAuthAndResolve = async (authorization, expectedRoles, controller) => 
 		const hasAccess = expectedRoles.some((role) => employee.role.includes(role));
 
 		if (hasAccess || employee.role.includes('root')) {
-			return controller.apply(this, arguments);
+			return controller.apply(this);
 		}
 
 		return new ApiError('No access', 403);
@@ -21,4 +21,4 @@ const checkAuthAndResolve = async (authorization, expectedRoles, controller) => 
 	}
 };
 
-module.exports = checkAuthAndResolve;
+export default checkAuthAndResolve;

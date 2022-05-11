@@ -1,7 +1,7 @@
-const checkAuthAndResolve = require('../helpers/check-auth');
-const SalaryController = require('../../controllers/salary-controller');
+import checkAuthAndResolve from '../helpers/check-auth.js'
+import SalaryController from '../../controllers/salary-controller.js'
 
-module.exports = {
+export default {
 	Query: {
 		getSalaryTableByCode: async (parent, args, context) => {
 			return checkAuthAndResolve(

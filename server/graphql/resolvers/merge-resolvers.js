@@ -1,9 +1,9 @@
-const Employee = require('../../models/employee-model');
-const Appointment = require('../../models/appointment-model');
+import Employee from '../../models/employee-model.js';
+import Appointment from '../../models/appointment-model.js';
 
 const getEmployeeFromDB = async (field, withPassword = false) => {
     try {
-        const employee = await Employee.findOne({ field });
+        const employee = await Employee.findOne({field});
 
         if (!withPassword) {
             employee._doc.password = null;
@@ -20,7 +20,7 @@ const getEmployeeFromDB = async (field, withPassword = false) => {
 
 const getAppointments = async (appointmentsIds) => {
     try {
-        const queryFilter = appointmentsIds.length ? { _id: { $in: appointmentsIds } } : {};
+        const queryFilter = appointmentsIds.length ? {_id: {$in: appointmentsIds}} : {};
         const appointments = await Appointment.find(queryFilter);
         return appointments.map((appointment) => {
             return {
@@ -34,7 +34,7 @@ const getAppointments = async (appointmentsIds) => {
     }
 };
 
-module.exports = {
+export default {
     getEmployeeFromDB,
     getAppointments
 };

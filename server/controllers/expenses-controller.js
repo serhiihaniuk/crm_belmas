@@ -1,6 +1,6 @@
-const Expenses = require("../models/expenses-model");
-const MonthController = require("./month-controller");
-const MonthTotal = require("../models/month-total-model");
+import Expenses from "../models/expenses-model.js"
+import MonthController from "./month-controller.js"
+import MonthTotal from "../models/month-total-model.js"
 
 class ExpensesController {
   static async addNewExpense({ ExpenseInput }) {
@@ -76,4 +76,4 @@ class ExpensesController {
   }
 }
 
-module.exports = ExpensesController;
+export default ExpensesController;
