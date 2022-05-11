@@ -10,6 +10,10 @@ const appointmentSchema = new Schema({
 	description: {
 		type: String
 	},
+    time: {
+        type: String,
+        required: true
+    },
 	cash: {
 		type: Number,
 		default: 0
@@ -53,7 +57,16 @@ const appointmentSchema = new Schema({
 	monthCode: {
 		type: String,
 		required: true
-	}
+	},
+    dayCode: {
+        type: String,
+        required: true
+    },
+    // day: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'Day',
+    //     required: true
+    // }
 });
 
 module.exports = mongoose.model('Appointment', appointmentSchema);

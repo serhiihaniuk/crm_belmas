@@ -36,17 +36,20 @@ const TabTemplate: React.FC<TabTemplateProps> = ({ selected, openModal, employee
         }
     });
 
-    if (loading || !appointmentsByDays) {
+    if (loading) {
         return <InlineLoading className={loadingCSS} description="Загрузка" />;
+    }
+
+    if (!appointmentsByDays) {
+        return <div>Error while loading appointments</div>;
     }
 
     return (
         <>
-            {!selected &&
-                appointmentsByDays.getAppointmentsByDate.map(({ date, appointments }) => {
-                    const rows = makeRows(appointments);
-                    return <Day key={date} openModal={openModal} rows={rows} dayCode={date} />;
-                })}
+            {appointmentsByDays.getAppointmentsByDate.map(({ date, appointments }) => {
+                const rows = makeRows(appointments);
+                return <Day key={date} openModal={openModal} rows={rows} dayCode={date} />;
+            })}
         </>
     );
 };

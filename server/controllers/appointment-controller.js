@@ -1,5 +1,5 @@
 const Appointment = require("../models/appointment-model");
-const Employee = require("../models/employee-model");
+const Day = require("../models/day-model");
 const MonthController = require("./month-controller");
 const MonthTotal = require("../models/month-total-model");
 const mongoose = require("mongoose");
@@ -15,6 +15,7 @@ class AppointmentController {
             const appointment = new Appointment({
                 client: AppointmentInput.client,
                 description: AppointmentInput.description,
+                time: AppointmentInput.time,
                 date: Number(AppointmentInput.date),
                 instagram: AppointmentInput.instagram,
                 procedure: AppointmentInput.procedure,
@@ -23,14 +24,16 @@ class AppointmentController {
                 createdAt: Date.now(),
                 status: "booked",
                 month: month,
-                monthCode: AppointmentInput.monthCode
+                monthCode: AppointmentInput.monthCode,
+                dayCode: AppointmentInput.dayCode
             });
 
             const savedAppointment = await appointment.save();
 
-            await Employee.findByIdAndUpdate(AppointmentInput.employee, {
-                $push: {appointments: savedAppointment},
-            });
+            //@todo add new appointment to day
+            // await Employee.findByIdAndUpdate(AppointmentInput.employee, {
+            //     $push: {appointments: savedAppointment},
+            // });
             await MonthTotal.findByIdAndUpdate(month.id, {
                 $push: {appointments: savedAppointment},
             });
@@ -45,12 +48,15 @@ class AppointmentController {
         const appointment = {
             client: AppointmentInput.client,
             description: AppointmentInput.description,
+            time: AppointmentInput.time,
             date: AppointmentInput.date,
             instagram: AppointmentInput.instagram,
             procedure: AppointmentInput.procedure,
             employee: AppointmentInput.employee,
             creator: AppointmentInput.creator,
             createdAt: AppointmentInput.date,
+            monthCode: AppointmentInput.monthCode,
+            dayCode: AppointmentInput.dayCode
         };
         try {
             const updatedAppointment = await Appointment.findByIdAndUpdate(
@@ -87,16 +93,18 @@ class AppointmentController {
         try {
             const deletedAppointment = await Appointment.findByIdAndDelete(id);
             const month = await MonthController.getMonthByCode(deletedAppointment.monthCode);
-            await Employee.findByIdAndUpdate(deletedAppointment.employee, {
-                $pull: {appointments: deletedAppointment._id},
-            });
+
+            //@todo delete new appointment to day
+            // await Employee.findByIdAndUpdate(deletedAppointment.employee, {
+            //     $pull: {appointments: deletedAppointment._id},
+            // });
             await MonthTotal.findByIdAndUpdate(month.id, {
                 $pull: {appointments: deletedAppointment._id},
             });
-            return "success";
+            return `Appointment with id ${id} has been deleted`;
         } catch (err) {
             console.log(err);
-            throw err;
+            return err;
         }
     }
 

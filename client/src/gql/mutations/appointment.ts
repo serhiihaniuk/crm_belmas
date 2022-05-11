@@ -12,6 +12,19 @@ export const UPDATE_APPOINTMENT = gql`
     mutation updateAppointment($appointmentID: ID!, $AppointmentInput: AppointmentInput!) {
         updateAppointment(appointmentID: $appointmentID, AppointmentInput: $AppointmentInput) {
             _id
+            client
+            cash
+            cashless
+            status
+            paymentMethod
+            date
+            instagram
+            procedure
+            description
+            time
+            employee {
+                _id
+            }
         }
     }
 `;

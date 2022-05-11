@@ -24,6 +24,9 @@ export const GET_APPOINTMENTS_BY_DAYS = gql`
                 instagram
                 procedure
                 description
+                time
+                monthCode,
+                dayCode,
                 employee {
                     _id
                 }

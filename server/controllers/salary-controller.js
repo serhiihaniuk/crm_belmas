@@ -21,7 +21,6 @@ class SalaryController {
 			});
 
 			const newSalaryTableSaved = await newSalaryTable.save();
-			console.log(newSalaryTableSaved);
 			await MonthTotal.findByIdAndUpdate(month.id, {
 				$push: { salaryTables: newSalaryTable }
 			});

@@ -27,13 +27,7 @@ const EmployeeSchema = new Schema({
 	role: [{
 		type: String,
 		required: true
-	}],
-	appointments: [
-		{
-			type: Schema.Types.ObjectId,
-			ref: 'Appointment'
-		}
-	]
+	}]
 });
 
 module.exports = mongoose.model('Employee', EmployeeSchema);

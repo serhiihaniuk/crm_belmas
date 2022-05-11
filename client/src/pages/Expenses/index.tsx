@@ -59,9 +59,6 @@ const Expenses: React.FC = () => {
                 <Tab id="tab-3" label="Зарплата">
                     <Salary month={`${from.YYYY}-${from.MM}`} />
                 </Tab>
-                <Tag type={'teal'} className={monthTag}>
-                    {getMonthName(from.MM)}
-                </Tag>
             </Tabs>
             <ApolloConsumer>
                 {(client) => (

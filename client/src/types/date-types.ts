@@ -52,3 +52,5 @@ type Iminutes = '00' | '15' | '30' | '45';
 export type MonthCode = `${Iyear}-${Imonth}`;
 export type DayCode = `${Iyear}-${Imonth}-${Iday}`;
 export type HourCode = `${Ihour}:${Iminutes}`;
+
+export type Timestamp = string
