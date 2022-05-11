@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-
+import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const monthTotalSchema = new Schema({
@@ -76,4 +75,4 @@ const monthTotalSchema = new Schema({
 	}
 });
 
-module.exports = mongoose.model('MonthTotal', monthTotalSchema);
+export default mongoose.model('MonthTotal', monthTotalSchema);

@@ -1,4 +1,4 @@
-const MonthTotal = require('../models/month-total-model');
+import MonthTotal from '../models/month-total-model.js'
 
 class MonthController {
 	static async getMonthByCode(monthCode) {
@@ -103,4 +103,4 @@ class MonthController {
 	}
 }
 
-module.exports = MonthController;
+export default MonthController;

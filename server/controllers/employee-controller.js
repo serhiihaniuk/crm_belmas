@@ -1,5 +1,4 @@
-const Employee = require('../models/employee-model');
-const AppointmentController = require('./appointment-controller');
+import Employee from '../models/employee-model.js'
 
 class EmployeeController {
 	async getEmployee(query, withPassword = false) {
@@ -59,4 +58,4 @@ class EmployeeController {
 	}
 }
 
-module.exports = new EmployeeController();
+export default new EmployeeController();

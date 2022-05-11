@@ -1,4 +1,4 @@
-function mapDaysBetweenDates(startDate, endDate) {
+export function mapDaysBetweenDates(startDate, endDate) {
 	const daysBetweenDates = {};
 	const startDateTimestamp = new Date(startDate).getTime();
 	const endDateTimestamp = new Date(endDate).getTime();
@@ -19,7 +19,7 @@ function mapDaysBetweenDates(startDate, endDate) {
 	return daysBetweenDates;
 }
 
-function addOneDayToDate(dateString) {
+export function addOneDayToDate(dateString) {
 	const date = new Date(dateString);
 	const newDate = new Date(date.getTime());
 	newDate.setDate(newDate.getDate() + 1);
@@ -29,4 +29,3 @@ function addOneDayToDate(dateString) {
 	return fullDateName;
 }
 
-module.exports = { mapDaysBetweenDates, addOneDayToDate };

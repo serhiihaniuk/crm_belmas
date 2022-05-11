@@ -1,6 +1,6 @@
-const checkAuthAndResolve = require("../helpers/check-auth");
-const MonthController = require("../../controllers/month-controller");
-module.exports = {
+import checkAuthAndResolve from "../helpers/check-auth.js"
+import MonthController from "../../controllers/month-controller.js"
+export default {
     Query: {
         getMonthStats: async (parent, args, context) => {
             return checkAuthAndResolve(

@@ -1,16 +1,18 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const { ApolloServer } = require('apollo-server-express');
-const { ApolloServerPluginLandingPageGraphQLPlayground } = require('apollo-server-core');
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import { ApolloServer } from 'apollo-server-express';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 
-const { typeDefs } = require('./graphql/schema/index');
-const graphQlResolvers = require('./graphql/resolvers/index');
-const httpHeadersPlugin = require('apollo-server-plugin-http-headers');
-const info = require('./helpers/info');
+import { typeDefs } from './graphql/schema/index.js';
+import graphQlResolvers from './graphql/resolvers/index.js';
+import httpHeadersPlugin from 'apollo-server-plugin-http-headers';
+import info from './helpers/info.js';
 
-require('dotenv').config();
+import dotenv from 'dotenv';
+
+dotenv.config();
 const workingMode = process.env.NODE_ENV;
 info('Starting server in ' + workingMode + ' mode');
 const corsOptions = {
@@ -82,4 +84,4 @@ startDB().then(() => {
 	info('...');
 });
 
-module.exports = db;
+export default db;

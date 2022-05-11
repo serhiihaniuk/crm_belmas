@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-
+import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const salaryPaymentSchema = new Schema({
@@ -31,4 +30,4 @@ const salaryPaymentSchema = new Schema({
 	}
 });
 
-module.exports = mongoose.model('SalaryPayment', salaryPaymentSchema);
+export default mongoose.model('SalaryPayment', salaryPaymentSchema);

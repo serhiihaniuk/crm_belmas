@@ -1,9 +1,6 @@
-const Appointment = require("../../models/appointment-model");
-const Employee = require("../../models/employee-model");
-const { getAppointmentsFromDB } = require("./merge-resolvers");
-const checkAuthAndResolve = require("../helpers/check-auth");
-const AppointmentController = require("../../controllers/appointment-controller");
-module.exports = {
+import checkAuthAndResolve from "../helpers/check-auth.js"
+import AppointmentController from "../../controllers/appointment-controller.js"
+export default {
   Query: {
     getAppointmentsTotalPrice: async (parent, args, context) => {
       return checkAuthAndResolve(
