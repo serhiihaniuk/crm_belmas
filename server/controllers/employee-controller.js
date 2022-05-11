@@ -12,8 +12,7 @@ class EmployeeController {
 
 			return {
 				...employee._doc,
-				_id: employee.id,
-				appointments: []
+				_id: employee.id
 			};
 		} catch (err) {
 			throw err;
@@ -29,8 +28,7 @@ class EmployeeController {
 
 			return {
 				...employee._doc,
-				_id: employee.id,
-				appointments: []
+				_id: employee.id
 			};
 		} catch (err) {
 			throw err;

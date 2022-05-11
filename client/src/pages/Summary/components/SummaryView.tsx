@@ -4,17 +4,10 @@ import { useQuery } from '@apollo/client';
 import { InlineLoading, Tag } from 'carbon-components-react';
 import { css } from '@emotion/css';
 import { GET_MONTH_STATS, IMonthTotalQuery } from '../../../gql/query/month';
-import { Divider } from '../../../globalStyles';
+import { Divider, loadingCSS } from '../../../globalStyles';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 
 interface ISummaryViewProps {}
-
-const loadingCSS = css`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 300px;
-`;
 
 const SummaryView: React.FC<ISummaryViewProps> = () => {
     const { from } = useTypedSelector((state) => state.date);

@@ -69,8 +69,7 @@ class ExpensesController {
   static async getExpensesByMonth({ monthCode }) {
     try {
       const month = await MonthController.getMonthByCode(monthCode);
-      const res =  await Expenses.find({ month: month.id }).sort({ date: 1 });
-      return res;
+        return await Expenses.find({ month: month.id }).sort({ date: 1 });
     } catch (error) {
       throw error;
     }

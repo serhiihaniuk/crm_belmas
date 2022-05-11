@@ -1,31 +1,6 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
-	type Query {
-		getAppointmentsTotalPrice(dateFrom: String, dateTo: String): TotalPrice!
-		getAppointmentsByDate(AppointmentsByDatesInput: AppointmentsByDatesInput!): [AppointmentsByDates!]!
-		getEmployee(id: ID!): Employee!
-		getEmployees(query: EmployeesQuery): [Employee!]!
-		getMonthStats(monthCode: String!): MonthStats!
-		login(login: String, password: String): AuthData!
-		logout: Boolean!
-		checkAuth: AuthData!
-		getExpensesByMonth(monthCode: String!): [Expense!]!
-		getSalaryTableByCode(salaryTableCode: String!): SalaryTable!
-		getSalaryTablesByMonth(monthCode: String!): [SalaryTable!]!
-	}
-	type Mutation {
-		createAppointment(AppointmentInput: AppointmentInput): Appointment
-		updateAppointment(appointmentID: ID!, AppointmentInput: AppointmentInput!): Appointment
-		calculateAppointment(id: ID!, cash: Int!, cashless: Int!, paymentMethod: String!): Appointment!
-		deleteAppointment(id: ID!): String
-		createEmployee(EmployeeInput: EmployeeInput): Employee
-		addNewExpense(ExpenseInput: ExpenseInput!): Expense!
-		editExpense(ExpenseID: ID!, ExpenseInput: ExpenseInput!): Expense!
-		deleteExpense(ExpenseID: ID!): String!
-		addSalaryPayment(SalaryPaymentInput: SalaryPaymentInput!): SalaryPayment!
-		deleteSalaryPayment(SalaryPaymentID: ID!): String!
-	}
 	type MonthStats {
 		_id: ID!
 		monthCode: String!
@@ -47,6 +22,7 @@ const typeDefs = gql`
 		_id: ID!
 		client: String!
 		description: String
+		time: String!
 		cash: Int
 		cashless: Int
 		paymentMethod: String
@@ -57,6 +33,8 @@ const typeDefs = gql`
 		employee: Employee!
 		creator: String!
 		createdAt: String!
+        monthCode: String!
+        dayCode: String!
 	}
 	type Expense {
 		_id: ID!
@@ -75,7 +53,6 @@ const typeDefs = gql`
 		role: [String!]!
 		login: String!
 		password: String
-		appointments: [Appointment]!
 	}
 	type AuthData {
 		accessToken: String!
@@ -93,11 +70,13 @@ const typeDefs = gql`
 		client: String!
 		description: String
 		date: String!
+		time: String!
 		instagram: String
 		procedure: String!
 		employee: String!
 		creator: String!
 		monthCode: String!
+        dayCode: String!
 	}
 	input AppointmentsByDatesInput {
 		dateFrom: String!
@@ -155,4 +134,35 @@ const typeDefs = gql`
 		monthCode: String!
 	}
 `;
-module.exports = {typeDefs}
+
+const Query = gql`
+	type Query {
+		getAppointmentsTotalPrice(dateFrom: String, dateTo: String): TotalPrice!
+		getAppointmentsByDate(AppointmentsByDatesInput: AppointmentsByDatesInput!): [AppointmentsByDates!]!
+		getEmployee(id: ID!): Employee!
+		getEmployees(query: EmployeesQuery): [Employee!]!
+		getMonthStats(monthCode: String!): MonthStats!
+		login(login: String!, password: String!): AuthData!
+		logout: Boolean!
+		checkAuth: AuthData!
+		getExpensesByMonth(monthCode: String!): [Expense!]!
+		getSalaryTableByCode(salaryTableCode: String!): SalaryTable!
+		getSalaryTablesByMonth(monthCode: String!): [SalaryTable!]!
+	}
+`;
+
+const Mutation = gql`
+	type Mutation {
+		createAppointment(AppointmentInput: AppointmentInput): Appointment
+		updateAppointment(appointmentID: ID!, AppointmentInput: AppointmentInput!): Appointment
+		calculateAppointment(id: ID!, cash: Int!, cashless: Int!, paymentMethod: String!): Appointment!
+		deleteAppointment(id: ID!): String
+		createEmployee(EmployeeInput: EmployeeInput): Employee!
+		addNewExpense(ExpenseInput: ExpenseInput!): Expense!
+		editExpense(ExpenseID: ID!, ExpenseInput: ExpenseInput!): Expense!
+		deleteExpense(ExpenseID: ID!): String!
+		addSalaryPayment(SalaryPaymentInput: SalaryPaymentInput!): SalaryPayment!
+		deleteSalaryPayment(SalaryPaymentID: ID!): String!
+	}
+`;
+module.exports = {typeDefs: [typeDefs, Query, Mutation]};

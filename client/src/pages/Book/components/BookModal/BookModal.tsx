@@ -12,7 +12,7 @@ import { TrashCan32 } from '@carbon/icons-react';
 import ModalInlineLoading from '../../../../components/shared/ModalInlineLoading';
 import { bookModalForm, deleteBtn, errorSpan, timePickerCss } from './BookModal.css';
 import { IBookModalState } from '../../index';
-import { HourCode, MonthCode } from '../../../../types/date-types';
+import { DayCode, HourCode, MonthCode } from '../../../../types/date-types';
 
 interface IBookModal {
     isOpen: boolean;
@@ -22,7 +22,7 @@ interface IBookModal {
     apolloClient: IApolloClient;
 }
 
-interface IAppointmentTemplate {
+interface IAppointmentInput {
     client: string;
     description: string;
     date: string;
@@ -31,6 +31,7 @@ interface IAppointmentTemplate {
     employee: string;
     creator: string;
     monthCode: MonthCode;
+    dayCode: DayCode;
     time: HourCode;
 }
 
@@ -45,7 +46,7 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, e
         formState: { errors },
         setValue,
         reset
-    } = useForm<IAppointmentTemplate>({
+    } = useForm<IAppointmentInput>({
         defaultValues: {
             client: '',
             description: '',
@@ -81,26 +82,35 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, e
         }
     }, [isOpen, reset]);
 
-    const onSubmit: SubmitHandler<IAppointmentTemplate> = async (appointmentTemplate) => {
+    const onSubmit: SubmitHandler<IAppointmentInput> = async (appointmentTemplate) => {
         const [year, month, day] = bookModalState.day.split('-');
         const [hour, minute] = appointmentTemplate.time.split(':');
-        appointmentTemplate.date = String(dateToTimestamp(+year, +month - 1, +day, +hour, +minute));
-        appointmentTemplate.monthCode = d.DayCodeToMonthCode(bookModalState.day);
-        appointmentTemplate.employee = employee;
-        appointmentTemplate.creator = createdBy;
+
+        const appointmentInput: IAppointmentInput = {
+            date: String(dateToTimestamp(+year, +month - 1, +day, +hour, +minute)),
+            monthCode: d.DayCodeToMonthCode(bookModalState.day),
+            dayCode: bookModalState.day,
+            employee: employee,
+            creator: createdBy,
+            client: appointmentTemplate.client,
+            description: appointmentTemplate.description,
+            instagram: appointmentTemplate.instagram,
+            procedure: appointmentTemplate.procedure,
+            time: appointmentTemplate.time
+        };
 
         try {
             if (isEditingExisting) {
                 await updateAppointment({
                     variables: {
                         appointmentID: bookModalState.selectedAppointment.id,
-                        AppointmentInput: appointmentTemplate
+                        AppointmentInput: appointmentInput
                     }
                 });
             } else {
                 await addAppointment({
                     variables: {
-                        AppointmentInput: appointmentTemplate
+                        AppointmentInput: appointmentInput
                     }
                 });
             }
@@ -160,7 +170,7 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, e
                         <SelectItem value="pedicure" text="Педикюр" />
                     </Select>
                     <Controller
-                        name="date"
+                        name="time"
                         control={control as any}
                         rules={{ required: true }}
                         render={({ field }) => (

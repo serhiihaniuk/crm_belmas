@@ -3,7 +3,7 @@ import { HourCode } from '../../../types/date-types';
 
 export const headers = [
     {
-        key: 'date',
+        key: 'time',
         header: 'Время'
     },
     {
@@ -18,13 +18,9 @@ export const headers = [
 
 export function makeRows(appointments: IAppointmentRaw[]): IAppointment[] {
     return appointments.map((appointment) => {
-        const date = new Date(Number(appointment.date));
-        const hours = date.getHours();
-        const minutes = `${date.getMinutes()}`.padStart(2, '0');
-        const time = (hours + ':' + minutes) as HourCode;
         return {
             id: appointment._id,
-            time: time,
+            time: appointment.time,
             client: appointment.client,
             procedure: appointment.procedure,
             description: appointment.description,

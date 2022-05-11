@@ -9,6 +9,7 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { makeScheduleTableRows } from './service/tableService';
 import { IAppointmentGroupByDateQuery, IScheduleAppointment } from '../../types/appointment-types';
 import d from '../../helpers/utils';
+import { loadingCSS } from '../../globalStyles';
 
 const Schedule = () => {
     const [open, setOpen] = React.useState(false);
@@ -33,7 +34,7 @@ const Schedule = () => {
     if (loading || !appointmentsByDays) {
         return (
             <div className={pageWrapper}>
-                <InlineLoading description="Загрузка" />
+                <InlineLoading description="Загрузка" className={loadingCSS} />
             </div>
         );
     }

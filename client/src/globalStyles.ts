@@ -11,3 +11,10 @@ export const Divider = css`
     height: 1px;
     background-color: #e0e0e0;
 `;
+
+export const loadingCSS = css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+`;

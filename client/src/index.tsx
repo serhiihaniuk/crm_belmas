@@ -14,7 +14,7 @@ import ErrorNotification from './components/ErrorNotification/ErrorNotification'
 const workingMode = process.env.NODE_ENV ? 'development' : 'production';
 info('Environment mode: ' + workingMode);
 
-const uri = 'http://192.168.1.101:3001/graphql';
+const uri = 'http://localhost:3001/graphql';
 
 info('api_url: ' + String(uri));
 
