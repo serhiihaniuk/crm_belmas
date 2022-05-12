@@ -1,9 +1,10 @@
 import { timestampToDate } from '../../../helpers/utils';
 import { IPayment } from '../../../gql/query/salary';
+import {IExpense, IExpenseRaw} from '../../../types/expenses-types';
 
 export const headers = [
     {
-        key: 'date',
+        key: 'monthCode',
         header: 'Дата'
     },
     {
@@ -24,36 +25,9 @@ export const headers = [
     }
 ];
 
-interface IExpense {
-    _id: string;
-    date: string;
-    description: string;
-    category: string;
-    cash: number;
-    cashless: number;
-}
-
-export interface IExpenseItem {
-    id: string;
-    date: string;
-    description: string;
-    category: string;
-    cash: number;
-    cashless: number;
-    fullDate: string;
-}
-
-export function CreateExpensesRows(expenses: IExpense[]): IExpenseItem[] {
+export function CreateExpensesRows(expenses: IExpenseRaw[]): IExpense[] {
     return expenses.map((expense) => {
-        return {
-            id: expense._id,
-            date: timestampToDate(+expense.date, 'MM-DD', '.'),
-            description: expense.description,
-            category: expense.category,
-            cash: expense.cash,
-            cashless: expense.cashless,
-            fullDate: expense.date
-        };
+        return { ...expense, id: expense._id };
     });
 }
 
@@ -82,7 +56,7 @@ export function CreateSalaryPaymentsRows(payments: IPayment[]): ISalaryTableRow[
     return payments.map((payment) => {
         return {
             id: payment._id,
-            date: timestampToDate(+payment.date, 'MM-DD', '.'),
+            date: timestampToDate(+payment.date, 'DayCode'),
             cash: payment.payedCash,
             cashless: payment.payedCashless
         };

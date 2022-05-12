@@ -14,10 +14,11 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { timestampToDate } from '../../../helpers/utils';
 import { useMutation } from '@apollo/client';
 import { ADD_NEW_EXPENSE, DELETE_EXPENSE, EDIT_EXPENSE } from '../../../gql/mutations/expenses';
-import { IExpenseItem } from '../service/tableService';
 import { TrashCan32 } from '@carbon/icons-react';
 import { css } from '@emotion/css';
 import ModalInlineLoading from '../../../components/shared/ModalInlineLoading';
+import { IExpense, IExpenseInput } from '../../../types/expenses-types';
+import { DayCode, MonthCode } from '../../../types/date-types';
 
 const deleteBtn = css`
     display: flex;
@@ -31,17 +32,7 @@ interface IExpensesModal {
     closeModal: () => void;
     name: string;
     apolloClient: any;
-    selectedExpense: IExpenseItem | undefined;
-}
-
-interface IExpenseInput {
-    description: string;
-    cash: number;
-    cashless: number;
-    date: string;
-    monthCode: string;
-    category: string;
-    invoice: boolean;
+    selectedExpense: IExpense | undefined;
 }
 
 interface IExpenseFormTemplate {
@@ -54,11 +45,17 @@ const ExpensesModal: React.FC<IExpensesModal> = ({ isOpen, closeModal, apolloCli
     const [isEditingExisting, setIsEdit] = useState<boolean>();
     const [showDeleteBtn, setShowDeleteBtn] = useState<boolean>(false);
     const [datePickerValue, setDatePickerValue] = useState<Date[]>();
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState<DayCode | ''>('');
     const [paymentMethod, setPaymentMethod] = useState('cash');
-    const [addNewExpense, { loading: aneLoading }] = useMutation(ADD_NEW_EXPENSE);
-    const [deleteExpense, { loading: deLoading }] = useMutation(DELETE_EXPENSE);
-    const [editExpense, { loading: eeLoading }] = useMutation(EDIT_EXPENSE);
+    const [addNewExpense, { loading: aneLoading }] = useMutation(ADD_NEW_EXPENSE, {
+        onCompleted: closeModal
+    });
+    const [deleteExpense, { loading: deLoading }] = useMutation(DELETE_EXPENSE, {
+        onCompleted: closeModal
+    });
+    const [editExpense, { loading: eeLoading }] = useMutation(EDIT_EXPENSE, {
+        onCompleted: closeModal
+    });
 
     const {
         register,
@@ -93,7 +90,7 @@ const ExpensesModal: React.FC<IExpensesModal> = ({ isOpen, closeModal, apolloCli
             setValue('description', selectedExpense.description);
             setValue('category', selectedExpense.category);
             setValue('amount', selectedExpense.cash + selectedExpense.cashless);
-            changeDate([new Date(+selectedExpense.fullDate)]);
+            changeDate([new Date(+selectedExpense.date)]);
             return;
         }
         resetForm();
@@ -106,10 +103,11 @@ const ExpensesModal: React.FC<IExpensesModal> = ({ isOpen, closeModal, apolloCli
             cash: Number(paymentMethod === 'cash' ? amount : 0),
             cashless: Number(paymentMethod === 'cashless' ? amount : 0),
             date,
-            monthCode: date.slice(0, 7),
+            monthCode: date.slice(0, 7) as MonthCode,
             category,
             invoice: false
         };
+        console.log('expinput', expense);
         try {
             if (isEditingExisting) {
                 await editExpense({
@@ -125,12 +123,10 @@ const ExpensesModal: React.FC<IExpensesModal> = ({ isOpen, closeModal, apolloCli
                     }
                 });
             }
-
-            await apolloClient.refetchQueries({
+            resetForm();
+            apolloClient.refetchQueries({
                 include: ['GET_EXPENSES_BY_MONTH']
             });
-            resetForm();
-            closeModal();
         } catch (e) {
             console.log(e);
         }
@@ -155,7 +151,7 @@ const ExpensesModal: React.FC<IExpensesModal> = ({ isOpen, closeModal, apolloCli
     const changeDate = (dateInput: Date[]) => {
         setDatePickerValue(dateInput);
         const timestamp = dateInput[0].getTime();
-        const dateString = timestampToDate(timestamp, 'YYYY-MM-DD');
+        const dateString = timestampToDate(timestamp, 'DayCode');
         setDate(dateString);
     };
 

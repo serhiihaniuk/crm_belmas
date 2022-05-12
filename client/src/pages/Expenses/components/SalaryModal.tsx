@@ -9,6 +9,7 @@ import {
     IAddSalaryPayment,
     ISalaryPaymentInput
 } from '../../../gql/mutations/salary';
+import { DayCode } from '../../../types/date-types';
 
 interface ISalaryModalProps {
     isOpen: boolean;
@@ -20,7 +21,7 @@ interface ISalaryModalProps {
 
 const SalaryModal: FC<ISalaryModalProps> = ({ isOpen, selectedPayment, closeModal, employeeID, apolloClient }) => {
     const [datePickerValue, setDatePickerValue] = useState<Date[]>();
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState<DayCode | ''>('');
     const [paymentMethod, setPaymentMethod] = useState('cash');
     const [amount, setAmount] = useState(0);
     const [addPayment, { loading }] = useMutation<IAddSalaryPayment>(ADD_NEW_SALARY_PAYMENT, {
@@ -60,7 +61,7 @@ const SalaryModal: FC<ISalaryModalProps> = ({ isOpen, selectedPayment, closeModa
     const changeDate = (dateInput: Date[]) => {
         setDatePickerValue(dateInput);
         const timestamp = dateInput[0].getTime();
-        const dateString = timestampToDate(timestamp, 'YYYY-MM-DD');
+        const dateString = timestampToDate(timestamp, 'DayCode') as DayCode;
         setDate(dateString);
     };
     const onDelete = async () => {

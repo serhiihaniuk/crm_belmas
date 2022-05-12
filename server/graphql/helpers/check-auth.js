@@ -14,10 +14,10 @@ const checkAuthAndResolve = async (authorization, expectedRoles, controller) => 
 			return controller.apply(this);
 		}
 
-		return new ApiError('No access', 403);
+		return new ApiError.ForbiddenError();
 	} catch (err) {
 		console.log({ err });
-		return ApiError.UnauthorizedError(err);
+        return new ApiError.ForbiddenError();
 	}
 };
 

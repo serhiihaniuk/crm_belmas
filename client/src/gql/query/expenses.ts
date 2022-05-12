@@ -10,6 +10,7 @@ export const GET_EXPENSES_BY_MONTH = gql`
             invoice
             category
             date
+            monthCode
         }
     }
 `;

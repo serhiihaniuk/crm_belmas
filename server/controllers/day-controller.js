@@ -9,18 +9,23 @@ class DayController {
 			}
 			return day;
 		} catch (e) {
+            console.error(e);
 			throw e;
 		}
 	}
 
-	static createDay(dayCode) {
+	static async createDay(dayCode) {
+        const [year, month, day] = dayCode.split('-');
 		const newDay = new Day({
             dayCode: dayCode,
+            year: year,
+            month: month,
+            day: day,
             appointments: [],
             dayOff: []
         })
         try {
-            return newDay.save();
+            return await newDay.save();
         }
         catch (e) {
             console.error(e);

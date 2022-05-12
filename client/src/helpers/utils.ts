@@ -1,4 +1,4 @@
-import { DateFormat, DayCode, IDate, MonthCode } from '../types/date-types';
+import { DayCode, IDate, MonthCode } from '../types/date-types';
 
 export function getMonthFirstAndLastDayTimestamp(offset = 0): { firstDayTimestamp: number; lastDayTimestamp: number } {
     const date = new Date();
@@ -76,14 +76,19 @@ export function getDateFromDateObject(dateObject: IDate): Date {
     return new Date(+dateObject.YYYY, +dateObject.MM - 1, +dateObject.DD, +dateObject.HH, +dateObject.mm);
 }
 
-export function timestampToDate(
+
+export function timestampToDate(timestamp: number, expectedType: "MonthCode"): MonthCode
+export function timestampToDate(timestamp: number, expectedType: "DayCode"): DayCode
+export function timestampToDate<T>(
     timestamp: number,
-    format: string = 'YYYY-MM-DD-HH-mm',
-    splitter: string = '-'
-): string {
+    expectedType: 'MonthCode' | 'DayCode',
+): MonthCode | DayCode {
     const dateObject = getDateObject(timestamp);
-    const requiredValues: DateFormat[] = format.split('-') as DateFormat[];
-    return requiredValues.map((value) => dateObject[value]).join(splitter);
+    if(expectedType === 'MonthCode') {
+       return DateObjectToMonthCode(dateObject);
+    } else  {
+        return DateObjectToDayCode(dateObject);
+    }
 }
 
 function DateObjectToMonthCode(dateObject: IDate): MonthCode {

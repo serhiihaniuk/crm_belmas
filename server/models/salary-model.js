@@ -8,11 +8,6 @@ const salarySchema = new Schema({
 		required: true,
 		unique: true
 	},
-	employee: {
-		type: Schema.Types.ObjectId,
-		ref: 'Employee',
-		required: true
-	},
 	totalEarned: {
 		type: Number,
 		required: true
@@ -34,6 +29,11 @@ const salarySchema = new Schema({
 		ref: 'Month',
 		required: true
 	},
+    employee: {
+        type: Schema.Types.ObjectId,
+        ref: 'Employee',
+        required: true
+    },
 	payments: [
 		{
 			type: Schema.Types.ObjectId,

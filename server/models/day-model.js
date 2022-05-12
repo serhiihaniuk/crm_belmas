@@ -8,6 +8,18 @@ const daySchema = new Schema({
 		required: true,
 		unique: true
 	},
+	year: {
+		type: String,
+		required: true
+	},
+	month: {
+		type: String,
+		required: true
+	},
+	day: {
+		type: String,
+		required: true
+	},
 	appointments: [
 		{
 			type: Schema.Types.ObjectId,

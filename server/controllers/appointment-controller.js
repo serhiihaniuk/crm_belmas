@@ -86,7 +86,6 @@ class AppointmentController {
 			const deletedAppointment = await Appointment.findByIdAndDelete(id);
 			const month = await MonthController.getMonthByCode(deletedAppointment.monthCode);
 
-			//@todo delete new appointment to day
             const day = await DayController.getDayByCode(deletedAppointment.dayCode);
             day.appointments.pull(deletedAppointment);
             await day.save();
@@ -191,7 +190,7 @@ class AppointmentController {
 			});
 			return response;
 		} catch (e) {
-			console.log(e);
+			console.error(e);
 			return e;
 		}
 	}
