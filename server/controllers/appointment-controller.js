@@ -1,6 +1,7 @@
 import Appointment from '../models/appointment-model.js';
 import MonthController from './month-controller.js';
 import MonthTotal from '../models/month-total-model.js';
+import DayController from './day-controller.js';
 import mongoose from 'mongoose';
 import { addOneDayToDate, mapDaysBetweenDates } from '../graphql/helpers/mapDays.js';
 
@@ -26,10 +27,11 @@ class AppointmentController {
 
 			const savedAppointment = await appointment.save();
 
-			//@todo add new appointment to day
-			// await Employee.findByIdAndUpdate(AppointmentInput.employee, {
-			//     $push: {appointments: savedAppointment},
-			// });
+
+            const day = await DayController.getDayByCode(AppointmentInput.dayCode);
+            day.appointments.push(savedAppointment);
+            await day.save();
+
 			await MonthTotal.findByIdAndUpdate(month.id, {
 				$push: { appointments: savedAppointment }
 			});
@@ -58,6 +60,7 @@ class AppointmentController {
 			const updatedAppointment = await Appointment.findByIdAndUpdate(appointmentID, appointment, { new: true });
 			return { ...updatedAppointment._doc, _id: updatedAppointment._id };
 		} catch (err) {
+            console.error(err)
 			throw err;
 		}
 	}
@@ -73,7 +76,8 @@ class AppointmentController {
 			const updatedAppointment = await Appointment.findByIdAndUpdate(id, appointment, { new: true });
 			return { ...updatedAppointment._doc, _id: updatedAppointment._id };
 		} catch (err) {
-			throw err;
+            console.error(err)
+            throw err;
 		}
 	}
 
@@ -83,9 +87,10 @@ class AppointmentController {
 			const month = await MonthController.getMonthByCode(deletedAppointment.monthCode);
 
 			//@todo delete new appointment to day
-			// await Employee.findByIdAndUpdate(deletedAppointment.employee, {
-			//     $pull: {appointments: deletedAppointment._id},
-			// });
+            const day = await DayController.getDayByCode(deletedAppointment.dayCode);
+            day.appointments.pull(deletedAppointment);
+            await day.save();
+
 			await MonthTotal.findByIdAndUpdate(month.id, {
 				$pull: { appointments: deletedAppointment._id }
 			});

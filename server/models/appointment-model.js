@@ -60,12 +60,7 @@ const appointmentSchema = new Schema({
     dayCode: {
         type: String,
         required: true
-    },
-    // day: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Day',
-    //     required: true
-    // }
+    }
 });
 
 export default mongoose.model('Appointment', appointmentSchema);
