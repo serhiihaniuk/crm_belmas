@@ -11,10 +11,11 @@ import {
     TableRow,
     Tag
 } from 'carbon-components-react';
-import { CreateExpensesRows, headers, IExpenseItem } from '../service/tableService';
+import { CreateExpensesRows, headers } from '../service/tableService';
 import { css } from '@emotion/css';
 import { useQuery } from '@apollo/client';
 import { GET_EXPENSES_BY_MONTH } from '../../../gql/query/expenses';
+import { IExpense, IGetExpensesByMonth } from '../../../types/expenses-types';
 
 const tagStyle = css`
     margin: 10px 10px 5px 0;
@@ -39,18 +40,22 @@ const loadingCSS = css`
 
 interface Props {
     monthCode: string;
-    setSelectedExpense: (value: IExpenseItem) => void;
+    setSelectedExpense: (value: IExpense) => void;
     openModal: () => void;
 }
 
 const ExpensesTable: React.FC<Props> = ({ monthCode, setSelectedExpense, openModal }) => {
-    const { data, loading } = useQuery(GET_EXPENSES_BY_MONTH, {
+    const { data, loading } = useQuery<IGetExpensesByMonth>(GET_EXPENSES_BY_MONTH, {
         variables: {
             monthCode: monthCode
         }
     });
-    if (loading || !data) {
+
+    if (loading) {
         return <InlineLoading className={loadingCSS} description="Загрузка" />;
+    }
+    if (!data) {
+        return <div>Error while loading expenses table data</div>;
     }
     const rowsData = CreateExpensesRows(data.getExpensesByMonth);
     return (

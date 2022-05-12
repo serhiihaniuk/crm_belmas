@@ -1,79 +1,69 @@
-import Expenses from "../models/expenses-model.js"
-import MonthController from "./month-controller.js"
-import MonthTotal from "../models/month-total-model.js"
+import Expenses from '../models/expenses-model.js';
+import MonthController from './month-controller.js';
 
 class ExpensesController {
-  static async addNewExpense({ ExpenseInput }) {
-    try {
-      const month = await MonthController.getMonthByCode(
-          ExpenseInput.monthCode
-      );
+    static async addNewExpense({ExpenseInput}) {
+        try {
+            const month = await MonthController.getMonthByCode(ExpenseInput.monthCode);
 
-      const newExpense = new Expenses({
-        cash: ExpenseInput.cash,
-        cashless: ExpenseInput.cashless,
-        month: month,
-        date: new Date(ExpenseInput.date),
-        category: ExpenseInput.category,
-        invoice: ExpenseInput.invoice,
-        description: ExpenseInput.description,
-      });
+            const newExpense = new Expenses({
+                cash: ExpenseInput.cash,
+                cashless: ExpenseInput.cashless,
+                month: month,
+                monthCode: ExpenseInput.monthCode,
+                date: new Date(ExpenseInput.date),
+                category: ExpenseInput.category,
+                invoice: ExpenseInput.invoice,
+                description: ExpenseInput.description
+            });
 
-      const savedExpense = await newExpense.save();
+            await newExpense.save();
 
-      await MonthTotal.findByIdAndUpdate(month.id, {
-        $push: { expenses: savedExpense },
-      });
-
-      return savedExpense;
-    } catch (error) {
-      console.log(error);
-      throw error;
+            return await newExpense.save();
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
-  }
 
-  static async editExpense({ ExpenseID, ExpenseInput }) {
-    const expense = {
-      cash: ExpenseInput.cash,
-      cashless: ExpenseInput.cashless,
-      category: ExpenseInput.category,
-      invoice: ExpenseInput.invoice,
-      description: ExpenseInput.description,
-    };
+    static async editExpense({ExpenseID, ExpenseInput}) {
+        const expense = {
+            cash: ExpenseInput.cash,
+            cashless: ExpenseInput.cashless,
+            category: ExpenseInput.category,
+            invoice: ExpenseInput.invoice,
+            description: ExpenseInput.description
+        };
 
-    try {
-      return await Expenses.findByIdAndUpdate(ExpenseID, expense, {
-        new: true,
-      });
-    } catch (error) {
-      throw error;
+        try {
+            return await Expenses.findByIdAndUpdate(ExpenseID, expense, {
+                new: true
+            });
+        } catch (error) {
+            throw error;
+        }
     }
-  }
 
-  static async deleteExpense({ ExpenseID }) {
-    try {
-      const expense = await Expenses.findById(ExpenseID);
+    static async deleteExpense({ExpenseID}) {
+        try {
+            const expense = await Expenses.findById(ExpenseID);
+            await expense.delete();
 
-      const month = await MonthTotal.findById(expense.month)
-      month.expenses.pull(ExpenseID);
-      await month.save();
-
-      await Expenses.findByIdAndDelete(ExpenseID);
-
-      return "success";
-    } catch (error) {
-      throw error;
+            return 'success';
+        } catch (error) {
+            throw error;
+        }
     }
-  }
 
-  static async getExpensesByMonth({ monthCode }) {
-    try {
-      const month = await MonthController.getMonthByCode(monthCode);
-        return await Expenses.find({ month: month.id }).sort({ date: 1 });
-    } catch (error) {
-      throw error;
+    static async getExpensesByMonth({monthCode}) {
+        try {
+            const month = await MonthController.getMonthByCode(monthCode);
+            return await Expenses.find({month: month}).sort({date: 1});
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
-  }
 }
 
 export default ExpensesController;

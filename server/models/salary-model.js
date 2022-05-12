@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 const Schema = mongoose.Schema;
 
 const salarySchema = new Schema({
@@ -6,11 +7,6 @@ const salarySchema = new Schema({
 		type: String,
 		required: true,
 		unique: true
-	},
-	employee: {
-		type: Schema.Types.ObjectId,
-		ref: 'Employee',
-		required: true
 	},
 	totalEarned: {
 		type: Number,
@@ -33,10 +29,15 @@ const salarySchema = new Schema({
 		ref: 'Month',
 		required: true
 	},
+    employee: {
+        type: Schema.Types.ObjectId,
+        ref: 'Employee',
+        required: true
+    },
 	payments: [
 		{
 			type: Schema.Types.ObjectId,
-			ref: 'SalaryPayment',
+			ref: 'SalaryPayment'
 		}
 	]
 });

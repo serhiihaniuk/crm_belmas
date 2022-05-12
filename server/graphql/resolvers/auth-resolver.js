@@ -29,6 +29,7 @@ const login = async (parent, { login, password }, context) => {
 			employee
 		};
 	} catch (error) {
+        console.error(error);
 		throw new Error(error);
 	}
 };
@@ -37,6 +38,7 @@ const logout = async (parent, args, { res }) => {
 	try {
 		return true;
 	} catch (error) {
+        console.error(error);
 		throw new Error(error);
 	}
 };
@@ -55,7 +57,8 @@ const checkAuth = async (parent, args, { req, res }) => {
 	const { accessToken } = generateTokens({
 		id: employee._id,
 		name: employee.name,
-		position: employee.position
+		position: employee.position,
+        role: employee.role
 	});
 	res.cookie('access', accessToken, { httpOnly: true });
 	return {

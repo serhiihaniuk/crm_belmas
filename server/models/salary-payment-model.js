@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
+
 const Schema = mongoose.Schema;
 
 const salaryPaymentSchema = new Schema({
 	salaryTableCode: {
 		type: String,
-		required: true,
+		required: true
 	},
 	employee: {
 		type: Schema.Types.ObjectId,
