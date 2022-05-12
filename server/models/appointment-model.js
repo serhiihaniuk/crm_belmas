@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 const Schema = mongoose.Schema;
 
 const appointmentSchema = new Schema({
@@ -9,10 +10,10 @@ const appointmentSchema = new Schema({
 	description: {
 		type: String
 	},
-    time: {
-        type: String,
-        required: true
-    },
+	time: {
+		type: String,
+		required: true
+	},
 	cash: {
 		type: Number,
 		default: 0
@@ -57,10 +58,10 @@ const appointmentSchema = new Schema({
 		type: String,
 		required: true
 	},
-    dayCode: {
-        type: String,
-        required: true
-    }
+	dayCode: {
+		type: String,
+		required: true
+	}
 });
 
 export default mongoose.model('Appointment', appointmentSchema);

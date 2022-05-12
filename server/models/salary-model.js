@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 const Schema = mongoose.Schema;
 
 const salarySchema = new Schema({
@@ -36,7 +37,7 @@ const salarySchema = new Schema({
 	payments: [
 		{
 			type: Schema.Types.ObjectId,
-			ref: 'SalaryPayment',
+			ref: 'SalaryPayment'
 		}
 	]
 });

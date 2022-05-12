@@ -24,10 +24,12 @@ const EmployeeSchema = new Schema({
 		type: String,
 		required: true
 	},
-	role: [{
-		type: String,
-		required: true
-	}]
+	role: [
+		{
+			type: String,
+			required: true
+		}
+	]
 });
 
 export default mongoose.model('Employee', EmployeeSchema);

@@ -133,6 +133,22 @@ const Types = gql`
         date: String!
         monthCode: String!
     }
+    input DayOffInput {
+        employeeID: String!
+        dayCode: String!
+    }
+
+    type DayOff {
+        _id: ID!
+        employee: Employee!
+        day: Day!
+    }
+
+    type Day {
+        _id: ID!
+        dayCode: String!
+        dayOff: [DayOff!]!
+    }
 `;
 
 const Query = gql`
@@ -163,7 +179,10 @@ const Mutation = gql`
         deleteExpense(ExpenseID: ID!): String!
         addSalaryPayment(SalaryPaymentInput: SalaryPaymentInput!): SalaryPayment!
         deleteSalaryPayment(SalaryPaymentID: ID!): String!
+        createDayOff(DayOffInput: DayOffInput!): DayOff!
+        deleteDayOff(DayOffID: ID!): DayOff
     }
 `;
+
 export const typeDefs = [Types, Query, Mutation]
 
