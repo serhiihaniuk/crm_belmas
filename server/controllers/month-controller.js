@@ -98,6 +98,7 @@ class MonthController {
 				{ new: true }
 			);
 		} catch (e) {
+            console.error(e)
 			throw e;
 		}
 	}

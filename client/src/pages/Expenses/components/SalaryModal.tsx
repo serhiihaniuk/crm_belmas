@@ -3,23 +3,21 @@ import { DatePicker, DatePickerInput, Modal, NumberInput, Select, SelectItem } f
 import ModalInlineLoading from '../../../components/shared/ModalInlineLoading';
 import { dateToTimestamp, timestampToDate } from '../../../helpers/utils';
 import { useMutation } from '@apollo/client';
-import {
-    ADD_NEW_SALARY_PAYMENT,
-    DELETE_SALARY_PAYMENT,
-    IAddSalaryPayment,
-    ISalaryPaymentInput
-} from '../../../gql/mutations/salary';
+import { ADD_NEW_SALARY_PAYMENT, DELETE_SALARY_PAYMENT } from '../../../gql/mutations/salary';
 import { DayCode } from '../../../types/date-types';
+import { IAddSalaryPayment, ISalaryPaymentInput } from '../../../types/salary-types';
+import d from "../../../helpers/utils";
+import {PrepareSalaryTableCode} from "../service/tableService";
 
 interface ISalaryModalProps {
     isOpen: boolean;
-    selectedPayment: string | null;
+    selectedPaymentID: string | null;
     closeModal: () => void;
     employeeID: string;
     apolloClient: any;
 }
 
-const SalaryModal: FC<ISalaryModalProps> = ({ isOpen, selectedPayment, closeModal, employeeID, apolloClient }) => {
+const SalaryModal: FC<ISalaryModalProps> = ({ isOpen, selectedPaymentID, closeModal, employeeID, apolloClient }) => {
     const [datePickerValue, setDatePickerValue] = useState<Date[]>();
     const [date, setDate] = useState<DayCode | ''>('');
     const [paymentMethod, setPaymentMethod] = useState('cash');
@@ -32,7 +30,7 @@ const SalaryModal: FC<ISalaryModalProps> = ({ isOpen, selectedPayment, closeModa
             console.log(error);
         }
     });
-    const [deletePayment] = useMutation<IAddSalaryPayment>(DELETE_SALARY_PAYMENT, {
+    const [deletePayment] = useMutation(DELETE_SALARY_PAYMENT, {
         onCompleted: () => {
             closeModal();
         },
@@ -41,15 +39,16 @@ const SalaryModal: FC<ISalaryModalProps> = ({ isOpen, selectedPayment, closeModa
         }
     });
     const onSubmit = async () => {
-        const monthCode = date.slice(0, 7);
+        if(!date) return;
+        const monthCode = d.DayCodeToMonthCode(date);
         const payedCash = paymentMethod === 'cash' ? +amount : 0;
         const payedCashless = paymentMethod === 'cashless' ? +amount : 0;
         const [year, month, day] = date.split('-');
         const SalaryPaymentInput: ISalaryPaymentInput = {
             date: String(dateToTimestamp(+year, +month, +day)),
-            monthCode: date.slice(0, 7),
-            employee: employeeID,
-            salaryTableCode: `${monthCode}_${employeeID}`,
+            monthCode: monthCode,
+            dayCode: date,
+            salaryTableCode: PrepareSalaryTableCode(monthCode, employeeID),
             payedCash: payedCash,
             payedCashless: payedCashless
         };
@@ -67,27 +66,27 @@ const SalaryModal: FC<ISalaryModalProps> = ({ isOpen, selectedPayment, closeModa
     const onDelete = async () => {
         await deletePayment({
             variables: {
-                SalaryPaymentID: selectedPayment
+                SalaryPaymentID: selectedPaymentID
             }
         });
-        await apolloClient.refetchQueries({
+        apolloClient.refetchQueries({
             include: ['GET_SALARY_TABLES_BY_MONTH']
         });
     };
     return (
         <Modal
             open={isOpen}
-            modalHeading={selectedPayment ? 'Удалить?' : 'Добавить'}
+            modalHeading={selectedPaymentID ? 'Удалить?' : 'Добавить'}
             modalLabel=""
-            primaryButtonText={selectedPayment ? 'Удалить' : 'Добавить'}
+            primaryButtonText={selectedPaymentID ? 'Удалить' : 'Добавить'}
             secondaryButtonText="Назад"
             onRequestClose={closeModal}
-            onRequestSubmit={selectedPayment ? onDelete : onSubmit}
+            onRequestSubmit={selectedPaymentID ? onDelete : onSubmit}
         >
             {loading ? (
                 <ModalInlineLoading />
             ) : (
-                !selectedPayment && (
+                !selectedPaymentID && (
                     <form>
                         <DatePicker
                             datePickerType="single"

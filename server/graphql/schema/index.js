@@ -171,15 +171,17 @@ const SalaryType = gql`
         payedCash: Int!
         payedCashless: Int!
         date: String!
+        monthCode: String!
+        dayCode: String!
     }
 
     input SalaryPaymentInput {
-        employee: String!
         salaryTableCode: String!
         payedCash: Int!
         payedCashless: Int!
         date: String!
         monthCode: String!
+        dayCode: String!
     }
 `
 

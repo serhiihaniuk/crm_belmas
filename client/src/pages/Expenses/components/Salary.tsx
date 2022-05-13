@@ -1,22 +1,29 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import { InlineLoading } from 'carbon-components-react';
-import { GET_SALARY_TABLES_BY_MONTH, IGetSalaryTablesQuery } from '../../../gql/query/salary';
+import { GET_SALARY_TABLES_BY_MONTH } from '../../../gql/query/salary';
 import SalaryTable from './SalaryTable';
+import {MonthCode} from "../../../types/date-types";
+import {IGetSalaryTablesQuery} from "../../../types/salary-types";
 
 interface SalaryProps {
-    month: string;
+    month: MonthCode;
 }
 
 const Salary: React.FC<SalaryProps> = ({ month }) => {
-    const { data, loading } = useQuery<IGetSalaryTablesQuery>(GET_SALARY_TABLES_BY_MONTH, {
+    const { data, loading, refetch } = useQuery<IGetSalaryTablesQuery>(GET_SALARY_TABLES_BY_MONTH, {
         variables: {
             monthCode: month
         }
     });
-    if (loading || !data) {
+    if (loading) {
         return <InlineLoading description="Загрузка" />;
     }
+
+    if(!data) {
+        return <button onClick={refetch}>Обновить</button>;
+    }
+
     const { getSalaryTablesByMonth: salaryTables } = data;
     return (
         <div>
@@ -25,7 +32,7 @@ const Salary: React.FC<SalaryProps> = ({ month }) => {
                     <SalaryTable
                         key={table._id}
                         payments={table.payments}
-                        employee={table.employee.name}
+                        employeeName={table.employee.name}
                         employeeID={table.employee._id}
                     />
                 );
