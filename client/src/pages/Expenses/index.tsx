@@ -9,7 +9,7 @@ import { ApolloConsumer } from '@apollo/client';
 import Salary from './components/Salary';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { IExpense } from '../../types/expenses-types';
-
+import d from '../../helpers/utils';
 const addButton = css`
     margin: 10px 0 0 71%;
 `;
@@ -39,7 +39,7 @@ const Expenses: React.FC = () => {
             <Tabs>
                 <Tab id="id-3-13" label="Материалы">
                     <ExpensesTable
-                        monthCode={`${from.YYYY}-${from.MM}`}
+                        monthCode={d.DateObjectToMonthCode(from)}
                         setSelectedExpense={setSelectedExpense}
                         openModal={openModal}
                     />
@@ -56,7 +56,7 @@ const Expenses: React.FC = () => {
                     </Button>
                 </Tab>
                 <Tab id="tab-3" label="Зарплата">
-                    <Salary month={`${from.YYYY}-${from.MM}`} />
+                    <Salary month={d.DateObjectToMonthCode(from)}/>
                 </Tab>
             </Tabs>
             <ApolloConsumer>

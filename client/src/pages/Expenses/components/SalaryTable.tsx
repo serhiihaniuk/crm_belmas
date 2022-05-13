@@ -13,10 +13,10 @@ import {
 } from 'carbon-components-react';
 import { CreateSalaryPaymentsRows, salaryTableHeaders as headers } from '../service/tableService';
 import { css } from '@emotion/css';
-import { IPayment } from '../../../gql/query/salary';
 import { Add16 } from '@carbon/icons-react';
 import SalaryModal from './SalaryModal';
 import { ApolloConsumer } from '@apollo/client';
+import {ISalaryPaymentRaw} from "../../../types/salary-types";
 
 const table = css`
     td,
@@ -43,17 +43,19 @@ const tableSalaryWrapper = css`
 `;
 
 interface ISalaryTableProps {
-    payments: IPayment[];
-    employee: string;
+    payments: ISalaryPaymentRaw[];
+    employeeName: string;
     employeeID: string;
 }
 
-const SalaryTable: React.FC<ISalaryTableProps> = ({ payments, employee, employeeID }) => {
+
+
+const SalaryTable: React.FC<ISalaryTableProps> = ({ payments, employeeName, employeeID }) => {
     const rowsData = CreateSalaryPaymentsRows(payments);
     const [isOpen, setIsOpen] = React.useState(false);
-    const [selectedPayment, setSelectedPayment] = useState<null | string>(null);
+    const [selectedPaymentID, setSelectedPaymentID] = useState<null | string>(null);
     const openModal = (paymentID: string | null = null) => {
-        setSelectedPayment(paymentID);
+        setSelectedPaymentID(paymentID);
         setIsOpen(true);
     };
     const closeModal = () => setIsOpen(false);
@@ -65,13 +67,13 @@ const SalaryTable: React.FC<ISalaryTableProps> = ({ payments, employee, employee
                         apolloClient={client}
                         isOpen={isOpen}
                         closeModal={closeModal}
-                        selectedPayment={selectedPayment}
+                        selectedPaymentID={selectedPaymentID}
                         employeeID={employeeID}
                     />
                 )}
             </ApolloConsumer>
             <div className={'header'}>
-                <Tag type={'teal'}>{employee}</Tag>
+                <Tag type={'teal'}>{employeeName}</Tag>
                 <Button
                     onClick={() => {
                         openModal();

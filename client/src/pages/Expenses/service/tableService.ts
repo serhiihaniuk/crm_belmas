@@ -1,6 +1,7 @@
 import { timestampToDate } from '../../../helpers/utils';
-import { IPayment } from '../../../gql/query/salary';
-import {IExpense, IExpenseRaw} from '../../../types/expenses-types';
+import { IExpense, IExpenseRaw } from '../../../types/expenses-types';
+import {DayCode, MonthCode} from '../../../types/date-types';
+import {IPayment, ISalaryPaymentRaw, ISalaryTableCode} from "../../../types/salary-types";
 
 export const headers = [
     {
@@ -46,19 +47,17 @@ export const salaryTableHeaders = [
     }
 ];
 
-export interface ISalaryTableRow {
-    id: string;
-    cash: number;
-    cashless: number;
-}
 
-export function CreateSalaryPaymentsRows(payments: IPayment[]): ISalaryTableRow[] {
+
+export function CreateSalaryPaymentsRows(payments: ISalaryPaymentRaw[]): IPayment[] {
     return payments.map((payment) => {
         return {
             id: payment._id,
-            date: timestampToDate(+payment.date, 'DayCode'),
-            cash: payment.payedCash,
-            cashless: payment.payedCashless
+            ...payment
         };
     });
+}
+
+export function PrepareSalaryTableCode(monthCode: MonthCode, employeeID: string): ISalaryTableCode {
+  return `${monthCode}_${employeeID}`;
 }

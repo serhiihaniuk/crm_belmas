@@ -16,6 +16,7 @@ import { css } from '@emotion/css';
 import { useQuery } from '@apollo/client';
 import { GET_EXPENSES_BY_MONTH } from '../../../gql/query/expenses';
 import { IExpense, IGetExpensesByMonth } from '../../../types/expenses-types';
+import { MonthCode } from '../../../types/date-types';
 
 const tagStyle = css`
     margin: 10px 10px 5px 0;
@@ -39,7 +40,7 @@ const loadingCSS = css`
 `;
 
 interface Props {
-    monthCode: string;
+    monthCode: MonthCode;
     setSelectedExpense: (value: IExpense) => void;
     openModal: () => void;
 }

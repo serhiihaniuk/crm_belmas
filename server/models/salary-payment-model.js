@@ -28,7 +28,15 @@ const salaryPaymentSchema = new Schema({
 	date: {
 		type: Date,
 		required: true
-	}
+	},
+    dayCode: {
+        type: String,
+        required: true
+    },
+    monthCode: {
+        type: String,
+        required: true
+    }
 });
 
 export default mongoose.model('SalaryPayment', salaryPaymentSchema);

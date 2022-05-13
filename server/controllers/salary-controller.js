@@ -82,6 +82,8 @@ class SalaryController {
 				payedCashless: SalaryPaymentInput.payedCashless,
 				month: month,
 				date: new Date(Number(SalaryPaymentInput.date)),
+                dayCode: SalaryPaymentInput.dayCode,
+                monthCode: SalaryPaymentInput.monthCode,
 				employee: employee,
 				salaryTableCode: SalaryPaymentInput.salaryTableCode
 			});
