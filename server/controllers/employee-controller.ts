@@ -1,4 +1,5 @@
-import Employee from '../models/employee-model.js'
+// @ts-nocheck
+import Employee from '../models/employee-model'
 
 class EmployeeController {
 	async getEmployee(query, withPassword = false) {

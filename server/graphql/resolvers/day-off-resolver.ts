@@ -1,5 +1,6 @@
-import checkAuthAndResolve from '../helpers/check-auth.js';
-import DayOffController from '../../controllers/day-controller.js';
+// @ts-nocheck
+import checkAuthAndResolve from '../helpers/check-auth';
+import DayOffController from '../../controllers/day-controller';
 
 export default {
     Mutation: {

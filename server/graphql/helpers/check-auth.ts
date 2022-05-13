@@ -1,6 +1,7 @@
+// @ts-nocheck
 import jwt from 'jsonwebtoken'
-import ApiError from './api-error.js'
-import Employee from '../../models/employee-model.js'
+import ApiError from './api-error'
+import Employee from '../../models/employee-model'
 const checkAuthAndResolve = async (authorization, expectedRoles, controller) => {
 	const token = authorization.split(' ')[1];
 

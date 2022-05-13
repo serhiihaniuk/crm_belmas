@@ -1,5 +1,6 @@
-import checkAuthAndResolve from '../helpers/check-auth.js'
-import SalaryController from '../../controllers/salary-controller.js'
+// @ts-nocheck
+import checkAuthAndResolve from '../helpers/check-auth'
+import SalaryController from '../../controllers/salary-controller'
 
 export default {
 	Query: {

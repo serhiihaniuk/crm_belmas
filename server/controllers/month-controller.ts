@@ -1,4 +1,5 @@
-import MonthTotal from '../models/month-total-model.js'
+// @ts-nocheck
+import MonthTotal from '../models/month-total-model'
 
 class MonthController {
 	static async getMonthByCode(monthCode) {

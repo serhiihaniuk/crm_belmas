@@ -1,10 +1,10 @@
-import appointmentsResolver from './appointments-resolver.js';
-import employeeResolver from './employee-resolver.js';
-import authResolver from './auth-resolver.js';
-import expensesResolver from './expenses-resolver.js';
-import monthResolver from './month-resolver.js';
-import salaryResolver from './salary-resolver.js';
-import dayOffResolver from './day-off-resolver.js';
+import appointmentsResolver from './appointments-resolver';
+import employeeResolver from './employee-resolver';
+import authResolver from './auth-resolver';
+import expensesResolver from './expenses-resolver';
+import monthResolver from './month-resolver';
+import salaryResolver from './salary-resolver';
+import dayOffResolver from './day-off-resolver';
 const rootResolver = {
     Query: {
         ...appointmentsResolver.Query,

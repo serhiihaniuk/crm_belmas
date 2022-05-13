@@ -1,5 +1,6 @@
-import Employee from '../../models/employee-model.js';
-import Appointment from '../../models/appointment-model.js';
+// @ts-nocheck
+import Employee from '../../models/employee-model';
+import Appointment from '../../models/appointment-model';
 
 const getEmployeeFromDB = async (field, withPassword = false) => {
     try {

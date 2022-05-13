@@ -1,5 +1,6 @@
+// @ts-nocheck
 import mongoose from 'mongoose';
-import MonthTotal from './month-total-model.js';
+import MonthTotal from './month-total-model';
 
 const Schema = mongoose.Schema;
 

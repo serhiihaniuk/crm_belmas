@@ -1,4 +1,5 @@
-import Day from '../models/day-model.js';
+// @ts-nocheck
+import Day from '../models/day-model';
 
 class DayController {
 	static async getDayByCode(dayCode) {

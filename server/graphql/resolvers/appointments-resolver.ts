@@ -1,5 +1,6 @@
-import checkAuthAndResolve from "../helpers/check-auth.js"
-import AppointmentController from "../../controllers/appointment-controller.js"
+// @ts-nocheck
+import checkAuthAndResolve from "../helpers/check-auth"
+import AppointmentController from "../../controllers/appointment-controller"
 export default {
   Query: {
     getAppointmentsTotalPrice: async (parent, args, context) => {

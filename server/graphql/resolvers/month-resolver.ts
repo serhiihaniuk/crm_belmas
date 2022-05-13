@@ -1,5 +1,6 @@
-import checkAuthAndResolve from "../helpers/check-auth.js"
-import MonthController from "../../controllers/month-controller.js"
+// @ts-nocheck
+import checkAuthAndResolve from "../helpers/check-auth"
+import MonthController from "../../controllers/month-controller"
 export default {
     Query: {
         getMonthStats: async (parent, args, context) => {

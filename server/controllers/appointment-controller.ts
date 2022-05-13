@@ -1,9 +1,10 @@
-import Appointment from '../models/appointment-model.js';
-import MonthController from './month-controller.js';
-import MonthTotal from '../models/month-total-model.js';
-import DayController from './day-controller.js';
+// @ts-nocheck
+import Appointment from '../models/appointment-model';
+import MonthController from './month-controller';
+import MonthTotal from '../models/month-total-model';
+import DayController from './day-controller';
 import mongoose from 'mongoose';
-import { addOneDayToDate, mapDaysBetweenDates } from '../graphql/helpers/mapDays.js';
+import { addOneDayToDate, mapDaysBetweenDates } from '../graphql/helpers/mapDays';
 
 class AppointmentController {
 	async createAppointment({ AppointmentInput }) {

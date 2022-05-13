@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const validateCredentials = (login, password) => {
     const loginRegex = /^[a-zA-Z0-9]{3,20}$/;
     const passwordRegex = /^[a-zA-Z0-9]{3,20}$/;

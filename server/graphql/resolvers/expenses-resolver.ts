@@ -1,5 +1,6 @@
-import checkAuthAndResolve from '../helpers/check-auth.js'
-import ExpensesController from '../../controllers/expenses-controller.js'
+// @ts-nocheck
+import checkAuthAndResolve from '../helpers/check-auth'
+import ExpensesController from '../../controllers/expenses-controller'
 export default{
 	Query: {
 		getExpensesByMonth: async (parent, args, context) => {

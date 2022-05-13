@@ -1,8 +1,9 @@
-import MonthController from './month-controller.js'
-import EmployeeController from './employee-controller.js'
-import Salary from '../models/salary-model.js'
-import SalaryPayment from '../models/salary-payment-model.js'
-import MonthTotal from '../models/month-total-model.js'
+// @ts-nocheck
+import MonthController from './month-controller'
+import EmployeeController from './employee-controller'
+import Salary from '../models/salary-model'
+import SalaryPayment from '../models/salary-payment-model'
+import MonthTotal from '../models/month-total-model'
 
 class SalaryController {
 	static async createSalaryTable(salaryTableCode) {

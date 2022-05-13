@@ -1,6 +1,8 @@
-import DayOff from '../models/day-off-model.js';
-import Employee from '../models/employee-model.js';
-import DayController from './day-controller.js';
+// @ts-nocheck
+
+import DayOff from '../models/day-off-model';
+import Employee from '../models/employee-model';
+import DayController from './day-controller';
 
 class DayOffController {
 	static async createDayOff(dayCode, employeeID) {

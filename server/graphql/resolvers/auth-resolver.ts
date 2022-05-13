@@ -1,8 +1,9 @@
+// @ts-nocheck
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
-import { generateTokens } from '../helpers/tokens.js'
-import ApiError from '../helpers/api-error.js'
-import Employee from '../../models/employee-model.js'
+import { generateTokens } from '../helpers/tokens'
+import ApiError from '../helpers/api-error'
+import Employee from '../../models/employee-model'
 
 const login = async (parent, { login, password }, context) => {
 	try {

@@ -1,3 +1,4 @@
+// @ts-nocheck
 export default class ApiError extends Error {
   status;
   errors;

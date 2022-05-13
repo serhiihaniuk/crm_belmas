@@ -1,3 +1,4 @@
+// @ts-nocheck
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -5,14 +6,14 @@ import cookieParser from 'cookie-parser';
 import { ApolloServer } from 'apollo-server-express';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 
-import { typeDefs } from './graphql/schema/index.js';
-import graphQlResolvers from './graphql/resolvers/index.js';
+import { typeDefs } from './graphql/schema';
+import graphQlResolvers from './graphql/resolvers/index';
 import httpHeadersPlugin from 'apollo-server-plugin-http-headers';
-import info from './helpers/info.js';
+import info from './helpers/info';
 
 import dotenv from 'dotenv';
 
-dotenv.config();
+dotenv.config()
 const workingMode = process.env.NODE_ENV;
 info('Starting server in ' + workingMode + ' mode');
 const corsOptions = {
@@ -24,11 +25,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors(corsOptions));
 
-let apolloServer;
+let apolloServer: any;
 
 async function startApolloServer() {
 	apolloServer = new ApolloServer({
-		cors: true,
+		// cors: true,
 		plugins: [ApolloServerPluginLandingPageGraphQLPlayground(), httpHeadersPlugin],
 		typeDefs: typeDefs,
 		resolvers: graphQlResolvers,
@@ -51,7 +52,7 @@ startApolloServer().then(() => {
 });
 
 let db;
-const dataBaseURI = workingMode === 'production' ? process.env.MONGO_URI_LOCAL : process.env.MONGO_URI_DEVELOPMENT;
+const dataBaseURI: any = workingMode === 'production' ? process.env.MONGO_URI_LOCAL : process.env.MONGO_URI_DEVELOPMENT;
 info('connecting to database ' + dataBaseURI);
 
 async function startDB() {
@@ -62,7 +63,7 @@ async function startDB() {
 				dbName: 'bnsdb',
 				useNewUrlParser: true,
 				useUnifiedTopology: true
-			},
+			} as any,
 			(err) => {
 				if (err) {
 					console.error(err);

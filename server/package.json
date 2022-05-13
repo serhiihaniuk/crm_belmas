@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=development nodemon app.js",
+    "start": "NODE_ENV=development nodemon app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -29,7 +28,8 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.15",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "ts-node": "^10.7.0"
   },
   "prettier": {
     "singleQuote": true,

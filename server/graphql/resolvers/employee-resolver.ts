@@ -1,8 +1,9 @@
+// @ts-nocheck
 import  bcrypt from 'bcryptjs'
-import  Employee from '../../models/employee-model.js'
-import  EmployeeController from '../../controllers/employee-controller.js'
-import  { validateCredentials } from '../helpers/validate.js'
-import  { generateTokens } from '../helpers/tokens.js'
+import  Employee from '../../models/employee-model'
+import  EmployeeController from '../../controllers/employee-controller'
+import  { validateCredentials } from '../helpers/validate'
+import  { generateTokens } from '../helpers/tokens'
 
 //todo add auth check
 export default {

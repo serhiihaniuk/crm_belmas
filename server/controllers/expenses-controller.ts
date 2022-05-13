@@ -1,5 +1,6 @@
-import Expenses from '../models/expenses-model.js';
-import MonthController from './month-controller.js';
+// @ts-nocheck
+import Expenses from '../models/expenses-model';
+import MonthController from './month-controller';
 
 class ExpensesController {
     static async addNewExpense({ExpenseInput}) {
