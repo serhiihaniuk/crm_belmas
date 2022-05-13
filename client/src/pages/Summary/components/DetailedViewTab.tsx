@@ -3,10 +3,11 @@ import { useQuery } from '@apollo/client';
 import { GET_APPOINTMENTS_BY_DAYS } from '../../../gql/query/appointment';
 import { InlineLoading } from 'carbon-components-react';
 import { css } from '@emotion/css';
-import { makeRevenueRows } from '../service/summaryService';
+import { IRevenueTableRow, makeRevenueRows } from '../service/summaryService';
 import RevenueTable from './tables/RevenueTable';
 import { IAppointmentGroupByDateQuery } from '../../../types/appointment-types';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
+import d from '../../../helpers/utils';
 
 const loadingCSS = css`
     display: flex;
@@ -15,16 +16,20 @@ const loadingCSS = css`
     height: 300px;
 `;
 
-const DetailedViewTab: React.FC<any> = ({ employee }) => {
-    const [rowsData, setRowsData] = useState<any>([]);
+interface DetailedViewTabProps {
+    employeeID: string;
+}
+
+const DetailedViewTab: React.FC<DetailedViewTabProps> = ({ employeeID }) => {
+    const [rowsData, setRowsData] = useState<IRevenueTableRow[]>([]);
     const { from, to } = useTypedSelector((state) => state.date);
 
     const { data: appointmentsByDays, loading } = useQuery<IAppointmentGroupByDateQuery>(GET_APPOINTMENTS_BY_DAYS, {
         variables: {
             AppointmentsByDatesInput: {
-                employee: employee,
-                dateFrom: `${from.YYYY}-${from.MM}-${from.DD}`,
-                dateTo: `${to.YYYY}-${to.MM}-${to.DD}`
+                employee: employeeID,
+                dateFrom: d.DateObjectToDayCode(from),
+                dateTo: d.DateObjectToDayCode(to)
             }
         }
     });

@@ -22,7 +22,7 @@ const Schedule = () => {
     const closeModal = () => setOpen(false);
 
     const employeeID = useTypedSelector((state) => state.employee._id);
-    const { data: appointmentsByDays, loading } = useQuery<IAppointmentGroupByDateQuery>(GET_APPOINTMENTS_BY_DAYS, {
+    const { data: appointmentsByDays, loading, refetch } = useQuery<IAppointmentGroupByDateQuery>(GET_APPOINTMENTS_BY_DAYS, {
         variables: {
             AppointmentsByDatesInput: {
                 employee: employeeID,
@@ -35,6 +35,14 @@ const Schedule = () => {
         return (
             <div className={pageWrapper}>
                 <InlineLoading description="Загрузка" className={loadingCSS} />
+            </div>
+        );
+    }
+
+    if ( !appointmentsByDays) {
+        return (
+            <div className={pageWrapper}>
+                <button onClick={refetch}>Refetch</button>
             </div>
         );
     }
