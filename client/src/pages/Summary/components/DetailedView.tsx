@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
-import { Tab, Tabs } from 'carbon-components-react';
+import {InlineLoading, Tab, Tabs} from 'carbon-components-react';
 import { useQuery } from '@apollo/client';
 import { GET_EMPLOYEES } from '../../../gql/query/employees';
 import DetailedViewTab from './DetailedViewTab';
 import { IGetEmployeesQuery } from '../../../types/employee-types';
 import SummaryView from './SummaryView';
+import {loadingCSS} from "../../../globalStyles";
 
 const DetailedView: React.FC = () => {
     const [selectedTab, setSelectedTab] = useState<number>(0);
 
-    const { data: employeesData, loading } = useQuery<IGetEmployeesQuery>(GET_EMPLOYEES, {
+    const { data: employeesData, loading, refetch } = useQuery<IGetEmployeesQuery>(GET_EMPLOYEES, {
         variables: {
             query: {
                 role: 'master'
             }
         }
     });
-    if (loading || !employeesData) return null;
+    if (loading) return <InlineLoading description="Загрузка" className={loadingCSS} />;
+    if (!employeesData) return <button onClick={refetch}>Refetch</button>
+
     return (
         <>
             <Tabs
@@ -26,14 +29,14 @@ const DetailedView: React.FC = () => {
                 }}
             >
                 <Tab
-                    id={'general-tab'}
+                    id={'general-tab1'}
                     label={'Сводная'}
                     renderContent={({ selected }) => {
                         return <>{selected && <SummaryView />}</>;
                     }}
                 />
                 <Tab
-                    id={'general-tab'}
+                    id={'general-tab2'}
                     label={'Всего'}
                     renderContent={({ selected }) => {
                         return <>{selected && <DetailedViewTab employee={null} />}</>;
@@ -46,7 +49,7 @@ const DetailedView: React.FC = () => {
                             id={employee._id}
                             label={employee.name}
                             renderContent={({ selected }) => {
-                                return <>{selected && <DetailedViewTab employee={employee._id} />}</>;
+                                return <>{selected && <DetailedViewTab employeeID={employee._id} />}</>;
                             }}
                         />
                     );

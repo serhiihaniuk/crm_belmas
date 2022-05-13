@@ -1,26 +1,26 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
-
 import { InlineLoading, Tag } from 'carbon-components-react';
 import { css } from '@emotion/css';
 import { GET_MONTH_STATS, IMonthTotalQuery } from '../../../gql/query/month';
 import { Divider, loadingCSS } from '../../../globalStyles';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
+import d from '../../../helpers/utils'
 
 interface ISummaryViewProps {}
 
 const SummaryView: React.FC<ISummaryViewProps> = () => {
     const { from } = useTypedSelector((state) => state.date);
-    const { data, loading } = useQuery<IMonthTotalQuery>(GET_MONTH_STATS, {
+    const { data, loading, refetch } = useQuery<IMonthTotalQuery>(GET_MONTH_STATS, {
         variables: {
-            monthCode: `${from.YYYY}-${from.MM}`
+            monthCode: d.DateObjectToMonthCode(from),
         },
         pollInterval: 5000
     });
 
-    if (loading || !data) {
-        return <InlineLoading className={loadingCSS} description="Загрузка" />;
-    }
+    if (loading || !data) return <InlineLoading className={loadingCSS} description="Загрузка" />;
+    if (!data) return <button onClick={refetch}>refetch</button>
+
     const { getMonthStats } = data;
     return (
         <>
