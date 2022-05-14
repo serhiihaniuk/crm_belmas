@@ -1,9 +1,9 @@
-// @ts-nocheck
 import mongoose from 'mongoose';
+import {IEmployee} from "employee-types";
 
 const Schema = mongoose.Schema;
 
-const EmployeeSchema = new Schema({
+const EmployeeSchema = new Schema<IEmployee>({
 	name: {
 		type: String,
 		required: true

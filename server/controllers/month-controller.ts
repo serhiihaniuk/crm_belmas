@@ -1,8 +1,12 @@
-// @ts-nocheck
-import MonthTotal from '../models/month-total-model'
+import MonthTotal from '../models/month-total-model';
+import { MonthCode } from 'date-types';
+import { MonthRaw } from 'month-types';
+import { Document } from 'mongoose';
+
+type MonthMongooseResponse = Document<any, any, MonthRaw> & MonthRaw & { _id: string };
 
 class MonthController {
-	static async getMonthByCode(monthCode) {
+	static async getMonthByCode(monthCode: MonthCode): Promise<MonthMongooseResponse> {
 		try {
 			let month = await MonthTotal.findOne({ monthCode: monthCode });
 			if (!month) {
@@ -14,7 +18,7 @@ class MonthController {
 		}
 	}
 
-	static async createMonth(monthCode) {
+	static async createMonth(monthCode: MonthCode): Promise<MonthMongooseResponse> {
 		const newMonth = new MonthTotal({
 			monthCode: monthCode,
 			month: monthCode.slice(-2),
@@ -36,7 +40,7 @@ class MonthController {
 		}
 	}
 
-	static async getMonthStats(monthCode) {
+	static async getMonthStats(monthCode: MonthCode): Promise<MonthMongooseResponse> {
 		try {
 			let month = await MonthTotal.findOne({ monthCode: monthCode })
 				.populate('appointments')
@@ -78,28 +82,30 @@ class MonthController {
 					cashless: 0
 				}
 			);
-			return await MonthTotal.findOneAndUpdate(
-				{ monthCode: monthCode },
-				{
-					$set: {
-						cash: totalEarnings.cash,
-						cashless: totalEarnings.cashless,
-						expensesCash: totalExpenses.cash,
-						expensesCashless: totalExpenses.cashless,
-						salaryCash: totalSalary.cash,
-						salaryCashless: totalSalary.cashless,
-						currentCash: totalEarnings.cash - totalSalary.cash - totalExpenses.cash,
-						currentCashless:
-							month.cashlessAtTheBeginning +
-							totalEarnings.cashless -
-							totalExpenses.cashless -
-							totalSalary.cashless
-					}
-				},
-				{ new: true }
-			);
+            const updatedMonth = await MonthTotal.findOneAndUpdate(
+                { monthCode: monthCode },
+                {
+                    $set: {
+                        cash: totalEarnings.cash,
+                        cashless: totalEarnings.cashless,
+                        expensesCash: totalExpenses.cash,
+                        expensesCashless: totalExpenses.cashless,
+                        salaryCash: totalSalary.cash,
+                        salaryCashless: totalSalary.cashless,
+                        currentCash: totalEarnings.cash - totalSalary.cash - totalExpenses.cash,
+                        currentCashless:
+                            month.cashlessAtTheBeginning +
+                            totalEarnings.cashless -
+                            totalExpenses.cashless -
+                            totalSalary.cashless
+                    }
+                },
+                { new: true }
+            );
+            if(!updatedMonth) throw new Error('Month not found');
+			return updatedMonth
 		} catch (e) {
-            console.error(e)
+			console.error(e);
 			throw e;
 		}
 	}

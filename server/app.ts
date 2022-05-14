@@ -1,4 +1,3 @@
-// @ts-nocheck
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -8,12 +7,12 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-co
 
 import { typeDefs } from './graphql/schema';
 import graphQlResolvers from './graphql/resolvers/index';
-import httpHeadersPlugin from 'apollo-server-plugin-http-headers';
 import info from './helpers/info';
 
 import dotenv from 'dotenv';
+import { AB } from 'types';
 
-dotenv.config()
+dotenv.config();
 const workingMode = process.env.NODE_ENV;
 info('Starting server in ' + workingMode + ' mode');
 const corsOptions = {
@@ -30,14 +29,12 @@ let apolloServer: any;
 async function startApolloServer() {
 	apolloServer = new ApolloServer({
 		// cors: true,
-		plugins: [ApolloServerPluginLandingPageGraphQLPlayground(), httpHeadersPlugin],
+		plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
 		typeDefs: typeDefs,
 		resolvers: graphQlResolvers,
 		context: ({ req, res }) => ({
 			req,
-			res,
-			setCookies: [],
-			setHeaders: []
+			res
 		})
 	});
 	await apolloServer.start();

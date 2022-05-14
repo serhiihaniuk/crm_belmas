@@ -1,14 +1,9 @@
-// @ts-nocheck
 import mongoose from 'mongoose';
+import { MonthRaw } from 'month-types';
 
 const Schema = mongoose.Schema;
 
-const monthTotalSchema = new Schema({
-	monthCode: {
-		type: String,
-		required: true,
-		unique: true
-	},
+const monthTotalSchema = new Schema<MonthRaw>({
 	month: {
 		type: String,
 		required: true
@@ -74,6 +69,12 @@ const monthTotalSchema = new Schema({
 	status: {
 		type: String,
 		default: 'active'
+	},
+    //@ts-ignore
+	monthCode: {
+		type: String,
+		required: true,
+		unique: true
 	}
 });
 

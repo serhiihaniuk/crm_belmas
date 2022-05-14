@@ -1,9 +1,9 @@
-// @ts-nocheck
 import mongoose from 'mongoose';
+import { IAppointmentRaw } from 'appointment-typesd';
 
 const Schema = mongoose.Schema;
 
-const appointmentSchema = new Schema({
+const appointmentSchema = new Schema<IAppointmentRaw>({
 	client: {
 		type: String,
 		required: true
@@ -65,4 +65,4 @@ const appointmentSchema = new Schema({
 	}
 });
 
-export default mongoose.model('Appointment', appointmentSchema);
+export default mongoose.model<IAppointmentRaw>('Appointment', appointmentSchema);
