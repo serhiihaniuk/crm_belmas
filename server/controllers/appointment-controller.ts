@@ -11,6 +11,9 @@ import { MongoResponse } from './controller-types';
 import log from '../helpers/info';
 
 const controllerName = 'AppointmentController.';
+const logInfo = (method: string, message: string): void => {
+    log.info(controllerName + method, message);
+}
 
 interface AppointmentGQLInput {
 	client: string;
@@ -43,6 +46,9 @@ class AppointmentController {
 	}: {
 		AppointmentInput: AppointmentGQLInput;
 	}): Promise<MongoResponse<IAppointmentRaw>> {
+
+        logInfo('createAppointment', `Creating appointment for ${JSON.stringify(AppointmentInput)}`);
+
 		try {
 			const month = await MonthController.getMonthByCode(AppointmentInput.monthCode);
 			const appointmentMongoInput: AppointmentMongoInput = {
@@ -86,6 +92,9 @@ class AppointmentController {
 		appointmentID: string;
 		AppointmentInput: AppointmentGQLInput;
 	}): Promise<MongoResponse<IAppointmentRaw>> {
+
+        logInfo('updateAppointment', `Updating appointment ${appointmentID} for ${JSON.stringify(AppointmentInput)}`);
+
 		const appointmentMongoInput: Partial<AppointmentMongoInput> = {
 			client: AppointmentInput.client,
 			description: AppointmentInput.description,
@@ -98,6 +107,7 @@ class AppointmentController {
 			monthCode: AppointmentInput.monthCode,
 			dayCode: AppointmentInput.dayCode
 		};
+
 		try {
 			const updatedAppointment = await Appointment.findByIdAndUpdate(appointmentID, appointmentMongoInput, {
 				new: true
@@ -126,6 +136,9 @@ class AppointmentController {
 		cashless: number;
 		paymentMethod: string;
 	}): Promise<MongoResponse<IAppointmentRaw>> {
+
+        logInfo('calculateAppointment', `Calculating appointment ${id}`);
+
 		const appointment: Partial<IAppointmentRaw> = {
 			cash,
 			cashless,
@@ -146,6 +159,9 @@ class AppointmentController {
 	}
 
 	async deleteAppointment({ id }: { id: string }): Promise<string> {
+
+        logInfo('deleteAppointment', `Deleting appointment ${id}`);
+
 		try {
 			const deletedAppointment = await Appointment.findByIdAndDelete(id);
 
@@ -174,6 +190,9 @@ class AppointmentController {
 	}
 
 	async getAppointmentsTotalPrice({ dateFrom, dateTo }: { dateFrom: number; dateTo: number }) {
+
+        logInfo('getAppointmentsTotalPrice', `Getting appointments total price from ${dateFrom} to ${dateTo}`);
+
 		try {
 			const match = {
 				$match: {
@@ -218,6 +237,9 @@ class AppointmentController {
 	}: {
 		AppointmentsByDatesInput: AppointmentByDatesGQLInput;
 	}) {
+
+        logInfo('getAppointmentsByDate', `Getting appointments by date from ${AppointmentsByDatesInput.dateFrom} to ${AppointmentsByDatesInput.dateTo}`);
+
 		interface IMatch {
 			date: {
 				$gte: Date;

@@ -1,9 +1,8 @@
-// @ts-nocheck
 export default class ApiError extends Error {
   status;
   errors;
 
-  constructor(status, message, errors = []) {
+  constructor(status: number, message: string, errors = []) {
     super(message);
     this.status = status;
     this.errors = errors;
@@ -17,7 +16,7 @@ export default class ApiError extends Error {
     return new ApiError(403, "Доступ запрещен");
   }
 
-  static BadRequest(message, errors = []) {
+  static BadRequest(message: string, errors = []) {
     return new ApiError(400, message, errors);
   }
 };

@@ -3,6 +3,7 @@ import ApiError from './api-error'
 import Employee from '../../models/employee-model'
 import {IRoles} from "employee-types";
 import {JWTPayload} from "../resolvers/auth-resolver";
+
 const checkAuthAndResolve = async (authorization: string, expectedRoles: IRoles[], controller: ()=>unknown) => {
 	const token = authorization.split(' ')[1];
 
