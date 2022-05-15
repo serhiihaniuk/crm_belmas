@@ -7,13 +7,14 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-co
 
 import { typeDefs } from './graphql/schema';
 import graphQlResolvers from './graphql/resolvers/index';
-import info from './helpers/info';
+import log from './helpers/info';
 
 import dotenv from 'dotenv';
 
 dotenv.config();
 const workingMode = process.env.NODE_ENV;
-info('Starting server in ' + workingMode + ' mode');
+log.info('app',`Working mode: ${workingMode}`);
+
 const corsOptions = {
 	credentials: true,
 	origin: 'http://localhost:3002'
@@ -44,12 +45,12 @@ async function startApolloServer() {
 }
 
 startApolloServer().then(() => {
-	info('Apollo server started, path: ' + apolloServer.graphqlPath);
+	log.info('app','Apollo server started, path: ' + apolloServer.graphqlPath);
 });
 
 let db;
 const dataBaseURI: any = workingMode === 'production' ? process.env.MONGO_URI_LOCAL : process.env.MONGO_URI_DEVELOPMENT;
-info('connecting to database ' + dataBaseURI);
+log.info('app','connecting to database ' + dataBaseURI);
 
 async function startDB() {
 	try {
@@ -69,8 +70,8 @@ async function startDB() {
 			}
 		);
 		app.listen(3001, () => {
-			info(`Server running on port ${process.env.PORT}`);
-			info(`gql path is ${apolloServer.graphqlPath}`);
+			log.info('app',`Server running on port ${process.env.PORT}`);
+			log.info('app',`gql path is ${apolloServer.graphqlPath}`);
 		});
 	} catch (err) {
 		console.log(err);
@@ -78,7 +79,7 @@ async function startDB() {
 }
 
 startDB().then(() => {
-	info('...');
+	log.info('app','working...');
 });
 
 export default db;

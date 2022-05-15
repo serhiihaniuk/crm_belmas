@@ -4,10 +4,13 @@ import MonthTotal from '../models/month-total-model';
 import DayController from './day-controller';
 import mongoose, { ObjectId } from 'mongoose';
 import { addOneDayToDate, mapDaysBetweenDates } from '../graphql/helpers/mapDays';
-import { IAppointmentRaw } from 'appointment-typesd';
+import { IAppointmentRaw } from 'appointment-types';
 import { MonthRaw } from 'month-types';
 import { DayCode, HourCode, MonthCode } from 'date-types';
 import { MongoResponse } from './controller-types';
+import log from '../helpers/info';
+
+const controllerName = 'AppointmentController.';
 
 interface AppointmentGQLInput {
 	client: string;
@@ -70,7 +73,8 @@ class AppointmentController {
 			});
 
 			return savedAppointment;
-		} catch (err) {
+		} catch (err: any) {
+			log.error(controllerName, err);
 			throw err;
 		}
 	}
@@ -100,12 +104,13 @@ class AppointmentController {
 			});
 
 			if (!updatedAppointment) {
+				log.error(controllerName + 'updateAppointment', 'Error while updating appointment');
 				throw new Error('Appointment not found');
 			}
 
 			return updatedAppointment;
-		} catch (err) {
-			console.error(err);
+		} catch (err: any) {
+			log.error(controllerName + 'updateAppointment', err);
 			throw err;
 		}
 	}
@@ -121,7 +126,7 @@ class AppointmentController {
 		cashless: number;
 		paymentMethod: string;
 	}): Promise<MongoResponse<IAppointmentRaw>> {
-		const appointment = {
+		const appointment: Partial<IAppointmentRaw> = {
 			cash,
 			cashless,
 			paymentMethod: paymentMethod,
@@ -130,11 +135,12 @@ class AppointmentController {
 		try {
 			const updatedAppointment = await Appointment.findByIdAndUpdate(id, appointment, { new: true });
 			if (!updatedAppointment) {
+				log.error(controllerName + 'calculateAppointment', 'Error while updating appointment');
 				throw new Error('Appointment not found');
 			}
 			return updatedAppointment;
-		} catch (err) {
-			console.error(err);
+		} catch (err: any) {
+			log.error(controllerName + 'calculateAppointment', err);
 			throw err;
 		}
 	}
@@ -144,6 +150,7 @@ class AppointmentController {
 			const deletedAppointment = await Appointment.findByIdAndDelete(id);
 
 			if (!deletedAppointment) {
+				log.error(controllerName + 'deleteAppointment', 'Error while deleting appointment');
 				throw new Error('Appointment not found');
 			}
 			const month = await MonthController.getMonthByCode(deletedAppointment.monthCode);
@@ -158,9 +165,10 @@ class AppointmentController {
 				$pull: { appointments: deletedAppointment._id }
 			});
 
+			log.info(controllerName + 'deleteAppointment', `Appointment with id ${id} was deleted`);
 			return `Appointment with id ${id} has been deleted`;
 		} catch (err: any) {
-			console.log(err);
+			log.error(controllerName + 'deleteAppointment', err);
 			return err;
 		}
 	}
@@ -188,13 +196,19 @@ class AppointmentController {
 			const pipeline = [match, group];
 			const result = await Appointment.aggregate(pipeline as any);
 			if (!result.length) {
+				log.info('appointment-controller-getAppointmentsTotalPrice', 'length is 0');
 				return {
 					cash: 0,
 					cashless: 0
 				};
 			}
+			log.info(
+				controllerName + 'getAppointmentsTotalPrice',
+				`Total price is ${result[0].cash + result[0].cashless}`
+			);
 			return result[0];
-		} catch (err) {
+		} catch (err: any) {
+			log.error(controllerName + 'getAppointmentsTotalPrice', err);
 			throw err;
 		}
 	}
@@ -266,10 +280,16 @@ class AppointmentController {
 					appointments: appointments
 				});
 			});
+
+			log.info(
+				controllerName + 'getAppointmentsByDate',
+				`Appointments by date from ${AppointmentsByDatesInput.dateFrom} to ${AppointmentsByDatesInput.dateTo}`
+			);
+
 			return response;
-		} catch (e) {
-			console.error(e);
-			return e;
+		} catch (e: any) {
+			log.error(controllerName + 'getAppointmentsByDate', e);
+			throw e;
 		}
 	}
 }

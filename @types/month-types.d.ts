@@ -1,5 +1,5 @@
 import {MonthCode} from "./date-types";
-import {IAppointmentRaw} from "./appointment-typesd";
+import {IAppointmentRaw} from "./appointment-types";
 import {IExpenseRaw} from "./expenses-types";
 import {ISalaryTable} from "./salary-types";
 

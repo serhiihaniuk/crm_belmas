@@ -1,5 +1,5 @@
 import {DayCode} from "./date-types";
-import {IAppointmentRaw} from "./appointment-typesd";
+import {IAppointmentRaw} from "./appointment-types";
 import {IEmployee} from "./employee-types";
 
 export interface IDayRaw {

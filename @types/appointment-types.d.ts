@@ -1,4 +1,6 @@
 import { DayCode, HourCode, MonthCode, Timestamp } from './date-types';
+import {IEmployee} from "./employee-types";
+import {MonthRaw} from "./month-types";
 
 
 export interface IAppointmentRaw {
@@ -11,16 +13,10 @@ export interface IAppointmentRaw {
     procedure: string;
     instagram?: string;
     description?: string;
-    employee: {
-        _id: string;
-    };
-    creator: {
-        _id: string;
-    };
-    month: {
-        _id: string;
-    }
-    status: string;
+    employee: IEmployee;
+    creator: IEmployee;
+    month: MonthRaw;
+    status: 'booked' | 'finished'
     paymentMethod?: string;
     cash: number;
     cashless: number;
