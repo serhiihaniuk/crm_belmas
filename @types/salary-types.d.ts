@@ -1,4 +1,6 @@
-import {DayCode, MonthCode, Timestamp} from './date-types';
+import {DayCode, MonthCode} from './date-types';
+import {MonthRaw} from "./month-types";
+import {IEmployee} from "./employee-types";
 
 export interface IGetSalaryTablesQuery {
     getSalaryTablesByMonth: ISalaryTable[];
@@ -14,7 +16,7 @@ export interface ISalaryTable {
     totalEarned: number;
     payedCash: number;
     payedCashless: number;
-    month: string;
+    month: MonthRaw;
     tips: number;
     payments: ISalaryPaymentRaw[];
 }
@@ -23,10 +25,12 @@ export interface ISalaryPaymentRaw {
     _id: string;
     payedCash: number;
     payedCashless: number;
-    date: Timestamp;
+    date: Date;
     dayCode: DayCode;
     monthCode: MonthCode;
     salaryTableCode: ISalaryTableCode;
+    employee: IEmployee;
+    month: MonthRaw;
 }
 
 export interface IPayment extends ISalaryPaymentRaw {

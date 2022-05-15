@@ -1,42 +1,41 @@
-// @ts-nocheck
-import Employee from '../models/employee-model'
+import Employee from '../models/employee-model';
+import { IEmployee } from 'employee-types';
+import {MongoResponse} from "./controller-types";
 
 class EmployeeController {
-	async getEmployee(query, withPassword = false) {
+	async getEmployee(query: any, withPassword = false): Promise<MongoResponse<IEmployee>> {
 		try {
 			const employee = await Employee.findOne({ query });
 
+			if (!employee) throw new Error('Employee not found');
+
 			if (!withPassword) {
-				employee._doc.password = null;
+				employee.password = null;
 			}
 
-			return {
-				...employee._doc,
-				_id: employee.id
-			};
+			return employee;
 		} catch (err) {
 			throw err;
 		}
 	}
 
-	async getEmployeeByID(id, withPassword = false) {
+	async getEmployeeByID(id: string, withPassword = false): Promise<MongoResponse<IEmployee>> {
 		try {
 			const employee = await Employee.findById(id);
+
+			if (!employee) throw new Error('Employee not found');
+
 			if (!withPassword) {
-				employee._doc.password = null;
+				employee.password = null;
 			}
 
-			return {
-				...employee._doc,
-				_id: employee.id
-			};
+			return employee;
 		} catch (err) {
 			throw err;
 		}
 	}
 
-	async getEmployees(args) {
-
+	async getEmployees(args?: any): Promise<IEmployee[]> {
 		const searchQuery = args?.query?.role
 			? {
 					role: { $in: [args.query.role] }
@@ -44,13 +43,10 @@ class EmployeeController {
 			: {};
 
 		try {
-
 			const employees = await Employee.find(searchQuery);
 			return employees.map((employee) => {
-				return {
-					...employee._doc,
-					_id: employee.id
-				};
+				employee.password = null;
+				return employee;
 			});
 		} catch (err) {
 			console.log(err);

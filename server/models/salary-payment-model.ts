@@ -1,9 +1,9 @@
-// @ts-nocheck
 import mongoose from 'mongoose';
+import {ISalaryPaymentRaw} from "salary-types";
 
 const Schema = mongoose.Schema;
 
-const salaryPaymentSchema = new Schema({
+const salaryPaymentSchema = new Schema<ISalaryPaymentRaw>({
 	salaryTableCode: {
 		type: String,
 		required: true

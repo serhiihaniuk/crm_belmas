@@ -10,7 +10,6 @@ import graphQlResolvers from './graphql/resolvers/index';
 import info from './helpers/info';
 
 import dotenv from 'dotenv';
-import { AB } from 'types';
 
 dotenv.config();
 const workingMode = process.env.NODE_ENV;

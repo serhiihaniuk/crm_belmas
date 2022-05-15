@@ -21,5 +21,5 @@ export interface IEmployee {
     qualification: IEmployeeQualification;
     role: IEmployeeRole;
     login: IEmployeeLogin;
-    password: string;
+    password: string | null;
 }

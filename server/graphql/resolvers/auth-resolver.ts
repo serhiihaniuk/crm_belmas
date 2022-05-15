@@ -5,6 +5,13 @@ import { generateTokens } from '../helpers/tokens'
 import ApiError from '../helpers/api-error'
 import Employee from '../../models/employee-model'
 
+export interface JWTPayload {
+    id: string;
+    name: string;
+    position: string;
+    role: string[]
+}
+
 const login = async (parent, { login, password }, context) => {
 	try {
 		const employee = await Employee.findOne({ login: login });
@@ -21,7 +28,8 @@ const login = async (parent, { login, password }, context) => {
 		const { accessToken } = generateTokens({
 			id: employee._id,
 			name: employee.name,
-			position: employee.position
+			position: employee.position,
+            role: employee.role
 		});
 		const { res } = context;
 		res.cookie('access', accessToken, { httpOnly: true });

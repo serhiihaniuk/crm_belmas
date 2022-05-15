@@ -1,9 +1,9 @@
-// @ts-nocheck
 import mongoose from 'mongoose';
+import { IDayRaw } from 'day-types';
 
 const Schema = mongoose.Schema;
 
-const daySchema = new Schema({
+const daySchema = new Schema<IDayRaw>({
 	dayCode: {
 		type: String,
 		required: true,

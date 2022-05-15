@@ -1,14 +1,24 @@
-// @ts-nocheck
-import MonthController from './month-controller'
-import EmployeeController from './employee-controller'
-import Salary from '../models/salary-model'
-import SalaryPayment from '../models/salary-payment-model'
-import MonthTotal from '../models/month-total-model'
+import MonthController from './month-controller';
+import EmployeeController from './employee-controller';
+import Salary from '../models/salary-model';
+import SalaryPayment from '../models/salary-payment-model';
+import MonthTotal from '../models/month-total-model';
+import { ISalaryTableCode } from 'salary-types';
+import { DayCode, MonthCode } from 'date-types';
+
+interface ISalaryPaymentInput {
+	salaryTableCode: ISalaryTableCode;
+	payedCash: number;
+	payedCashless: number;
+	date: Date;
+	monthCode: MonthCode;
+	dayCode: DayCode;
+}
 
 class SalaryController {
-	static async createSalaryTable(salaryTableCode) {
+	static async createSalaryTable(salaryTableCode: ISalaryTableCode) {
 		try {
-			const [monthCode, employeeID] = salaryTableCode.split('_');
+			const [monthCode, employeeID] = salaryTableCode.split('_') as [MonthCode, string];
 			const month = await MonthController.getMonthByCode(monthCode);
 			const employee = await EmployeeController.getEmployeeByID(employeeID);
 			const newSalaryTable = new Salary({
@@ -32,8 +42,8 @@ class SalaryController {
 		}
 	}
 
-	static async getSalaryTableByCode({ salaryTableCode }) {
-		const [, employeeID] = salaryTableCode.split('_');
+	static async getSalaryTableByCode({ salaryTableCode }: { salaryTableCode: ISalaryTableCode }) {
+		const [, employeeID] = salaryTableCode.split('_') as [MonthCode, string];
 		try {
 			let salaryTable = await Salary.findOne({
 				salaryTableCode: salaryTableCode
@@ -41,20 +51,20 @@ class SalaryController {
 			if (!salaryTable) {
 				salaryTable = await SalaryController.createSalaryTable(salaryTableCode);
 			}
-			const employee = await EmployeeController.getEmployeeByID(employeeID);
+            salaryTable.employee = await EmployeeController.getEmployeeByID(employeeID);
 
-			return { ...salaryTable._doc, _id: salaryTable.id, employee: { ...employee } };
+			return salaryTable
 		} catch (e) {
 			throw e;
 		}
 	}
 
-	static async getSalaryTablesByMonth({ monthCode }) {
+	static async getSalaryTablesByMonth({ monthCode }: { monthCode: MonthCode }) {
 		try {
 			const employees = await EmployeeController.getEmployees();
 			let salaryTables = [];
 			for (let employee of employees) {
-				const salaryTableCode = `${monthCode}_${employee._id}`;
+				const salaryTableCode = `${monthCode}_${employee._id}` as ISalaryTableCode;
 				const salaryTable = await SalaryController.getSalaryTableByCode({ salaryTableCode });
 				salaryTables.push(salaryTable);
 			}
@@ -65,9 +75,9 @@ class SalaryController {
 		}
 	}
 
-	static async addSalaryPayment({ SalaryPaymentInput }) {
+	static async addSalaryPayment({ SalaryPaymentInput }: { SalaryPaymentInput: ISalaryPaymentInput }) {
 		try {
-			const [monthCode, employeeID] = SalaryPaymentInput.salaryTableCode.split('_');
+			const [monthCode, employeeID] = SalaryPaymentInput.salaryTableCode.split('_') as [MonthCode, string];
 			const month = await MonthController.getMonthByCode(monthCode);
 
 			const employee = await EmployeeController.getEmployeeByID(employeeID);
@@ -83,8 +93,8 @@ class SalaryController {
 				payedCashless: SalaryPaymentInput.payedCashless,
 				month: month,
 				date: new Date(Number(SalaryPaymentInput.date)),
-                dayCode: SalaryPaymentInput.dayCode,
-                monthCode: SalaryPaymentInput.monthCode,
+				dayCode: SalaryPaymentInput.dayCode,
+				monthCode: SalaryPaymentInput.monthCode,
 				employee: employee,
 				salaryTableCode: SalaryPaymentInput.salaryTableCode
 			});
@@ -103,16 +113,27 @@ class SalaryController {
 				}
 			);
 
-			return { ...savedSalaryPayment._doc, employee: { ...employee } };
+
+            savedSalaryPayment.employee = employee
+			return savedSalaryPayment
 		} catch (error) {
 			console.log(error);
 			throw error;
 		}
 	}
 
-	static async deleteSalaryPayment({ SalaryPaymentID }) {
+	static async deleteSalaryPayment({
+		SalaryPaymentID
+	}: {
+		SalaryPaymentID: string;
+	}): Promise<'Successfully deleted'> {
 		try {
 			const salaryPayment = await SalaryPayment.findByIdAndDelete(SalaryPaymentID);
+
+            if(!salaryPayment) {
+                throw new Error('Salary payment not found')
+            }
+
 			const salaryTable = await SalaryController.getSalaryTableByCode({
 				salaryTableCode: salaryPayment.salaryTableCode
 			});
@@ -126,7 +147,7 @@ class SalaryController {
 					payedCashless: payedCashless
 				},
 				$pull: { payments: salaryPayment._id }
-			});
+			} as any);
 
 			return 'Successfully deleted';
 		} catch (error) {
