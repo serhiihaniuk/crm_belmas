@@ -221,16 +221,19 @@ class AppointmentController {
 					cashless: 0
 				};
 			}
+
 			log.info(
 				controllerName + 'getAppointmentsTotalPrice',
 				`Total price is ${result[0].cash + result[0].cashless}`
 			);
+
 			return result[0];
 		} catch (err: any) {
 			log.error(controllerName + 'getAppointmentsTotalPrice', err);
 			throw err;
 		}
 	}
+
 
 	async getAppointmentsByDate({
 		AppointmentsByDatesInput
