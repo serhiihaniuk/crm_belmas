@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=development nodemon app.js",
+    "start": "NODE_ENV=development nodemon app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -25,11 +24,15 @@
     "graphql": "^16.1.0",
     "graphql-type-json": "^0.3.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.1.0"
+    "mongoose": "^6.1.0",
+    "npmlog": "^6.0.2"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/npmlog": "^4.1.4",
     "nodemon": "^2.0.15",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "ts-node": "^10.7.0"
   },
   "prettier": {
     "singleQuote": true,
