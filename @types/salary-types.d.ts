@@ -2,10 +2,6 @@ import {DayCode, MonthCode} from './date-types';
 import {MonthRaw} from "./month-types";
 import {IEmployee} from "./employee-types";
 
-export interface IGetSalaryTablesQuery {
-    getSalaryTablesByMonth: ISalaryTable[];
-}
-
 export interface ISalaryTable {
     salaryTableCode: ISalaryTableCode;
     _id: string;

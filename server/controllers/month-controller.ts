@@ -1,61 +1,83 @@
 import MonthTotal from '../models/month-total-model';
-import {DayCode, MonthCode} from 'date-types';
+import { DayCode, MonthCode } from 'date-types';
 import { MonthRaw } from 'month-types';
 import { Document } from 'mongoose';
-import DayController from "./day-controller";
-import d from '../helpers/d'
+import DayController from './day-controller';
+import d from '../helpers/d';
+import log from '../helpers/info';
 
+const controllerName = 'MonthController.';
+const logInfo = (method: string, message: string): void => {
+	log.info(`${controllerName}${method}`, message);
+};
 type MonthMongooseResponse = Document<any, any, MonthRaw> & MonthRaw & { _id: string };
 
 class MonthController {
 	static async getMonthByCode(monthCode: MonthCode): Promise<MonthMongooseResponse> {
+		logInfo('getMonthByCode', `monthCode: ${monthCode}`);
 		try {
 			let month = await MonthTotal.findOne({ monthCode: monthCode });
 			if (!month) {
+				log.error(`${controllerName}getMonthByCode`, `Month not found`);
 				month = await MonthController.createMonth(monthCode);
 			}
+
+			logInfo('getMonthByCode', `month: ${JSON.stringify(month)}`);
 			return month;
 		} catch (e) {
+			log.error(`${controllerName}getMonthByCode`, `Error: ${e}`);
 			throw e;
 		}
 	}
 
 	static async createMonth(monthCode: MonthCode): Promise<MonthMongooseResponse> {
-		const newMonth = new MonthTotal({
-			monthCode: monthCode,
-			month: monthCode.slice(-2),
-			year: monthCode.substring(0, 4),
-			cashlessAtTheBeginning: 0,
-			cash: 0,
-			cashless: 0,
-			currentCashless: 0,
-			currentCash: 0,
-			expensesCashless: 0,
-			expensesCash: 0,
-			salaryCashless: 0,
-			salaryCash: 0
-		});
-
-        const dayCodesInMonth: DayCode[] = d.prepareDaysCodesInMonth(monthCode);
-
-        for (let dayCode of dayCodesInMonth) {
-            await DayController.getDayByCode(dayCode);
-        }
+		logInfo('createMonth', `monthCode: ${monthCode}`);
 
 		try {
-			return await newMonth.save();
+			const newMonth = await new MonthTotal({
+				monthCode: monthCode,
+				month: monthCode.slice(-2),
+				year: monthCode.substring(0, 4),
+				cashlessAtTheBeginning: 0,
+				cash: 0,
+				cashless: 0,
+				currentCashless: 0,
+				currentCash: 0,
+				expensesCashless: 0,
+				expensesCash: 0,
+				salaryCashless: 0,
+				salaryCash: 0
+			});
+
+			await newMonth.save();
+
+			const dayCodesInMonth: DayCode[] = d.prepareDaysCodesInMonth(monthCode);
+
+			for (let dayCode of dayCodesInMonth) {
+				await DayController.getDayByCode(dayCode);
+			}
+
+			const newMonthLatest = await MonthController.getMonthByCode(monthCode);
+			logInfo('createMonth', `newMonth: ${JSON.stringify(newMonthLatest)}`);
+
+			return newMonthLatest;
 		} catch (e) {
+			log.error(`${controllerName}createMonth`, `Error: ${e}`);
 			throw e;
 		}
 	}
 
 	static async getMonthStats(monthCode: MonthCode): Promise<MonthMongooseResponse> {
+		logInfo('getMonthStats', `monthCode: ${monthCode}`);
+
 		try {
 			let month = await MonthTotal.findOne({ monthCode: monthCode })
 				.populate('appointments')
 				.populate('expenses')
 				.populate('salaryTables');
+
 			if (!month) {
+				log.error(`${controllerName}getMonthStats`, `Month not found`);
 				month = await MonthController.createMonth(monthCode);
 			}
 			const totalEarnings = month.appointments.reduce(
@@ -69,6 +91,8 @@ class MonthController {
 					cashless: 0
 				}
 			);
+			logInfo('getMonthStats', `totalEarnings: ${JSON.stringify(totalEarnings)}`);
+
 			const totalExpenses = month.expenses.reduce(
 				(acc, curr) => {
 					acc.cash += curr.cash;
@@ -80,6 +104,8 @@ class MonthController {
 					cashless: 0
 				}
 			);
+			logInfo('getMonthStats', `totalExpenses: ${JSON.stringify(totalExpenses)}`);
+
 			const totalSalary = month.salaryTables.reduce(
 				(acc, curr) => {
 					acc.cash += curr.payedCash;
@@ -91,30 +117,34 @@ class MonthController {
 					cashless: 0
 				}
 			);
-            const updatedMonth = await MonthTotal.findOneAndUpdate(
-                { monthCode: monthCode },
-                {
-                    $set: {
-                        cash: totalEarnings.cash,
-                        cashless: totalEarnings.cashless,
-                        expensesCash: totalExpenses.cash,
-                        expensesCashless: totalExpenses.cashless,
-                        salaryCash: totalSalary.cash,
-                        salaryCashless: totalSalary.cashless,
-                        currentCash: totalEarnings.cash - totalSalary.cash - totalExpenses.cash,
-                        currentCashless:
-                            month.cashlessAtTheBeginning +
-                            totalEarnings.cashless -
-                            totalExpenses.cashless -
-                            totalSalary.cashless
-                    }
-                },
-                { new: true }
-            );
-            if(!updatedMonth) throw new Error('Month not found');
-			return updatedMonth
+			logInfo('getMonthStats', `totalSalary: ${JSON.stringify(totalSalary)}`);
+			
+			const updatedMonth = await MonthTotal.findOneAndUpdate(
+				{ monthCode: monthCode },
+				{
+					$set: {
+						cash: totalEarnings.cash,
+						cashless: totalEarnings.cashless,
+						expensesCash: totalExpenses.cash,
+						expensesCashless: totalExpenses.cashless,
+						salaryCash: totalSalary.cash,
+						salaryCashless: totalSalary.cashless,
+						currentCash: totalEarnings.cash - totalSalary.cash - totalExpenses.cash,
+						currentCashless:
+							month.cashlessAtTheBeginning +
+							totalEarnings.cashless -
+							totalExpenses.cashless -
+							totalSalary.cashless
+					}
+				},
+				{ new: true }
+			);
+			if (!updatedMonth) throw new Error('Month not found');
+			
+			logInfo('getMonthStats', `updatedMonth: ${JSON.stringify(updatedMonth)}`);
+			return updatedMonth;
 		} catch (e) {
-			console.error(e);
+			log.error(`${controllerName}getMonthStats`, `Error: ${e}`);
 			throw e;
 		}
 	}
