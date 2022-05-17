@@ -1,7 +1,9 @@
 import MonthTotal from '../models/month-total-model';
-import { MonthCode } from 'date-types';
+import {DayCode, MonthCode} from 'date-types';
 import { MonthRaw } from 'month-types';
 import { Document } from 'mongoose';
+import DayController from "./day-controller";
+import d from '../helpers/d'
 
 type MonthMongooseResponse = Document<any, any, MonthRaw> & MonthRaw & { _id: string };
 
@@ -33,6 +35,13 @@ class MonthController {
 			salaryCashless: 0,
 			salaryCash: 0
 		});
+
+        const dayCodesInMonth: DayCode[] = d.prepareDaysCodesInMonth(monthCode);
+
+        for (let dayCode of dayCodesInMonth) {
+            await DayController.getDayByCode(dayCode);
+        }
+
 		try {
 			return await newMonth.save();
 		} catch (e) {
