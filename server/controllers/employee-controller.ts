@@ -1,41 +1,63 @@
 import Employee from '../models/employee-model';
 import { IEmployee } from 'employee-types';
 import {MongoResponse} from "./controller-types";
+import log from "../helpers/info";
+
+const controllerName = 'EmployeeController.';
+const logInfo = (method: string, message: string): void => {
+    log.info(`${controllerName}${method}`, message);
+};
 
 class EmployeeController {
 	async getEmployee(query: any, withPassword = false): Promise<MongoResponse<IEmployee>> {
+
+        logInfo('getEmployee', `query: ${JSON.stringify(query)}`);
 		try {
 			const employee = await Employee.findOne({ query });
 
-			if (!employee) throw new Error('Employee not found');
+			if (!employee) {
+                log.error(`${controllerName}getEmployee`, `Employee not found`);
+                throw new Error('Employee not found');
+            }
 
 			if (!withPassword) {
 				employee.password = null;
 			}
 
+            logInfo('getEmployee', `employee: ${JSON.stringify(employee)}`);
 			return employee;
 		} catch (err) {
+            log.error(`${controllerName}getEmployee`, `Error: ${err}`);
 			throw err;
 		}
 	}
 
 	async getEmployeeByID(id: string, withPassword = false): Promise<MongoResponse<IEmployee>> {
+        logInfo('getEmployeeByID', `id: ${id}`);
 		try {
 			const employee = await Employee.findById(id);
 
-			if (!employee) throw new Error('Employee not found');
+			if (!employee) {
+                log.error(`${controllerName}getEmployeeByID`, `Employee not found`);
+                throw new Error('Employee not found');
+			}
 
 			if (!withPassword) {
 				employee.password = null;
 			}
 
+
+            logInfo('getEmployeeByID', `employee: ${JSON.stringify(employee)}`);
+
 			return employee;
 		} catch (err) {
+            log.error(`${controllerName}getEmployeeByID`, `Error: ${err}`);
 			throw err;
 		}
 	}
 
 	async getEmployees(args?: any): Promise<IEmployee[]> {
+        logInfo('getEmployees', `args: ${JSON.stringify(args)}`);
 		const searchQuery = args?.query?.role
 			? {
 					role: { $in: [args.query.role] }
@@ -44,12 +66,14 @@ class EmployeeController {
 
 		try {
 			const employees = await Employee.find(searchQuery);
+
+            logInfo('getEmployees', `employees: ${JSON.stringify(employees)}`);
 			return employees.map((employee) => {
 				employee.password = null;
 				return employee;
 			});
 		} catch (err) {
-			console.log(err);
+            log.error(`${controllerName}getEmployees`, `Error: ${err}`);
 			throw err;
 		}
 	}

@@ -66,6 +66,12 @@ const monthTotalSchema = new Schema<MonthRaw>({
 			ref: 'Salary'
 		}
 	],
+    days: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Day'
+        }
+    ],
 	status: {
 		type: String,
 		default: 'active'
