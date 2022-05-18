@@ -10,6 +10,7 @@ import { DayCode, HourCode, MonthCode } from 'date-types';
 import { MongoResponse } from './controller-types';
 import log from '../helpers/info';
 
+
 const controllerName = 'AppointmentController.';
 const logInfo = (method: string, message: string): void => {
     log.info(controllerName + method, message);
@@ -235,6 +236,14 @@ class AppointmentController {
 	}
 
 
+
+    async getAppointments(dateFrom: DayCode, dateTo: DayCode) {
+
+        logInfo('getAppointments', `Getting appointments from ${dateFrom} to ${dateTo}`);
+
+
+
+    }
 	async getAppointmentsByDate({
 		AppointmentsByDatesInput
 	}: {

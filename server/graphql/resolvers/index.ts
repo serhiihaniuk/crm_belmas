@@ -5,6 +5,7 @@ import expensesResolver from './expenses-resolver';
 import monthResolver from './month-resolver';
 import salaryResolver from './salary-resolver';
 import dayOffResolver from './day-off-resolver';
+import dayResolver from './day-resolver';
 const rootResolver = {
     Query: {
         ...appointmentsResolver.Query,
@@ -12,6 +13,7 @@ const rootResolver = {
         ...monthResolver.Query,
         ...expensesResolver.Query,
         ...salaryResolver.Query,
+        ...dayResolver.Query,
         ...authResolver
     },
     Mutation: {

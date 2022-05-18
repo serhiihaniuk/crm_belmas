@@ -39,7 +39,7 @@ const DetailedView: React.FC = () => {
                     id={'general-tab2'}
                     label={'Всего'}
                     renderContent={({ selected }) => {
-                        return <>{selected && <DetailedViewTab employee={null} />}</>;
+                        return <>{selected && <DetailedViewTab />}</>;
                     }}
                 />
                 {employeesData.getEmployees.map((employee) => {

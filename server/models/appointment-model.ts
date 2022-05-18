@@ -65,6 +65,5 @@ const appointmentSchema = new Schema<IAppointmentRaw>({
 	}
 });
 
-const a:HydratedDocument<IAppointmentRaw> = new mongoose.model<IAppointmentRaw>('Appointment', appointmentSchema);
 
 export default mongoose.model<IAppointmentRaw>('Appointment', appointmentSchema);
