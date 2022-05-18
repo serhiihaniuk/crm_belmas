@@ -15,7 +15,7 @@ const SummaryView: React.FC<ISummaryViewProps> = () => {
         variables: {
             monthCode: d.DateObjectToMonthCode(from)
         },
-        pollInterval: 5000
+        pollInterval: 225000 //@todo change
     });
 
     if (loading || !data) return <InlineLoading className={loadingCSS} description="Загрузка" />;

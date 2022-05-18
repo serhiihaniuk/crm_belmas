@@ -13,16 +13,16 @@ const logInfo = (method: string, message: string): void => {
 type MonthMongooseResponse = Document<any, any, MonthRaw> & MonthRaw & { _id: string };
 
 class MonthController {
-	static async getMonthByCode(monthCode: MonthCode): Promise<MonthMongooseResponse> {
-		logInfo('getMonthByCode', `monthCode: ${monthCode}`);
+	static async getMonthByCode(monthCode: MonthCode, populate: string[] = []): Promise<MonthMongooseResponse> {
+		logInfo('getMonthByCode', `Start monthCode: ${monthCode}`);
 		try {
 			let month = await MonthTotal.findOne({ monthCode: monthCode });
 			if (!month) {
-				log.error(`${controllerName}getMonthByCode`, `Month not found`);
+				log.info(`${controllerName}getMonthByCode`, `Month not found, creating new`);
 				month = await MonthController.createMonth(monthCode);
 			}
 
-			logInfo('getMonthByCode', `month: ${JSON.stringify(month)}`);
+			logInfo('getMonthByCode', `Success! month: ${JSON.stringify(month.month)}`);
 			return month;
 		} catch (e) {
 			log.error(`${controllerName}getMonthByCode`, `Error: ${e}`);
@@ -71,6 +71,7 @@ class MonthController {
 		logInfo('getMonthStats', `monthCode: ${monthCode}`);
 
 		try {
+			await MonthController.getMonthByCode(monthCode)
 			let month = await MonthTotal.findOne({ monthCode: monthCode })
 				.populate('appointments')
 				.populate('expenses')
@@ -81,6 +82,7 @@ class MonthController {
 				month = await MonthController.createMonth(monthCode);
 			}
 			const totalEarnings = month.appointments.reduce(
+				//@ts-ignore
 				(acc, curr) => {
 					acc.cash += curr.cash;
 					acc.cashless += curr.cashless;
@@ -94,6 +96,7 @@ class MonthController {
 			logInfo('getMonthStats', `totalEarnings: ${JSON.stringify(totalEarnings)}`);
 
 			const totalExpenses = month.expenses.reduce(
+				//@ts-ignore
 				(acc, curr) => {
 					acc.cash += curr.cash;
 					acc.cashless += curr.cashless;
@@ -107,6 +110,7 @@ class MonthController {
 			logInfo('getMonthStats', `totalExpenses: ${JSON.stringify(totalExpenses)}`);
 
 			const totalSalary = month.salaryTables.reduce(
+				//@ts-ignore
 				(acc, curr) => {
 					acc.cash += curr.payedCash;
 					acc.cashless += curr.payedCashless;
@@ -118,7 +122,7 @@ class MonthController {
 				}
 			);
 			logInfo('getMonthStats', `totalSalary: ${JSON.stringify(totalSalary)}`);
-			
+
 			const updatedMonth = await MonthTotal.findOneAndUpdate(
 				{ monthCode: monthCode },
 				{
@@ -140,8 +144,8 @@ class MonthController {
 				{ new: true }
 			);
 			if (!updatedMonth) throw new Error('Month not found');
-			
-			logInfo('getMonthStats', `updatedMonth: ${JSON.stringify(updatedMonth)}`);
+
+			logInfo('getMonthStats', `updatedMonth: ${JSON.stringify(updatedMonth.month)}`);
 			return updatedMonth;
 		} catch (e) {
 			log.error(`${controllerName}getMonthStats`, `Error: ${e}`);

@@ -1,6 +1,6 @@
 // @ts-nocheck
 import checkAuthAndResolve from '../helpers/check-auth';
-import DayOffController from '../../controllers/day-controller';
+import DayOffController from '../../controllers/day-off-controller';
 
 export default {
     Mutation: {

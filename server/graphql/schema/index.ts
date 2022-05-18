@@ -66,6 +66,7 @@ const Query = gql`
         getExpensesByMonth(monthCode: String!): [Expense!]!
         getSalaryTableByCode(salaryTableCode: String!): SalaryTable!
         getSalaryTablesByMonth(monthCode: String!): [SalaryTable!]!
+        getDaysInRange(from: String!, to: String!): [Day!]!
     }
 `;
 

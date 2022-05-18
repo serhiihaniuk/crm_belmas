@@ -2,8 +2,12 @@ import Day from '../models/day-model';
 import {DayCode, Iday, Imonth, Iyear, MonthCode} from 'date-types';
 import {MongoResponse} from './controller-types';
 import {IDayRaw} from 'day-types';
-import MonthController from "./month-controller";
 import log from "../helpers/info";
+import d from "../helpers/d";
+import MonthController from './month-controller';
+
+
+console.log(MonthController)
 
 const controllerName = 'DayController.';
 const logInfo = (method: string, message: string): void => {
@@ -28,6 +32,28 @@ class DayController {
         }
     }
 
+    static async getDaysInRange(a: any, {from, to}: any) {
+        
+        console.log({from, to})
+
+        const monthsInRange = d.mapMonthCodesBetweenDates(from, to)
+
+        for(let month of monthsInRange){
+           await MonthController.getMonthByCode(month)
+        }
+
+        //find day rage from to
+        const daysInRange = await Day.find({
+            date: {
+                $gte: d.prepareCustomTimestamp(from) - 1,
+                $lte: d.prepareCustomTimestamp(to) + 1
+            }
+        });
+            
+        console.log(daysInRange);
+        return daysInRange;
+    }
+
     static async createDay(dayCode: DayCode): Promise<MongoResponse<IDayRaw>> {
 
         logInfo('createDay', `create day: ${dayCode}`);
@@ -48,6 +74,7 @@ class DayController {
                 year: year,
                 month: month,
                 day: day,
+                date: d.prepareCustomTimestamp(dayCode),
                 appointments: [],
                 dayOff: []
             });

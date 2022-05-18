@@ -78,3 +78,6 @@ class DayOffController {
 		}
 	}
 }
+
+
+export default DayOffController;

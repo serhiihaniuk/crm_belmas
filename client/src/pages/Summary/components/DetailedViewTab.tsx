@@ -17,7 +17,7 @@ const loadingCSS = css`
 `;
 
 interface DetailedViewTabProps {
-    employeeID: string;
+    employeeID?: string;
 }
 
 const DetailedViewTab: React.FC<DetailedViewTabProps> = ({ employeeID }) => {

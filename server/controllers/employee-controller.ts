@@ -67,7 +67,7 @@ class EmployeeController {
 		try {
 			const employees = await Employee.find(searchQuery);
 
-            logInfo('getEmployees', `employees: ${JSON.stringify(employees)}`);
+            logInfo('getEmployees', `employees: ${JSON.stringify(employees.map(e=>e.name))}`);
 			return employees.map((employee) => {
 				employee.password = null;
 				return employee;

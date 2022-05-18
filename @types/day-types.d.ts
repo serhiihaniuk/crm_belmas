@@ -8,6 +8,7 @@ export interface IDayRaw {
     year: string;
     month: string;
     day: string;
+    date: number;
     appointments: IAppointmentRaw[];
     dayOff: IDayOffRaw[];
 }

@@ -21,6 +21,10 @@ const daySchema = new Schema<IDayRaw>({
 		type: String,
 		required: true
 	},
+    date: {
+        type: Number,
+        required: true
+    },
 	appointments: [
 		{
 			type: Schema.Types.ObjectId,
