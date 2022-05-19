@@ -4,8 +4,8 @@ import {MongoResponse} from "./controller-types";
 import log from "../helpers/info";
 
 const controllerName = 'EmployeeController.';
-const logInfo = (method: string, message: string): void => {
-    log.info(`${controllerName}${method}`, message);
+const logInfo = (method: string, message: string, a:any = ''): void => {
+    log.info(`${controllerName}${method}`, message, a);
 };
 
 class EmployeeController {
@@ -47,7 +47,7 @@ class EmployeeController {
 			}
 
 
-            logInfo('getEmployeeByID', `employee: ${JSON.stringify(employee)}`);
+            logInfo('getEmployeeByID', `Success! employee: `, employee);
 
 			return employee;
 		} catch (err) {

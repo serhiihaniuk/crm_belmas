@@ -9,6 +9,7 @@ import { IEmployeeId } from '../../../types/employee-types';
 import { DayCode } from '../../../types/date-types';
 import { GET_DAYS_IN_RANGE } from '../../../gql/query/days';
 import { IGetDaysInRange } from '../../../types/day-types';
+import {useWhyDidYouUpdate} from "../../../helpers/tools";
 
 const loadingCSS = css`
     display: flex;
@@ -37,6 +38,9 @@ const TabTemplate: React.FC<TabTemplateProps> = ({ openModal, openDayOffModal, e
             employeeID: employeeID
         }
     });
+
+
+    useWhyDidYouUpdate("a", daysInRange)
 
     useEffect(() => {
         //@todo: setup proper cache merge

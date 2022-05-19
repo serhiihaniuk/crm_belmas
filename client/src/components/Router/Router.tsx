@@ -1,28 +1,50 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import Header from '../Header/PageHeader';
 import { IRoute, routes } from './Routes';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { UserRoles } from './service';
+import { useDispatch } from 'react-redux';
+import { useQuery } from '@apollo/client';
+import { CHECK_AUTH } from '../../gql/query/auth';
+import { setEmployeeAction } from '../../redux/actionCreators';
+import { Loading } from 'carbon-components-react';
 
-export interface IRouterProps {
-    isAuth: boolean;
-}
-
-const Router: React.FC<IRouterProps> = ({ isAuth }) => {
+const Router: React.FC = () => {
     const employee = useTypedSelector((state) => state.employee);
-    const permittedRoutes: IRoute[] = routes.filter((route) => {
-        if (!route.isAuth && !isAuth) {
-            return true;
-        }
+    const isAuth = useTypedSelector((state) => state.employee.isAuth);
+    const [authChecked, setAuthChecked] = useState(false);
 
-        if (employee.role.includes(UserRoles.root) && route.isAuth) {
-            console.log({ employee });
-            return true;
-        }
+    const dispatch = useDispatch();
 
-        return route.expectedRole && employee.role.includes(route.expectedRole);
-    });
+    const { data, loading } = useQuery(CHECK_AUTH);
+
+    useEffect(() => {
+        if (data) {
+            console.log(data)
+            localStorage.setItem('token', data?.checkAuth?.accessToken);
+            dispatch(setEmployeeAction(data?.checkAuth?.employee));
+            setAuthChecked(true);
+        }
+    }, [data, dispatch]);
+
+    const permittedRoutes: IRoute[] = useMemo(
+        () =>
+            routes.filter((route) => {
+                if (!route.isAuth && !isAuth) {
+                    return true;
+                }
+
+                if (employee.role.includes(UserRoles.root) && route.isAuth) {
+                    return true;
+                }
+
+                return route.expectedRole && employee.role.includes(route.expectedRole);
+            }),
+        [isAuth]
+    );
+
+    if (loading) return <Loading withOverlay={true} />;
     return (
         <BrowserRouter>
             <Header routes={permittedRoutes} />
@@ -30,8 +52,9 @@ const Router: React.FC<IRouterProps> = ({ isAuth }) => {
                 {permittedRoutes.map((route, index) => {
                     return <Route key={index} path={route.path} exact={route.exact} component={route.component} />;
                 })}
-                <Redirect to={isAuth ? permittedRoutes[0].path : '/login'} />
+
             </Switch>
+            {authChecked && <Redirect to={isAuth ? permittedRoutes[0].path : '/login'} />}
         </BrowserRouter>
     );
 };
