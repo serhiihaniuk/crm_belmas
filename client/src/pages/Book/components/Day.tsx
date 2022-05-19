@@ -39,6 +39,7 @@ const Day: React.FC<IDayProps> = ({ openModal, openDayOffModal, rows, dayCode, i
     };
 
     const dayOffModalHandler = () => {
+        if(rows.length) return
         openDayOffModal(dayOffID);
     };
 

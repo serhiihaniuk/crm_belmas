@@ -5,7 +5,8 @@ import { css } from '@emotion/css';
 import { GET_MONTH_STATS, IMonthTotalQuery } from '../../../gql/query/month';
 import { Divider, loadingCSS } from '../../../globalStyles';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
-import d from '../../../helpers/utils';
+import d, {getMonthName} from '../../../helpers/utils';
+import {monthTag} from "./tables/tables-styles";
 
 interface ISummaryViewProps {}
 
@@ -25,6 +26,9 @@ const SummaryView: React.FC<ISummaryViewProps> = () => {
     return (
         <>
             <SummaryViewTable>
+                <div className={rowStyle}>
+                    <Tag className={monthTag}>{getMonthName(from.MM)}</Tag>
+                </div>
                 <div className={rowStyle}>
                     <Tag className="desc">Категория</Tag>
                     <Tag className="cash">Нал</Tag>

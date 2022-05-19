@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import BookModal from './components/BookModal/BookModal';
 import { pageWrapper } from '../../globalStyles';
 import { Tab, Tabs } from 'carbon-components-react';
@@ -64,22 +64,52 @@ const Book: React.FC = () => {
         }
     }, [employeesData, selectedTab]);
 
-    const openModal = (BookModalState: IBookModalState) => {
+    const openModal = useCallback((BookModalState: IBookModalState) => {
         setIsOpenBookModal(true);
         setBookModalState(BookModalState);
-    };
+    },[])
 
-    const openDayOffModal = (dayOffModalState: IDayOffModalState) => {
+    const openDayOffModal = useCallback((dayOffModalState: IDayOffModalState) => {
         setIsOpenDayOffModal(true)
         setDayOffModalState(dayOffModalState)
-    }
-    const closeModal = () => {
+    },[])
+    const closeModal = useCallback(() => {
         setIsOpenBookModal(false);
-    };
+    },[])
 
-    const closeDayOffModal = () => {
+    const closeDayOffModal = useCallback(() => {
         setIsOpenDayOffModal(false)
-    }
+    },[])
+
+    const tabsContent = useMemo( () => {
+        if(employeesData?.getEmployees) {
+            return employeesData.getEmployees.map((employee) => {
+                return (
+                    <Tab
+                        key={employee._id}
+                        id={employee._id}
+                        label={employee.name}
+                        renderContent={({ selected }) => {
+                            return (
+                                <>
+                                    {selected && (
+                                        <TabTemplate
+                                            key={employee._id}
+                                            employeeID={employee._id}
+                                            dateFrom={d.DateObjectToDayCode(from)}
+                                            dateTo={d.DateObjectToDayCode(to)}
+                                            openModal={openModal}
+                                            openDayOffModal={openDayOffModal}
+                                        />
+                                    )}
+                                </>
+                            );
+                        }}
+                    />
+                );
+            })
+        }
+    },[employeesData])
     return (
         <>
             <div className={pageWrapper}>
@@ -90,30 +120,7 @@ const Book: React.FC = () => {
                             setSelectedTab(idx);
                         }}
                     >
-                        {employeesData.getEmployees.map((employee) => {
-                            return (
-                                <Tab
-                                    key={employee._id}
-                                    id={employee._id}
-                                    label={employee.name}
-                                    renderContent={({ selected }) => {
-                                        return (
-                                            <>
-                                                {selected && (
-                                                    <TabTemplate
-                                                        employeeID={employee._id}
-                                                        dateFrom={d.DateObjectToDayCode(from)}
-                                                        dateTo={d.DateObjectToDayCode(to)}
-                                                        openModal={openModal}
-                                                        openDayOffModal={openDayOffModal}
-                                                    />
-                                                )}
-                                            </>
-                                        );
-                                    }}
-                                />
-                            );
-                        })}
+                        {tabsContent}
                     </Tabs>
                 )}
             </div>
@@ -126,6 +133,7 @@ const Book: React.FC = () => {
                             isOpen={isOpenBookModal}
                             bookModalState={bookModalState}
                             employeeID={employeeID}
+
                         />
                         <DayOffModal
                             apolloClient={client as IApolloClient}

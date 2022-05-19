@@ -17,11 +17,11 @@ export const headers = [
         header: 'Кат'
     },
     {
-        key: 'payedCash',
+        key: 'cash',
         header: 'Нал'
     },
     {
-        key: 'payedCashless',
+        key: 'cashless',
         header: 'Безнал'
     }
 ];

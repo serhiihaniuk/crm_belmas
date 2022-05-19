@@ -14,8 +14,9 @@ import { IDateState } from '../../redux/reducers/date-reducer';
 import { buttonWrapper, openModalBTN, setCurrentMonthBTN } from './DateModal.css';
 import { EventSchedule32 } from '@carbon/icons-react';
 
-const DateModal: React.FC<{ isAuth: boolean }> = ({ isAuth }) => {
+const DateModal = () => {
     const isOpen = useTypedSelector((state) => state.date.isModalOpen);
+    const isAuth = useTypedSelector((state) => state.employee.isAuth);
     const { from, to, monthNames } = useTypedSelector((state) => state.date);
     const [dateInput, setDateInput] = useState<IDateState>({ from, to });
 
