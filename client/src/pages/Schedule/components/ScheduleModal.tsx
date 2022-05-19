@@ -66,7 +66,7 @@ const ScheduleModal: React.FC<IScheduleModalProps> = ({ isOpen, closeModal, sele
                 variables
             });
             await client.refetchQueries({
-                include: ['GET_APPOINTMENTS_BY_DATE']
+                include: ['GET_DAYS_IN_RANGE']
             });
         } catch (e) {
             console.log(e);

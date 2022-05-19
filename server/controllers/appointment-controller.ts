@@ -12,8 +12,8 @@ import log from '../helpers/info';
 
 
 const controllerName = 'AppointmentController.';
-const logInfo = (method: string, message: string): void => {
-    log.info(controllerName + method, message);
+const logInfo = (method: string, message: string, a: any = ''): void => {
+    log.info(controllerName + method, message, a);
 }
 
 interface AppointmentGQLInput {
@@ -79,6 +79,7 @@ class AppointmentController {
 				$push: { appointments: savedAppointment }
 			});
 
+            logInfo('createAppointment', `Saved appointment ${appointment.client}`, savedAppointment);
 			return savedAppointment;
 		} catch (err: any) {
 			log.error(controllerName, err);

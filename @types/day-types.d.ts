@@ -11,6 +11,7 @@ export interface IDayRaw {
     date: number;
     appointments: IAppointmentRaw[];
     dayOff: IDayOffRaw[];
+    isOff?: true | null
 }
 
 export interface IDayOffRaw {

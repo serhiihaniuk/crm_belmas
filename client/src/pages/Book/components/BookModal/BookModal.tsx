@@ -18,7 +18,7 @@ interface IBookModal {
     isOpen: boolean;
     closeModal: () => void;
     bookModalState: IBookModalState;
-    employee: string;
+    employeeID: string;
     apolloClient: IApolloClient;
 }
 
@@ -35,7 +35,7 @@ interface IAppointmentInput {
     time: HourCode;
 }
 
-const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, employee, apolloClient }) => {
+const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, employeeID, apolloClient }) => {
     const gqlRequestOptions = {
         onCompleted: closeModal
     };
@@ -90,7 +90,7 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, e
             date: String(dateToTimestamp(+year, +month - 1, +day, +hour, +minute)),
             monthCode: d.DayCodeToMonthCode(bookModalState.day),
             dayCode: bookModalState.day,
-            employee: employee,
+            employee: employeeID,
             creator: createdBy,
             client: appointmentTemplate.client,
             description: appointmentTemplate.description,
@@ -115,7 +115,7 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, e
                 });
             }
             await apolloClient.refetchQueries({
-                include: ['GET_APPOINTMENTS_BY_DAYS']
+                include: ['GET_DAYS_IN_RANGE']
             });
         } catch (e) {
             console.log(e);
@@ -130,7 +130,7 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, e
                 }
             });
             apolloClient.refetchQueries({
-                include: ['GET_APPOINTMENTS_BY_DAYS']
+                include: ['GET_DAYS_IN_RANGE']
             });
         } catch (e) {
             console.log(e);

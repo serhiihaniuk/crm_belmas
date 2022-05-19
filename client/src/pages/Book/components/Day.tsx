@@ -26,25 +26,39 @@ const divider = css`
 
 interface IDayProps {
     openModal: (bookModalState: IBookModalState) => void;
+    openDayOffModal: (s: string | undefined) => void;
     rows: IAppointment[];
     dayCode: DayCode;
+    isOff?: true | null;
+    dayOffID: string | undefined;
 }
 
-const Day: React.FC<IDayProps> = ({ openModal, rows, dayCode }) => {
+const Day: React.FC<IDayProps> = ({ openModal, openDayOffModal, rows, dayCode, isOff, dayOffID }) => {
+    const addNewAppointmentModal = () => {
+        openModal({ day: dayCode, isEditingExisting: false });
+    };
+
+    const dayOffModalHandler = () => {
+        openDayOffModal(dayOffID);
+    };
+
     return (
         <div className={wrapper}>
             <div className={dayHeader}>
-                <Tag type={'teal'}>{getDayName(dayCode)}</Tag>
-                <Button
-                    onClick={() => {
-                        openModal({ day: dayCode, isEditingExisting: false });
-                    }}
-                    renderIcon={Add16}
-                    iconDescription="Add"
-                    hasIconOnly
-                    size="small"
-                    kind="tertiary"
-                />
+                <Tag type={isOff ? 'cool-gray' : 'teal'} onClick={dayOffModalHandler}>
+                    {isOff && 'Выходной '}
+                    {getDayName(dayCode)}
+                </Tag>
+                {!isOff && (
+                    <Button
+                        onClick={addNewAppointmentModal}
+                        renderIcon={Add16}
+                        iconDescription="Add"
+                        hasIconOnly
+                        size="small"
+                        kind="tertiary"
+                    />
+                )}
             </div>
             {rows.length ? <DayTable rowsData={rows} openModal={openModal} /> : <div className={divider} />}
         </div>

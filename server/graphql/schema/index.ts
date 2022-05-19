@@ -36,10 +36,6 @@ const Types = gql`
 `;
 
 const DayTypes = gql`
-    input DayOffInput {
-        employeeID: String!
-        dayCode: String!
-    }
 
     type DayOff {
         _id: ID!
@@ -51,6 +47,8 @@ const DayTypes = gql`
         _id: ID!
         dayCode: String!
         dayOff: [DayOff!]!
+        appointments: [Appointment!]!
+        isOff: Boolean
     }
 `;
 const Query = gql`
@@ -62,11 +60,11 @@ const Query = gql`
         getMonthStats(monthCode: String!): MonthStats!
         login(login: String!, password: String!): AuthData!
         logout: Boolean!
-        checkAuth: AuthData!
+        checkAuth: AuthData
         getExpensesByMonth(monthCode: String!): [Expense!]!
         getSalaryTableByCode(salaryTableCode: String!): SalaryTable!
         getSalaryTablesByMonth(monthCode: String!): [SalaryTable!]!
-        getDaysInRange(from: String!, to: String!): [Day!]!
+        getDaysInRange(from: String!, to: String!, employeeID: String!): [Day!]!
     }
 `;
 
@@ -82,8 +80,8 @@ const Mutation = gql`
         deleteExpense(ExpenseID: ID!): String!
         addSalaryPayment(SalaryPaymentInput: SalaryPaymentInput!): SalaryPayment!
         deleteSalaryPayment(SalaryPaymentID: ID!): String!
-        createDayOff(DayOffInput: DayOffInput!): DayOff!
-        deleteDayOff(DayOffID: ID!): DayOff
+        createDayOff(employeeID: String!, dayCode: String): DayOff
+        deleteDayOff(dayOffID: String!): DayOff
     }
 `;
 

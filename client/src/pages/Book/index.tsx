@@ -11,6 +11,7 @@ import d from '../../helpers/utils';
 import { IGetEmployeesQuery } from '../../types/employee-types';
 import { IAppointment } from '../../types/appointment-types';
 import { DayCode } from '../../types/date-types';
+import DayOffModal from './components/DayOffModal';
 
 export type IEditingAppointment = {
     selectedAppointment: IAppointment;
@@ -25,13 +26,27 @@ export type IAddingNewAppointment = {
 
 export type IBookModalState = IEditingAppointment | IAddingNewAppointment;
 
+export interface IDayOffModalState {
+    dayCode: DayCode;
+    employeeID: string;
+    dayOffID: string | undefined
+}
+
 const Book: React.FC = () => {
-    const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isOpenDayOffModal, setIsOpenDayOffModal] = useState(false);
+    const [isOpenBookModal, setIsOpenBookModal] = useState(false);
     const [bookModalState, setBookModalState] = useState<IBookModalState>({
         day: '' as DayCode,
         isEditingExisting: false
     });
-    const [employee, setEmployee] = useState<string>('');
+
+    const [dayOffModalState, setDayOffModalState] = useState<IDayOffModalState>({
+        dayCode: '2022-01-01',
+        employeeID: '',
+        dayOffID: undefined
+    })
+
+    const [employeeID, setEmployeeID] = useState<string>('');
     const [selectedTab, setSelectedTab] = useState<number>(0);
     const { from, to } = useTypedSelector((state) => state.date);
 
@@ -45,17 +60,26 @@ const Book: React.FC = () => {
 
     useEffect(() => {
         if (employeesData) {
-            setEmployee(employeesData?.getEmployees[selectedTab]._id);
+            setEmployeeID(employeesData?.getEmployees[selectedTab]._id);
         }
     }, [employeesData, selectedTab]);
 
     const openModal = (BookModalState: IBookModalState) => {
-        setIsOpenModal(true);
+        setIsOpenBookModal(true);
         setBookModalState(BookModalState);
     };
+
+    const openDayOffModal = (dayOffModalState: IDayOffModalState) => {
+        setIsOpenDayOffModal(true)
+        setDayOffModalState(dayOffModalState)
+    }
     const closeModal = () => {
-        setIsOpenModal(false);
+        setIsOpenBookModal(false);
     };
+
+    const closeDayOffModal = () => {
+        setIsOpenDayOffModal(false)
+    }
     return (
         <>
             <div className={pageWrapper}>
@@ -77,11 +101,11 @@ const Book: React.FC = () => {
                                             <>
                                                 {selected && (
                                                     <TabTemplate
-                                                        selected={selected}
                                                         employeeID={employee._id}
                                                         dateFrom={d.DateObjectToDayCode(from)}
                                                         dateTo={d.DateObjectToDayCode(to)}
                                                         openModal={openModal}
+                                                        openDayOffModal={openDayOffModal}
                                                     />
                                                 )}
                                             </>
@@ -95,13 +119,21 @@ const Book: React.FC = () => {
             </div>
             <ApolloConsumer>
                 {(client) => (
-                    <BookModal
-                        apolloClient={client as IApolloClient}
-                        closeModal={closeModal}
-                        isOpen={isOpenModal}
-                        bookModalState={bookModalState}
-                        employee={employee}
-                    />
+                    <>
+                        <BookModal
+                            apolloClient={client as IApolloClient}
+                            closeModal={closeModal}
+                            isOpen={isOpenBookModal}
+                            bookModalState={bookModalState}
+                            employeeID={employeeID}
+                        />
+                        <DayOffModal
+                            apolloClient={client as IApolloClient}
+                            closeModal={closeDayOffModal}
+                            isOpen={isOpenDayOffModal}
+                            dayOffModalState={dayOffModalState}
+                        />
+                    </>
                 )}
             </ApolloConsumer>
         </>

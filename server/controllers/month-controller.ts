@@ -7,8 +7,8 @@ import d from '../helpers/d';
 import log from '../helpers/info';
 
 const controllerName = 'MonthController.';
-const logInfo = (method: string, message: string): void => {
-	log.info(`${controllerName}${method}`, message);
+const logInfo = (method: string, message: string, a:any=''): void => {
+	log.info(`${controllerName}${method}`, message, a);
 };
 type MonthMongooseResponse = Document<any, any, MonthRaw> & MonthRaw & { _id: string };
 
@@ -58,7 +58,7 @@ class MonthController {
 			}
 
 			const newMonthLatest = await MonthController.getMonthByCode(monthCode);
-			logInfo('createMonth', `newMonth: ${JSON.stringify(newMonthLatest)}`);
+			logInfo('createMonth', `Success! newMonth:`, newMonthLatest);
 
 			return newMonthLatest;
 		} catch (e) {
@@ -68,7 +68,7 @@ class MonthController {
 	}
 
 	static async getMonthStats(monthCode: MonthCode): Promise<MonthMongooseResponse> {
-		logInfo('getMonthStats', `monthCode: ${monthCode}`);
+		logInfo('getMonthStats', `Start! monthCode: ${monthCode}`);
 
 		try {
 			await MonthController.getMonthByCode(monthCode)
@@ -78,8 +78,8 @@ class MonthController {
 				.populate('salaryTables');
 
 			if (!month) {
-				log.error(`${controllerName}getMonthStats`, `Month not found`);
-				month = await MonthController.createMonth(monthCode);
+				log.error(`${controllerName}getMonthStats`, `Month not found, creatin`);
+                throw new Error('month not found')
 			}
 			const totalEarnings = month.appointments.reduce(
 				//@ts-ignore
@@ -145,7 +145,7 @@ class MonthController {
 			);
 			if (!updatedMonth) throw new Error('Month not found');
 
-			logInfo('getMonthStats', `updatedMonth: ${JSON.stringify(updatedMonth.month)}`);
+			logInfo('getMonthStats', `updatedMonth: Success! ${monthCode}`);
 			return updatedMonth;
 		} catch (e) {
 			log.error(`${controllerName}getMonthStats`, `Error: ${e}`);

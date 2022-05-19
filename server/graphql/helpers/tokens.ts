@@ -13,14 +13,12 @@ export const generateTokens = (payload: JWTPayload) => {
         throw new Error('No access or refresh token secret');
     }
 
-    const accessToken = jwt.sign(payload, accessTokenVar, {
-        expiresIn: '22d'
-    });
+    const accessToken = jwt.sign(payload, accessTokenVar);
     // const refreshToken = jwt.sign(payload, refreshTokenVar, {
     //     expiresIn: '22d'
     // });
 
-    log.info('generateTokens', `Generated tokens for user ${payload.name}`);
+    log.info('generateTokens', `Generated tokens for user ${payload.name}`, accessToken);
 
     return {accessToken};
 };

@@ -25,13 +25,18 @@ interface IDayProps {
     openModal: (day: IScheduleAppointment) => void;
     rows: IScheduleAppointment[];
     day: DayCode;
+    isOff?: true | null
 }
 
-const Day: React.FC<IDayProps> = ({ openModal, rows, day }) => {
+const Day: React.FC<IDayProps> = ({ openModal, rows, day, isOff }) => {
     return (
         <div className={wrapper}>
             <div className={dayHeader}>
-                <Tag type={'teal'}>{getDayName(day)}</Tag>
+                <Tag type={isOff ? 'cool-gray' :'teal'}>
+                    {isOff && 'Выходной '}
+                    {getDayName(day)}
+
+                </Tag>
             </div>
             {rows.length ? <DayTable rowsData={rows} openModal={openModal} /> : <div className={divider} />}
         </div>

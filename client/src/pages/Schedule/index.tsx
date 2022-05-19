@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Day from './components/Day';
 import ScheduleModal from './components/ScheduleModal';
-import { pageWrapper } from '../../globalStyles';
-import { ApolloConsumer, useQuery } from '@apollo/client';
-import { GET_APPOINTMENTS_BY_DAYS } from '../../gql/query/appointment';
-import { InlineLoading } from 'carbon-components-react';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
-import { makeScheduleTableRows } from './service/tableService';
-import { IAppointmentGroupByDateQuery, IScheduleAppointment } from '../../types/appointment-types';
+import {loadingCSS, pageWrapper} from '../../globalStyles';
+import {ApolloConsumer, useQuery} from '@apollo/client';
+import {InlineLoading} from 'carbon-components-react';
+import {useTypedSelector} from '../../hooks/useTypedSelector';
+import {makeScheduleTableRows} from './service/tableService';
+import {IScheduleAppointment} from '../../types/appointment-types';
 import d from '../../helpers/utils';
-import { loadingCSS } from '../../globalStyles';
+import {IGetDaysInRange} from '../../types/day-types';
+import {GET_DAYS_IN_RANGE} from '../../gql/query/days';
 
 const Schedule = () => {
     const [open, setOpen] = React.useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState<IScheduleAppointment | null>(null);
-    const { from, to } = useTypedSelector((state) => state.date);
+    const {from, to} = useTypedSelector((state) => state.date);
     const openModal = (appointment: IScheduleAppointment) => {
         setOpen(true);
         setSelectedAppointment(appointment);
@@ -22,24 +22,31 @@ const Schedule = () => {
     const closeModal = () => setOpen(false);
 
     const employeeID = useTypedSelector((state) => state.employee._id);
-    const { data: appointmentsByDays, loading, refetch } = useQuery<IAppointmentGroupByDateQuery>(GET_APPOINTMENTS_BY_DAYS, {
+    const {
+        data: appointmentsByDays,
+        loading,
+        refetch
+    } = useQuery<IGetDaysInRange>(GET_DAYS_IN_RANGE, {
         variables: {
-            AppointmentsByDatesInput: {
-                employee: employeeID,
-                dateFrom: d.DateObjectToDayCode(from),
-                dateTo: d.DateObjectToDayCode(to)
-            }
+            employeeID: employeeID,
+            from: d.DateObjectToDayCode(from),
+            to: d.DateObjectToDayCode(to)
         }
     });
+
+    useEffect(() => {
+        refetch();
+    });
+
     if (loading || !appointmentsByDays) {
         return (
             <div className={pageWrapper}>
-                <InlineLoading description="Загрузка" className={loadingCSS} />
+                <InlineLoading description="Загрузка" className={loadingCSS}/>
             </div>
         );
     }
 
-    if ( !appointmentsByDays) {
+    if (!appointmentsByDays) {
         return (
             <div className={pageWrapper}>
                 <button onClick={refetch}>Refetch</button>
@@ -49,9 +56,9 @@ const Schedule = () => {
     return (
         <>
             <div className={pageWrapper}>
-                {appointmentsByDays.getAppointmentsByDate.map(({ date, appointments }) => {
+                {appointmentsByDays.getDaysInRange.map(({dayCode, appointments, isOff}) => {
                     const rows = makeScheduleTableRows(appointments);
-                    return <Day key={date} openModal={openModal} rows={rows} day={date} />;
+                    return <Day key={dayCode} openModal={openModal} rows={rows} day={dayCode} isOff={isOff}/>;
                 })}
             </div>
             <ApolloConsumer>
