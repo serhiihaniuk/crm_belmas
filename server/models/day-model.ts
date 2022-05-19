@@ -25,6 +25,9 @@ const daySchema = new Schema<IDayRaw>({
         type: Number,
         required: true
     },
+    isOff: {
+        type: Boolean,
+    },
 	appointments: [
 		{
 			type: Schema.Types.ObjectId,

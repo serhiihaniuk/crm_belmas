@@ -1,5 +1,6 @@
-import { IAppointment, IAppointmentRaw } from '../../../types/appointment-types';
+import { IAppointment } from '../../../types/appointment-types';
 import { HourCode } from '../../../types/date-types';
+import { IAppointmentRaw } from '../../../../../@types/appointment-types';
 
 export const headers = [
     {
@@ -25,9 +26,11 @@ export function makeRows(appointments: IAppointmentRaw[]): IAppointment[] {
             procedure: appointment.procedure,
             description: appointment.description,
             instagram: appointment.instagram,
-            date: appointment.date,
-            employee: appointment.employee,
-            status: appointment.status
+            date: appointment.date as unknown as number,
+            employee: appointment.employee._id,
+            status: appointment.status,
+            cash: appointment.cash,
+            cashless: appointment.cashless
         };
     });
 }

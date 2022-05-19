@@ -1,5 +1,6 @@
-import { IAppointmentRaw, IScheduleAppointment } from '../../../types/appointment-types';
+import { IScheduleAppointment } from '../../../types/appointment-types';
 import { HourCode } from '../../../types/date-types';
+import { IAppointmentRaw } from '../../../../../@types/appointment-types';
 
 export const headers = [
     {
@@ -30,7 +31,7 @@ export function makeScheduleTableRows(appointments: IAppointmentRaw[]): ISchedul
             cash: appointment.cash || 0,
             cashless: appointment.cashless || 0,
             description: appointment.description || '',
-            employee: appointment.employee,
+            employee: appointment.employee._id,
             status: appointment.status,
             paymentMethod: appointment.paymentMethod || ''
         };

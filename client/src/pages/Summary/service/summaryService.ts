@@ -1,4 +1,5 @@
-import { IAppointmentGroupByDate, IAppointmentRaw } from '../../../types/appointment-types';
+import { IAppointmentGroupByDate } from '../../../types/appointment-types';
+import {IAppointmentRaw} from "../../../../../@types/appointment-types";
 
 export const headers = [
     {

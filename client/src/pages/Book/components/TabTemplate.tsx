@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeRows } from '../service/tableService';
 import Day from './Day';
 import { useQuery } from '@apollo/client';
-import { GET_APPOINTMENTS_BY_DAYS } from '../../../gql/query/appointment';
 import { InlineLoading } from 'carbon-components-react';
 import { css } from '@emotion/css';
-import { IAppointmentGroupByDateQuery } from '../../../types/appointment-types';
-import { IBookModalState } from '../index';
+import { IBookModalState, IDayOffModalState } from '../index';
 import { IEmployeeId } from '../../../types/employee-types';
 import { DayCode } from '../../../types/date-types';
+import { GET_DAYS_IN_RANGE } from '../../../gql/query/days';
+import { IGetDaysInRange } from '../../../types/day-types';
 
 const loadingCSS = css`
     display: flex;
@@ -18,37 +18,61 @@ const loadingCSS = css`
 `;
 
 interface TabTemplateProps {
-    selected: boolean;
     openModal: (bookModalState: IBookModalState) => void;
+    openDayOffModal: (dayOffModalState: IDayOffModalState) => void;
     employeeID: IEmployeeId;
     dateFrom: DayCode;
     dateTo: DayCode;
 }
 
-const TabTemplate: React.FC<TabTemplateProps> = ({ selected, openModal, employeeID, dateFrom, dateTo }) => {
-    const { data: appointmentsByDays, loading } = useQuery<IAppointmentGroupByDateQuery>(GET_APPOINTMENTS_BY_DAYS, {
+const TabTemplate: React.FC<TabTemplateProps> = ({ openModal, openDayOffModal, employeeID, dateFrom, dateTo }) => {
+    const {
+        data: daysInRange,
+        loading,
+        refetch
+    } = useQuery<IGetDaysInRange>(GET_DAYS_IN_RANGE, {
         variables: {
-            AppointmentsByDatesInput: {
-                employee: employeeID,
-                dateFrom: dateFrom,
-                dateTo: dateTo
-            }
+            from: dateFrom,
+            to: dateTo,
+            employeeID: employeeID
         }
     });
+
+    useEffect(() => {
+        //@todo: setup proper cache merge
+        refetch();
+    }, [refetch, employeeID]);
 
     if (loading) {
         return <InlineLoading className={loadingCSS} description="Загрузка" />;
     }
 
-    if (!appointmentsByDays) {
+    if (!daysInRange) {
         return <div>Error while loading appointments</div>;
     }
 
     return (
         <>
-            {appointmentsByDays.getAppointmentsByDate.map(({ date, appointments }) => {
+            {daysInRange.getDaysInRange.map(({ dayCode, appointments, isOff, dayOff }) => {
                 const rows = makeRows(appointments);
-                return <Day key={date} openModal={openModal} rows={rows} dayCode={date} />;
+                const openDOModalHandler = (dayOffID: string | undefined) => {
+                    openDayOffModal({
+                        dayCode: dayCode,
+                        employeeID: employeeID,
+                        dayOffID: dayOffID
+                    });
+                };
+                return (
+                    <Day
+                        key={dayCode}
+                        openModal={openModal}
+                        openDayOffModal={openDOModalHandler}
+                        rows={rows}
+                        dayCode={dayCode}
+                        isOff={isOff}
+                        dayOffID={dayOff[0]?._id}
+                    />
+                );
             })}
         </>
     );

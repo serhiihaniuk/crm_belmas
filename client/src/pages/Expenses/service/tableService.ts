@@ -17,11 +17,11 @@ export const headers = [
         header: 'Кат'
     },
     {
-        key: 'cash',
+        key: 'payedCash',
         header: 'Нал'
     },
     {
-        key: 'cashless',
+        key: 'payedCashless',
         header: 'Безнал'
     }
 ];
@@ -34,15 +34,15 @@ export function CreateExpensesRows(expenses: IExpenseRaw[]): IExpense[] {
 
 export const salaryTableHeaders = [
     {
-        key: 'date',
+        key: 'dayCode',
         header: 'Дата'
     },
     {
-        key: 'cash',
+        key: 'payedCash',
         header: 'Нал'
     },
     {
-        key: 'cashless',
+        key: 'payedCashless',
         header: 'Безнал'
     }
 ];

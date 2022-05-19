@@ -54,7 +54,7 @@ const logout = async (parent, args, { res }) => {
 
 const checkAuth = async (parent, args, { req, res }) => {
 	const token = req.headers.authorization.split(' ')[1];
-
+    if (!token) return false
 	const verifyJWT = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
 	const employee = await Employee.findOne({ _id: verifyJWT.id });

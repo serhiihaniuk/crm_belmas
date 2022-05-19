@@ -76,17 +76,13 @@ export function getDateFromDateObject(dateObject: IDate): Date {
     return new Date(+dateObject.YYYY, +dateObject.MM - 1, +dateObject.DD, +dateObject.HH, +dateObject.mm);
 }
 
-
-export function timestampToDate(timestamp: number, expectedType: "MonthCode"): MonthCode
-export function timestampToDate(timestamp: number, expectedType: "DayCode"): DayCode
-export function timestampToDate<T>(
-    timestamp: number,
-    expectedType: 'MonthCode' | 'DayCode',
-): MonthCode | DayCode {
+export function timestampToDate(timestamp: number, expectedType: 'MonthCode'): MonthCode;
+export function timestampToDate(timestamp: number, expectedType: 'DayCode'): DayCode;
+export function timestampToDate<T>(timestamp: number, expectedType: 'MonthCode' | 'DayCode'): MonthCode | DayCode {
     const dateObject = getDateObject(timestamp);
-    if(expectedType === 'MonthCode') {
-       return DateObjectToMonthCode(dateObject);
-    } else  {
+    if (expectedType === 'MonthCode') {
+        return DateObjectToMonthCode(dateObject);
+    } else {
         return DateObjectToDayCode(dateObject);
     }
 }
@@ -99,7 +95,12 @@ function DateObjectToDayCode(dateObject: IDate): DayCode {
     return `${dateObject.YYYY}-${dateObject.MM}-${dateObject.DD}` as DayCode;
 }
 
-function TimestampToDayCode(timestamp: string | number): DayCode {
+
+function TimestampToDayCode(timestamp: string | number | Date): DayCode {
+    if(timestamp instanceof Date) {
+        const dateObject = getDateObject(timestamp.getTime());
+        return DateObjectToDayCode(dateObject);
+    }
     const dateObject = getDateObject(+timestamp);
     return DateObjectToDayCode(dateObject);
 }

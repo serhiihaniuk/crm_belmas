@@ -50,7 +50,7 @@ const Root: React.FC = ({ children }) => {
         link: authLink.concat(onErrorLink.concat(httpLink)),
         credentials: 'include',
         connectToDevTools: workingMode === 'development',
-        cache: new InMemoryCache({})
+        cache: new InMemoryCache()
     });
     return (
         <ApolloProvider client={client}>

@@ -6,6 +6,6 @@ function info(message: string): void {
 	console.log(`%c info: ${message}`, consoleLogStyles);
 }
 
-log.heading = new Date().toISOString();
+log.heading = '';
 
 export default log;
