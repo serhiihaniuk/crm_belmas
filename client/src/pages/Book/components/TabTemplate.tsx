@@ -5,7 +5,6 @@ import { useQuery } from '@apollo/client';
 import { InlineLoading } from 'carbon-components-react';
 import { css } from '@emotion/css';
 import { IBookModalState, IDayOffModalState } from '../index';
-import { IEmployeeId } from '../../../types/employee-types';
 import { DayCode } from '../../../types/date-types';
 import { GET_DAYS_IN_RANGE } from '../../../gql/query/days';
 import { IGetDaysInRange } from '../../../types/day-types';
@@ -21,7 +20,7 @@ const loadingCSS = css`
 interface TabTemplateProps {
     openModal: (bookModalState: IBookModalState) => void;
     openDayOffModal: (dayOffModalState: IDayOffModalState) => void;
-    employeeID: IEmployeeId;
+    employeeID: string;
     dateFrom: DayCode;
     dateTo: DayCode;
 }

@@ -6,6 +6,7 @@ export const GET_EMPLOYEES = gql`
             name
             _id
             position
+            occupation
             qualification
             role
             login

@@ -20,5 +20,5 @@ export interface IEmployee {
     occupation: OccupationType
     role: IEmployeeRole;
     login: IEmployeeLogin;
-    password: string | null;
+    password?: string | null;
 }

@@ -141,8 +141,6 @@ class AppointmentController {
 				new: true
 			}).populate('procedure');
 
-			logInfo('a', 'a', updatedAppointment);
-
 			if (!updatedAppointment) {
 				log.error(controllerName + 'updateAppointment', 'Error while updating appointment');
 				throw new Error('Appointment not found');
