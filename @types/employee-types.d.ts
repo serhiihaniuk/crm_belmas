@@ -1,6 +1,4 @@
-export interface IGetEmployeesQuery {
-    getEmployees: IEmployee[];
-}
+import {OccupationType} from "./procedure-types";
 
 export type IEmployeeId = string;
 export type IEmployeeName = string;
@@ -19,6 +17,7 @@ export interface IEmployee {
     _id: IEmployeeId;
     position: IEmployeePosition;
     qualification: IEmployeeQualification;
+    occupation: OccupationType
     role: IEmployeeRole;
     login: IEmployeeLogin;
     password: string | null;

@@ -1,4 +1,4 @@
-import mongoose, {HydratedDocument} from 'mongoose';
+import mongoose from 'mongoose';
 import { IAppointmentRaw } from 'appointment-types';
 
 const Schema = mongoose.Schema;
@@ -11,6 +11,10 @@ const appointmentSchema = new Schema<IAppointmentRaw>({
 	description: {
 		type: String
 	},
+    typeOf: {
+      type: String,
+      required: true
+    },
 	time: {
 		type: String,
 		required: true
@@ -34,7 +38,8 @@ const appointmentSchema = new Schema<IAppointmentRaw>({
 		type: String
 	},
 	procedure: {
-		type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Procedure',
 		required: true
 	},
 	status: {
@@ -64,6 +69,5 @@ const appointmentSchema = new Schema<IAppointmentRaw>({
 		required: true
 	}
 });
-
 
 export default mongoose.model<IAppointmentRaw>('Appointment', appointmentSchema);

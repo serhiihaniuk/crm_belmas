@@ -22,7 +22,6 @@ export const GET_APPOINTMENTS_BY_DAYS = gql`
                 paymentMethod
                 date
                 instagram
-                procedure
                 description
                 time
                 monthCode,

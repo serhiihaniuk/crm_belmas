@@ -9,12 +9,13 @@ import { MonthRaw } from 'month-types';
 import { DayCode, HourCode, MonthCode } from 'date-types';
 import { MongoResponse } from './controller-types';
 import log from '../helpers/info';
-
+import { IProcedureCodes, IProcedureRaw, OccupationType } from 'procedure-types';
+import Procedure from '../models/procedure-model';
 
 const controllerName = 'AppointmentController.';
 const logInfo = (method: string, message: string, a: any = ''): void => {
-    log.info(controllerName + method, message, a);
-}
+	log.info(controllerName + method, message, a);
+};
 
 interface AppointmentGQLInput {
 	client: string;
@@ -22,7 +23,7 @@ interface AppointmentGQLInput {
 	date: string;
 	time: HourCode;
 	instagram: string;
-	procedure: string;
+	procedureCode: IProcedureCodes;
 	employee: string;
 	creator: string;
 	monthCode: MonthCode;
@@ -35,10 +36,12 @@ interface AppointmentByDatesGQLInput {
 	employee?: string;
 }
 
-type AppointmentMongoInput = Omit<AppointmentGQLInput, 'date'> & {
+type AppointmentMongoInput = Omit<AppointmentGQLInput, 'date' | 'procedureCode'> & {
 	status: 'booked' | 'finished';
 	date: number;
 	month: MonthRaw;
+	procedure: IProcedureRaw;
+	typeOf: OccupationType;
 };
 
 class AppointmentController {
@@ -47,18 +50,26 @@ class AppointmentController {
 	}: {
 		AppointmentInput: AppointmentGQLInput;
 	}): Promise<MongoResponse<IAppointmentRaw>> {
-
-        logInfo('createAppointment', `Creating appointment for ${JSON.stringify(AppointmentInput)}`);
+		logInfo('createAppointment', `Creating appointment for ${JSON.stringify(AppointmentInput)}`);
 
 		try {
 			const month = await MonthController.getMonthByCode(AppointmentInput.monthCode);
+			const procedure = await Procedure.findOne({
+				procedureCode: AppointmentInput.procedureCode
+			});
+
+			if (!procedure) {
+				throw new Error('Procedure not found');
+			}
+
 			const appointmentMongoInput: AppointmentMongoInput = {
 				client: AppointmentInput.client,
+				typeOf: procedure.typeOf,
 				description: AppointmentInput.description,
 				time: AppointmentInput.time,
 				date: Number(AppointmentInput.date),
 				instagram: AppointmentInput.instagram,
-				procedure: AppointmentInput.procedure,
+				procedure: procedure._id,
 				employee: AppointmentInput.employee,
 				creator: AppointmentInput.creator,
 				status: 'booked',
@@ -67,6 +78,7 @@ class AppointmentController {
 				dayCode: AppointmentInput.dayCode
 			};
 
+			log.warn('123123123123123', AppointmentInput.procedureCode, appointmentMongoInput);
 			const appointment = new Appointment(appointmentMongoInput);
 
 			const savedAppointment = await appointment.save();
@@ -79,7 +91,7 @@ class AppointmentController {
 				$push: { appointments: savedAppointment }
 			});
 
-            logInfo('createAppointment', `Saved appointment ${appointment.client}`, savedAppointment);
+			logInfo('createAppointment', `Saved appointment ${appointment.client}`, savedAppointment);
 			return savedAppointment;
 		} catch (err: any) {
 			log.error(controllerName, err);
@@ -94,26 +106,42 @@ class AppointmentController {
 		appointmentID: string;
 		AppointmentInput: AppointmentGQLInput;
 	}): Promise<MongoResponse<IAppointmentRaw>> {
-
-        logInfo('updateAppointment', `Updating appointment ${appointmentID} for ${JSON.stringify(AppointmentInput)}`);
-
-		const appointmentMongoInput: Partial<AppointmentMongoInput> = {
-			client: AppointmentInput.client,
-			description: AppointmentInput.description,
-			time: AppointmentInput.time,
-			date: +AppointmentInput.date,
-			instagram: AppointmentInput.instagram,
-			procedure: AppointmentInput.procedure,
-			employee: AppointmentInput.employee,
-			creator: AppointmentInput.creator,
-			monthCode: AppointmentInput.monthCode,
-			dayCode: AppointmentInput.dayCode
-		};
+		logInfo('updateAppointment', `Updating appointment ${appointmentID} for ${JSON.stringify(AppointmentInput)}`);
 
 		try {
+			let procedure;
+
+			if (AppointmentInput.procedureCode) {
+				procedure = await Procedure.findOne({
+					procedureCode: AppointmentInput.procedureCode
+				});
+
+				if (!procedure) {
+					throw new Error('Procedure not found');
+				}
+			}
+
+			const appointmentMongoInput: Partial<AppointmentMongoInput> = {
+				client: AppointmentInput.client,
+				description: AppointmentInput.description,
+				time: AppointmentInput.time,
+				date: +AppointmentInput.date,
+				instagram: AppointmentInput.instagram,
+				employee: AppointmentInput.employee,
+				creator: AppointmentInput.creator,
+				monthCode: AppointmentInput.monthCode,
+				dayCode: AppointmentInput.dayCode
+			};
+
+			if (procedure) {
+				appointmentMongoInput.procedure = procedure;
+			}
+
 			const updatedAppointment = await Appointment.findByIdAndUpdate(appointmentID, appointmentMongoInput, {
 				new: true
-			});
+			}).populate('procedure');
+
+			logInfo('a', 'a', updatedAppointment);
 
 			if (!updatedAppointment) {
 				log.error(controllerName + 'updateAppointment', 'Error while updating appointment');
@@ -138,8 +166,7 @@ class AppointmentController {
 		cashless: number;
 		paymentMethod: string;
 	}): Promise<MongoResponse<IAppointmentRaw>> {
-
-        logInfo('calculateAppointment', `Calculating appointment ${id}`);
+		logInfo('calculateAppointment', `Calculating appointment ${id}`);
 
 		const appointment: Partial<IAppointmentRaw> = {
 			cash,
@@ -161,8 +188,7 @@ class AppointmentController {
 	}
 
 	async deleteAppointment({ id }: { id: string }): Promise<string> {
-
-        logInfo('deleteAppointment', `Deleting appointment ${id}`);
+		logInfo('deleteAppointment', `Deleting appointment ${id}`);
 
 		try {
 			const deletedAppointment = await Appointment.findByIdAndDelete(id);
@@ -192,8 +218,7 @@ class AppointmentController {
 	}
 
 	async getAppointmentsTotalPrice({ dateFrom, dateTo }: { dateFrom: number; dateTo: number }) {
-
-        logInfo('getAppointmentsTotalPrice', `Getting appointments total price from ${dateFrom} to ${dateTo}`);
+		logInfo('getAppointmentsTotalPrice', `Getting appointments total price from ${dateFrom} to ${dateTo}`);
 
 		try {
 			const match = {
@@ -236,22 +261,19 @@ class AppointmentController {
 		}
 	}
 
+	async getAppointments(dateFrom: DayCode, dateTo: DayCode) {
+		logInfo('getAppointments', `Getting appointments from ${dateFrom} to ${dateTo}`);
+	}
 
-
-    async getAppointments(dateFrom: DayCode, dateTo: DayCode) {
-
-        logInfo('getAppointments', `Getting appointments from ${dateFrom} to ${dateTo}`);
-
-
-
-    }
 	async getAppointmentsByDate({
 		AppointmentsByDatesInput
 	}: {
 		AppointmentsByDatesInput: AppointmentByDatesGQLInput;
 	}) {
-
-        logInfo('getAppointmentsByDate', `Getting appointments by date from ${AppointmentsByDatesInput.dateFrom} to ${AppointmentsByDatesInput.dateTo}`);
+		logInfo(
+			'getAppointmentsByDate',
+			`Getting appointments by date from ${AppointmentsByDatesInput.dateFrom} to ${AppointmentsByDatesInput.dateTo}`
+		);
 
 		interface IMatch {
 			date: {

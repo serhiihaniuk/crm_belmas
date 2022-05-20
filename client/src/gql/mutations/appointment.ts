@@ -19,7 +19,12 @@ export const UPDATE_APPOINTMENT = gql`
             paymentMethod
             date
             instagram
-            procedure
+            procedure {
+                typeOf
+                procedure
+                duration
+                procedureCode
+            }
             description
             time
             employee {
