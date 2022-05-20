@@ -1,9 +1,9 @@
-import { IProcedureRaw } from '../../../../../@types/procedure-types';
 import { SelectItem } from 'carbon-components-react';
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { IGetProcedures } from '../../../types/procedure-types';
 import { GET_PROCEDURES } from '../../../gql/query/procedures';
+import {IProcedureRaw} from "procedure-types";
+import {IGetProcedures} from "../../../types/procedure-types";
 
 function mapProceduresToPicker(procedures: IProcedureRaw[] | undefined, occupation: string): any {
     if (!procedures) return null;

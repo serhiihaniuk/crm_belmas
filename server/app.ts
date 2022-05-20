@@ -12,12 +12,12 @@ import log from './helpers/info';
 import dotenv from 'dotenv';
 
 dotenv.config();
-const workingMode = process.env.NODE_ENV;
+const workingMode = process.env.NODE_ENV || 'http://localhost:3002'
 log.info('app',`Working mode: ${workingMode}`);
 
 const corsOptions = {
 	credentials: true,
-	origin: 'http://localhost:3002'
+	origin: 'http://localhost:3000'
 };
 const app = express();
 app.use(express.json());
@@ -49,7 +49,7 @@ startApolloServer().then(() => {
 });
 
 let db;
-const dataBaseURI: any = workingMode === 'production' ? process.env.MONGO_URI_LOCAL : process.env.MONGO_URI_DEVELOPMENT;
+const dataBaseURI = "mongodb://admin_bns:password@localhost:27017"
 log.info('app','connecting to database ' + dataBaseURI);
 
 async function startDB() {

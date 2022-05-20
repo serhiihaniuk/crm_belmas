@@ -1,4 +1,5 @@
-import { IEmployee } from '../../../@types/employee-types';
+import {IEmployee} from "employee-types";
+
 
 export interface IGetEmployeesQuery {
     getEmployees: IEmployee[];

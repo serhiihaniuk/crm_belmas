@@ -1,4 +1,4 @@
-import {IEmployee} from "../../../../@types/employee-types";
+import {IEmployee} from "employee-types";
 
 
 export enum EmployeeActionTypes {

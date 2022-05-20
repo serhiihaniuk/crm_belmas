@@ -4,6 +4,7 @@ ENV NODE_ENV production
 WORKDIR /usr/src/bns_server
 
 COPY . .
-RUN npm install --production
+RUN npm i
+RUN npm run build
 
-CMD [ "node", "app.js" ]
+CMD [ "node", "./dist/app.js" ]
