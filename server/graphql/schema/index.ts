@@ -194,6 +194,7 @@ const EmployeeTypes = gql`
 		_id: ID!
 		name: String!
 		position: String!
+        occupation: String!
 		qualification: String!
 		role: [String!]!
 		login: String!

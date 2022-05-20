@@ -14,12 +14,14 @@ import { bookModalForm, deleteBtn, errorSpan, timePickerCss } from './BookModal.
 import { IBookModalState } from '../../index';
 import { DayCode, HourCode, MonthCode } from '../../../../types/date-types';
 import { useProcedures } from '../../service/useProcedures';
+import { OccupationType } from '../../../../../../@types/procedure-types';
 
 interface IBookModal {
     isOpen: boolean;
     closeModal: () => void;
     bookModalState: IBookModalState;
     employeeID: string;
+    employeeOccupation: OccupationType;
     apolloClient: IApolloClient;
 }
 
@@ -36,7 +38,14 @@ interface IAppointmentInput {
     time: HourCode;
 }
 
-const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, employeeID, apolloClient }) => {
+const BookModal: React.FC<IBookModal> = ({
+    isOpen,
+    closeModal,
+    employeeOccupation,
+    bookModalState,
+    employeeID,
+    apolloClient
+}) => {
     const gqlRequestOptions = {
         onCompleted: closeModal
     };
@@ -63,7 +72,7 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, e
     const [updateAppointment, { loading: uaLoading }] = useMutation(UPDATE_APPOINTMENT, gqlRequestOptions);
     const [deleteAppointment, { loading: daLoading }] = useMutation(DELETE_APPOINTMENT, gqlRequestOptions);
     const [showDeleteBtn, setShowDeleteBtn] = React.useState(false);
-    const proceduresSelectItems = useProcedures();
+    const proceduresSelectItems = useProcedures(employeeOccupation);
 
     useEffect(() => {
         if (bookModalState.isEditingExisting) {

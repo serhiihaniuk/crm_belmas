@@ -1,4 +1,5 @@
-import { IEmployee } from '../../types/employee-types';
+import {IEmployee} from "../../../../@types/employee-types";
+
 
 export enum EmployeeActionTypes {
     SET_EMPLOYEE = 'SET_EMPLOYEE'
@@ -19,6 +20,7 @@ const initialState: IEmployeeState = {
     position: '',
     qualification: '',
     role: [],
+    occupation: 'none',
     login: '',
     isAuth: false
 };

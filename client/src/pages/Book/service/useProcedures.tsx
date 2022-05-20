@@ -1,24 +1,32 @@
-import {IProcedureRaw} from "../../../../../@types/procedure-types";
-import {SelectItem} from "carbon-components-react";
-import React from "react";
-import {useQuery} from "@apollo/client";
-import {IGetProcedures} from "../../../types/procedure-types";
-import {GET_PROCEDURES} from "../../../gql/query/procedures";
-import loading from 'carbon-components/components/loading/loading';
+import { IProcedureRaw } from '../../../../../@types/procedure-types';
+import { SelectItem } from 'carbon-components-react';
+import React, { useEffect, useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { IGetProcedures } from '../../../types/procedure-types';
+import { GET_PROCEDURES } from '../../../gql/query/procedures';
 
- function mapProceduresToPicker(procedures: IProcedureRaw[] | undefined):  JSX.Element[] | null {
-    if(!procedures) return null
-    return procedures.map(p=><SelectItem key={p.procedureCode} value={p.procedureCode} text={p.procedure} />)
+function mapProceduresToPicker(procedures: IProcedureRaw[] | undefined, occupation: string): any {
+    if (!procedures) return null;
+    const items = procedures.map((p) => {
+        if (p.typeOf !== occupation) return null;
+        return <SelectItem key={p.procedureCode} value={p.procedureCode} text={p.procedure} />;
+    });
+
+    return items;
 }
 
+export const useProcedures = (occupation: string) => {
+    const [items, setItems] = useState(null);
+    const { data, loading } = useQuery<IGetProcedures>(GET_PROCEDURES);
 
+    useEffect(() => {
+        if (data) {
+            setItems(mapProceduresToPicker(data.getProcedures, occupation));
+        }
+    }, [occupation, data]);
 
-export const useProcedures = () => {
-    const {data, loading} = useQuery<IGetProcedures>(GET_PROCEDURES)
+    if (loading) return null;
+    if (!data) return null;
 
-    if(loading) return null
-    if(!data) return null
-
-    return mapProceduresToPicker(data.getProcedures)
-
-}
+    return items;
+};

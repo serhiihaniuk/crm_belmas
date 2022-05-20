@@ -12,6 +12,10 @@ const EmployeeSchema = new Schema<IEmployee>({
 		type: String,
 		required: true
 	},
+    occupation: {
+        type: String,
+        required: true
+    },
 	qualification: {
 		type: String,
 		required: true

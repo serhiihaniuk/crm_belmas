@@ -12,6 +12,7 @@ import { IGetEmployeesQuery } from '../../types/employee-types';
 import { IAppointment } from '../../types/appointment-types';
 import { DayCode } from '../../types/date-types';
 import DayOffModal from './components/DayOffModal';
+import {OccupationType} from "../../../../@types/procedure-types";
 
 export type IEditingAppointment = {
     selectedAppointment: IAppointment;
@@ -47,6 +48,7 @@ const Book: React.FC = () => {
     })
 
     const [employeeID, setEmployeeID] = useState<string>('');
+    const [employeeOccupation, setEmployeeOccupation] = useState<OccupationType>('none')
     const [selectedTab, setSelectedTab] = useState<number>(0);
     const { from, to } = useTypedSelector((state) => state.date);
 
@@ -61,6 +63,7 @@ const Book: React.FC = () => {
     useEffect(() => {
         if (employeesData) {
             setEmployeeID(employeesData?.getEmployees[selectedTab]._id);
+            setEmployeeOccupation(employeesData?.getEmployees[selectedTab].occupation)
         }
     }, [employeesData, selectedTab]);
 
@@ -133,6 +136,7 @@ const Book: React.FC = () => {
                             isOpen={isOpenBookModal}
                             bookModalState={bookModalState}
                             employeeID={employeeID}
+                            employeeOccupation={employeeOccupation}
 
                         />
                         <DayOffModal
