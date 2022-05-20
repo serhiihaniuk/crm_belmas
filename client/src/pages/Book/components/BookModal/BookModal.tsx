@@ -14,7 +14,7 @@ import { bookModalForm, deleteBtn, errorSpan, timePickerCss } from './BookModal.
 import { IBookModalState } from '../../index';
 import { DayCode, HourCode, MonthCode } from '../../../../types/date-types';
 import { useProcedures } from '../../service/useProcedures';
-import { OccupationType } from '../../../../../../@types/procedure-types';
+import {OccupationType} from "procedure-types";
 
 interface IBookModal {
     isOpen: boolean;

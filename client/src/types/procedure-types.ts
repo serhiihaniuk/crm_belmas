@@ -1,4 +1,5 @@
-import { IProcedureRaw } from '../../../@types/procedure-types';
+import {IProcedureRaw} from "procedure-types";
+
 
 export interface IGetProcedures {
     getProcedures: IProcedureRaw[]

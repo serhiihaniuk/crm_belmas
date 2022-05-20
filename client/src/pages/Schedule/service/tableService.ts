@@ -1,6 +1,6 @@
 import { IScheduleAppointment } from '../../../types/appointment-types';
 import { HourCode } from '../../../types/date-types';
-import { IAppointmentRaw } from '../../../../../@types/appointment-types';
+import {IAppointmentRaw} from "appointment-types";
 
 export const headers = [
     {

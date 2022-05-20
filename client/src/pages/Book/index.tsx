@@ -12,7 +12,7 @@ import { IGetEmployeesQuery } from '../../types/employee-types';
 import { IAppointment } from '../../types/appointment-types';
 import { DayCode } from '../../types/date-types';
 import DayOffModal from './components/DayOffModal';
-import {OccupationType} from "../../../../@types/procedure-types";
+import {OccupationType} from "procedure-types";
 
 export type IEditingAppointment = {
     selectedAppointment: IAppointment;

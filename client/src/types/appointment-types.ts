@@ -1,5 +1,5 @@
 import {DayCode} from './date-types';
-import {IAppointmentRaw} from '../../../@types/appointment-types';
+import {IAppointmentRaw} from "appointment-types";
 
 export type IAppointment = {
     id: string;

@@ -1,4 +1,5 @@
-import {IDayOffRaw, IDayRaw} from '../../../@types/day-types';
+import {IDayOffRaw, IDayRaw} from "day-types";
+
 export interface IGetDaysInRange {
     getDaysInRange: IDayRaw[];
 }

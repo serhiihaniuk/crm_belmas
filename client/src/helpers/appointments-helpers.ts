@@ -1,4 +1,4 @@
-import {IAppointmentRaw} from "../../../@types/appointment-types";
+import {IAppointmentRaw} from "appointment-types";
 
 export function mapDaysBetweenDates(startDateTimestamp: number, endDateTimestamp: number): IMappedDaysWithAppointments {
     const daysBetweenDates: IMappedDaysWithAppointments = {};
