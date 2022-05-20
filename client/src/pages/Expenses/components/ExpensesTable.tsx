@@ -61,9 +61,6 @@ const ExpensesTable: React.FC<Props> = ({ monthCode, setSelectedExpense, openMod
     const rowsData = CreateExpensesRows(data.getExpensesByMonth);
     return (
         <>
-            <Tag type={'teal'} className={tagStyle}>
-                Всего: 2222 zł.
-            </Tag>
 
             {!!rowsData.length && (
                 <DataTable size="sm" rows={rowsData as any} headers={headers as any}>
