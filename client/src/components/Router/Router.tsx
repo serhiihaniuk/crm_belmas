@@ -13,6 +13,7 @@ import { Loading } from 'carbon-components-react';
 const Router: React.FC = () => {
     const employee = useTypedSelector((state) => state.employee);
     const isAuth = useTypedSelector((state) => state.employee.isAuth);
+
     const [authChecked, setAuthChecked] = useState(false);
 
     const dispatch = useDispatch();
@@ -20,10 +21,9 @@ const Router: React.FC = () => {
     const { data, loading } = useQuery(CHECK_AUTH);
 
     useEffect(() => {
-        if (data) {
-            console.log(data)
-            localStorage.setItem('token', data?.checkAuth?.accessToken);
-            dispatch(setEmployeeAction(data?.checkAuth?.employee));
+        if (data && data.checkAuth) {
+            localStorage.setItem('token', data.checkAuth?.accessToken);
+            dispatch(setEmployeeAction(data.checkAuth?.employee));
             setAuthChecked(true);
         }
     }, [data, dispatch]);

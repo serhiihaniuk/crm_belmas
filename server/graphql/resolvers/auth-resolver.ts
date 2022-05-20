@@ -53,27 +53,31 @@ const logout = async (parent, args, { res }) => {
 };
 
 const checkAuth = async (parent, args, { req, res }) => {
-	const token = req.headers.authorization.split(' ')[1];
-    if (!token) return false
-	const verifyJWT = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+	try {
+        const token = req.headers.authorization.split(' ')[1];
+        if (!token) return false
+        const verifyJWT = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-	const employee = await Employee.findOne({ _id: verifyJWT.id });
+        const employee = await Employee.findOne({ _id: verifyJWT.id });
 
-	if (!employee) {
-		return ApiError.UnauthorizedError();
-	}
+        if (!employee) {
+            return ApiError.UnauthorizedError();
+        }
 
-	const { accessToken } = generateTokens({
-		id: employee._id,
-		name: employee.name,
-		position: employee.position,
-        role: employee.role
-	});
-	res.cookie('access', accessToken, { httpOnly: true });
-	return {
-		accessToken,
-		employee
-	};
+        const { accessToken } = generateTokens({
+            id: employee._id,
+            name: employee.name,
+            position: employee.position,
+            role: employee.role
+        });
+        res.cookie('access', accessToken, { httpOnly: true });
+        return {
+            accessToken,
+            employee
+        };
+    } catch (e) {
+        return null
+    }
 };
 
 export default {
