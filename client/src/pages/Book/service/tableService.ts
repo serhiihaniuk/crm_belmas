@@ -12,28 +12,13 @@ export const headers = [
         header: 'Имя'
     },
     {
-        key: 'procedure',
+        key: 'procedureName',
         header: 'Процедура'
     }
 ];
 
-export function makeRows(appointments: IAppointmentRaw[]): IAppointment[] {
-    return appointments.map((appointment) => {
-        return {
-            id: appointment._id,
-            time: appointment.time,
-            client: appointment.client,
-            procedure: appointment.procedure,
-            description: appointment.description,
-            instagram: appointment.instagram,
-            date: appointment.date as unknown as number,
-            employee: appointment.employee._id,
-            status: appointment.status,
-            cash: appointment.cash,
-            cashless: appointment.cashless
-        };
-    });
-}
+
+
 
 export function mapTimeToTimepicker(): HourCode[] {
     const times: HourCode[] = [];
@@ -44,4 +29,23 @@ export function mapTimeToTimepicker(): HourCode[] {
         times.push(`${i}:45` as HourCode);
     }
     return times;
+}
+
+export function makeRows(appointments: IAppointmentRaw[]): IAppointment[] {
+    return appointments.map((appointment) => {
+        return {
+            id: appointment._id,
+            time: appointment.time,
+            client: appointment.client,
+            procedure: appointment.procedure,
+            procedureName: appointment.procedure.procedure,
+            description: appointment.description,
+            instagram: appointment.instagram,
+            date: appointment.date as unknown as number,
+            employee: appointment.employee._id,
+            status: appointment.status,
+            cash: appointment.cash,
+            cashless: appointment.cashless,
+        };
+    });
 }

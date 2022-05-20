@@ -6,6 +6,7 @@ import monthResolver from './month-resolver';
 import salaryResolver from './salary-resolver';
 import dayOffResolver from './day-off-resolver';
 import dayResolver from './day-resolver';
+import procedureResolver from './procedure-resolver';
 const rootResolver = {
     Query: {
         ...appointmentsResolver.Query,
@@ -14,6 +15,7 @@ const rootResolver = {
         ...expensesResolver.Query,
         ...salaryResolver.Query,
         ...dayResolver.Query,
+        ...procedureResolver.Query,
         ...authResolver
     },
     Mutation: {
@@ -21,6 +23,7 @@ const rootResolver = {
         ...appointmentsResolver.Mutation,
         ...employeeResolver.Mutation,
         ...expensesResolver.Mutation,
+        ...procedureResolver.Mutation,
         ...salaryResolver.Mutation
     }
 };

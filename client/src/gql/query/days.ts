@@ -15,13 +15,18 @@ export const GET_DAYS_IN_RANGE = gql`
                 paymentMethod
                 date
                 instagram
-                procedure
                 description
                 time
                 monthCode,
                 dayCode,
                 employee {
                     _id
+                },
+                procedure {
+                    typeOf
+                    procedure
+                    duration
+                    procedureCode
                 }
             }
           dayOff {

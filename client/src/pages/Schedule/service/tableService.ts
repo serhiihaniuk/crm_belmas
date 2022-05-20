@@ -12,7 +12,7 @@ export const headers = [
         header: 'Имя'
     },
     {
-        key: 'procedure',
+        key: 'procedureName',
         header: 'Процедура'
     }
 ];
@@ -28,6 +28,7 @@ export function makeScheduleTableRows(appointments: IAppointmentRaw[]): ISchedul
             time: time,
             client: appointment.client,
             procedure: appointment.procedure,
+            procedureName: appointment.procedure.procedure,
             cash: appointment.cash || 0,
             cashless: appointment.cashless || 0,
             description: appointment.description || '',

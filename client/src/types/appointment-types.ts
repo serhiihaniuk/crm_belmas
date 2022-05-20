@@ -1,22 +1,13 @@
-import { DayCode, HourCode, MonthCode, Timestamp } from './date-types';
-import {IAppointmentRaw} from '../../../@types/appointment-types'
+import {DayCode} from './date-types';
+import {IAppointmentRaw} from '../../../@types/appointment-types';
 
 export type IAppointment = {
     id: string;
     date: number;
     employee: string;
-} & Pick<
-    IAppointmentRaw,
-    | 'client'
-    | 'procedure'
-    | 'description'
-    | 'time'
-    | 'instagram'
-    | 'status'
-    | 'paymentMethod'
-    | 'cash'
-    | 'cashless'
->
+    procedureName: string;
+} & Pick<IAppointmentRaw,
+    'client' | 'procedure' | 'description' | 'time' | 'instagram' | 'status' | 'paymentMethod' | 'cash' | 'cashless'>;
 
 export type IScheduleAppointment = Required<Omit<IAppointment, 'instagram' | 'date'>>;
 

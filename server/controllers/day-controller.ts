@@ -32,29 +32,44 @@ class DayController {
 	 * getDaysInRange - get days for particular employee
 	 */
 	static async getDaysInRange({ from, to, employeeID }: IGetDaysInRange) {
-		logInfo('getDaysInRange', `Start!`, { from, to, employeeID });
+		try {
+            logInfo('getDaysInRange', `Start!`, { from, to, employeeID });
 
-		const monthsInRange = d.mapMonthCodesBetweenDates(from, to);
+            const monthsInRange = d.mapMonthCodesBetweenDates(from, to);
 
-		for (let month of monthsInRange) {
-			await MonthController.getMonthByCode(month);
-		}
+            for (let month of monthsInRange) {
+                await MonthController.getMonthByCode(month);
+            }
 
-		const daysInRange = await Day.find({
-			date: {
-				$gte: d.prepareCustomTimestamp(from) - 1,
-				$lte: d.prepareCustomTimestamp(to) + 1
-			}
-		})
-			.populate('appointments', undefined, undefined, { employee: employeeID })
-			.populate('dayOff', undefined, undefined, { employee: employeeID });
+            const daysInRange = await Day.find({
+                date: {
+                    $gte: d.prepareCustomTimestamp(from) - 1,
+                    $lte: d.prepareCustomTimestamp(to) + 1
+                }
+            })
+                .populate(
+                    {
+                        path: 'appointments',
+                        populate: {
+                            path: 'procedure',
+                        },
+                        match: {
+                            employee: employeeID
+                        }
+                    }
+                ).populate('dayOff', undefined, undefined, { employee: employeeID })
 
-		daysInRange.forEach((day) => {
-			if (day.dayOff[0]?.dayCode) day.isOff = true;
-		});
 
-		logInfo('getDaysInRange', `Success! days: ${daysInRange.length}`);
-		return daysInRange;
+            daysInRange.forEach((day) => {
+                if (day.dayOff[0]?.dayCode) day.isOff = true;
+            });
+
+            logInfo('getDaysInRange', `Success! days: ${daysInRange.length}`);
+            return daysInRange;
+        } catch (e) {
+            log.error('getDaysInRange', 'error', e)
+            throw e
+        }
 	}
 
 	static async createDay(dayCode: DayCode): Promise<MongoResponse<IDayRaw>> {

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import d, { dateToTimestamp } from '../../../../helpers/utils';
-import { Button, FormLabel, Modal, Select, SelectItem, TextArea, TextInput } from 'carbon-components-react';
+import { Button, FormLabel, Modal, Select, TextArea, TextInput } from 'carbon-components-react';
 import { TimePicker } from '@atlaskit/datetime-picker';
 import { mapTimeToTimepicker } from '../../service/tableService';
 import { useTypedSelector } from '../../../../hooks/useTypedSelector';
@@ -13,6 +13,7 @@ import ModalInlineLoading from '../../../../components/shared/ModalInlineLoading
 import { bookModalForm, deleteBtn, errorSpan, timePickerCss } from './BookModal.css';
 import { IBookModalState } from '../../index';
 import { DayCode, HourCode, MonthCode } from '../../../../types/date-types';
+import { useProcedures } from '../../service/useProcedures';
 
 interface IBookModal {
     isOpen: boolean;
@@ -27,7 +28,7 @@ interface IAppointmentInput {
     description: string;
     date: string;
     instagram: string;
-    procedure: string;
+    procedureCode: string;
     employee: string;
     creator: string;
     monthCode: MonthCode;
@@ -52,7 +53,7 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, e
             description: '',
             time: '8:00',
             instagram: '',
-            procedure: 'manicure'
+            procedureCode: 'manicure'
         }
     });
 
@@ -62,6 +63,7 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, e
     const [updateAppointment, { loading: uaLoading }] = useMutation(UPDATE_APPOINTMENT, gqlRequestOptions);
     const [deleteAppointment, { loading: daLoading }] = useMutation(DELETE_APPOINTMENT, gqlRequestOptions);
     const [showDeleteBtn, setShowDeleteBtn] = React.useState(false);
+    const proceduresSelectItems = useProcedures();
 
     useEffect(() => {
         if (bookModalState.isEditingExisting) {
@@ -69,7 +71,7 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, e
             setValue('client', selectedAppointment.client);
             setValue('description', selectedAppointment.description || '');
             setValue('instagram', selectedAppointment.instagram || '');
-            setValue('procedure', selectedAppointment.procedure);
+            setValue('procedureCode', selectedAppointment.procedure.procedureCode);
             setValue('time', selectedAppointment.time);
             return;
         }
@@ -95,7 +97,7 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, e
             client: appointmentTemplate.client,
             description: appointmentTemplate.description,
             instagram: appointmentTemplate.instagram,
-            procedure: appointmentTemplate.procedure,
+            procedureCode: appointmentTemplate.procedureCode,
             time: appointmentTemplate.time
         };
 
@@ -162,12 +164,11 @@ const BookModal: React.FC<IBookModal> = ({ isOpen, closeModal, bookModalState, e
                     <Select
                         id="select-1"
                         labelText="Выберите процедуру"
-                        {...register('procedure', { required: true })}
-                        warn={!!errors.procedure}
+                        {...register('procedureCode', { required: true })}
+                        warn={!!errors.procedureCode}
                         warnText={'Это поле обязательно'}
                     >
-                        <SelectItem value="manicure" text="Маникюр" />
-                        <SelectItem value="pedicure" text="Педикюр" />
+                        {proceduresSelectItems}
                     </Select>
                     <Controller
                         name="time"
